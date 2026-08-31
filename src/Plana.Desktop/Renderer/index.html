@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Plana Renderer</title>
+    <link rel="stylesheet" href="/vendor/spine-player/spine-player.css" />
+    <style>
+      html, body, #player { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent; }
+      body { user-select: none; -webkit-user-select: none; }
+      #player { cursor: grab; touch-action: none; }
+      #player.dragging { cursor: grabbing; }
+      .spine-player, .spine-player-canvas { background: transparent !important; }
+    </style>
+  </head>
+  <body>
+    <div id="player" aria-label="Plana desktop companion"></div>
+    <script src="/vendor/spine-player/spine-player.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>

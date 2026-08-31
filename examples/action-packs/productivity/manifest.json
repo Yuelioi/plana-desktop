@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "example.productivity",
+  "name": "Productivity examples",
+  "version": "1.0.0",
+  "publisher": "Plana Desktop examples",
+  "actions": [
+    {
+      "id": "example.open-website",
+      "label": "Open example.com",
+      "kind": "url.open",
+      "parameters": { "url": "https://example.com" },
+      "capabilities": ["url.open"]
+    },
+    {
+      "id": "example.open-notepad",
+      "label": "Open Notepad",
+      "kind": "process.launch",
+      "parameters": { "executable": "notepad.exe" },
+      "capabilities": ["process.launch"]
+    }
+  ]
+}
