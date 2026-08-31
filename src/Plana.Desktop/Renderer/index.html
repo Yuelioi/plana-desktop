@@ -6,14 +6,46 @@
     <title>Plana Renderer</title>
     <link rel="stylesheet" href="/vendor/spine-player/spine-player.css" />
     <style>
-      html, body, #player { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent; }
+      html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent; }
       body { user-select: none; -webkit-user-select: none; }
-      #player { cursor: grab; touch-action: none; }
+      #player { position: absolute; inset: 0; cursor: grab; touch-action: none; }
+      body.native #player { top: 76px; height: calc(100% - 76px); }
+      body.native.tools-collapsed #player { top: 43px; height: calc(100% - 43px); }
       #player.dragging { cursor: grabbing; }
       .spine-player, .spine-player-canvas { background: transparent !important; }
+      #native-toolbar { display: none; position: absolute; z-index: 10; top: 5px; left: 50%; width: min(calc(100% - 12px), 340px); height: 62px; padding: 5px; transform: translateX(-50%); box-sizing: border-box; border: 1px solid rgba(34,49,78,.22); border-radius: 14px; background: rgba(245,248,255,.72); box-shadow: 0 8px 24px rgba(20,32,58,.22); font: 12px "Segoe UI Variable", "Segoe UI", sans-serif; color: #172033; }
+      body.native #native-toolbar { display: grid; grid-template-rows: 24px 24px; gap: 3px; }
+      body.native.tools-collapsed #native-toolbar { height: 35px; grid-template-rows: 24px; }
+      body.native.tools-collapsed .tool-row.secondary { display: none; }
+      .tool-row { display: grid; grid-template-columns: minmax(0,1fr) 26px 26px; gap: 3px; }
+      .tool-row.secondary { grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr) 26px; }
+      #native-toolbar input, #native-toolbar select, #native-toolbar button { min-width: 0; height: 24px; box-sizing: border-box; border: 0; border-radius: 7px; font: inherit; }
+      #native-toolbar input, #native-toolbar select { padding: 0 8px; color: #182033; background: rgba(255,255,255,.82); outline: none; }
+      #native-toolbar input:focus, #native-toolbar select:focus { box-shadow: inset 0 0 0 2px #7897ff; }
+      #native-toolbar button { display: grid; place-items: center; color: #25304a; background: rgba(31,45,73,.10); cursor: pointer; }
+      #native-toolbar button.icon { font-family: "Segoe Fluent Icons", "Segoe MDL2 Assets"; font-size: 13px; }
+      #native-toolbar button.primary { background: #5879df; }
+      #native-toolbar button:hover { background: rgba(31,45,73,.18); }
+      #native-toolbar button.primary:hover { background: #6d8bea; }
+      #ai-response { position: absolute; z-index: 9; top: 72px; left: 50%; width: min(calc(100% - 18px), 330px); max-height: 120px; overflow: auto; transform: translateX(-50%); padding: 9px 11px; box-sizing: border-box; border: 1px solid rgba(34,49,78,.18); border-radius: 12px; background: rgba(250,252,255,.90); box-shadow: 0 8px 24px rgba(20,32,58,.18); color: #182033; font: 12px/1.45 "Segoe UI Variable", "Segoe UI", sans-serif; white-space: pre-wrap; user-select: text; }
+      body.tools-collapsed #ai-response { top: 44px; }
+      #ai-response.error { color: #9c2525; }
     </style>
   </head>
   <body>
+    <div id="native-toolbar" aria-label="Quick tools">
+      <div class="tool-row">
+        <input id="ai-prompt" type="text" placeholder="Ask Plana" aria-label="Ask Plana" />
+        <button id="quick-settings" class="icon" title="Settings" aria-label="Settings">&#xE713;</button>
+        <button id="quick-collapse" class="icon" title="Collapse tools" aria-label="Collapse tools">&#xE70E;</button>
+      </div>
+      <div class="tool-row secondary">
+        <select id="quick-group" aria-label="Tool group"><option value="">Quick tools</option></select>
+        <select id="quick-action" aria-label="Action"><option value="">Choose an action</option></select>
+        <button id="quick-run" class="primary icon" title="Run" aria-label="Run">&#xE768;</button>
+      </div>
+    </div>
+    <div id="ai-response" hidden></div>
     <div id="player" aria-label="Plana desktop companion"></div>
     <script src="/vendor/spine-player/spine-player.js"></script>
     <script src="/app.js"></script>

@@ -1,0 +1,315 @@
+<!--
+THESIS: Everyday Plana configuration reads like a calm Windows control panel, not a JSON editor or a dashboard.
+OWN-WORLD: Native light surfaces, restrained blue selection, crisp dividers, compact controls, and generous section spacing.
+STORY: Users understand companion behavior, bind interactions, inspect packs, and save changes with failures kept in context.
+FIRST VIEWPORT: A compact title and explanation lead into three familiar tabs; the persistent Save action anchors the lower right.
+FORM: Operate-mode settings window extending the incumbent Windows-native shell; direct, single-window staging.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+<Window x:Class="Plana.Desktop.ControlCenterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        Title="{DynamicResource SettingsTitle}"
+        Width="840" Height="680" MinWidth="720" MinHeight="560"
+        WindowStartupLocation="CenterScreen" ShowInTaskbar="True"
+        Background="{DynamicResource ApplicationBackgroundBrush}">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="16,7" />
+            <Setter Property="MinHeight" Value="32" />
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="0,5" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,16,0,8" />
+        </Style>
+        <Style x:Key="SecondaryText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="NavigationItemStyle" TargetType="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="14,10" />
+            <Setter Property="Margin" Value="0,2" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="24,20,24,18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="184" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="10">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource NavigationHeading}" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               FontSize="12" FontWeight="SemiBold" Margin="10,8,10,8" />
+                    <ListBox x:Name="NavigationList" BorderThickness="0" Background="Transparent"
+                             ItemContainerStyle="{StaticResource NavigationItemStyle}"
+                             SelectionChanged="OnNavigationChanged" SelectedIndex="0">
+                        <ListBoxItem><TextBlock Text="{DynamicResource CompanionTab}" /></ListBoxItem>
+                        <ListBoxItem><TextBlock Text="{DynamicResource ActionsTab}" /></ListBoxItem>
+                        <ListBoxItem><TextBlock Text="{DynamicResource InteractionsTab}" /></ListBoxItem>
+                        <ListBoxItem><TextBlock Text="{DynamicResource ActionPacksTab}" /></ListBoxItem>
+                        <ListBoxItem><TextBlock Text="{DynamicResource PluginsTab}" /></ListBoxItem>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1"
+                    CornerRadius="12" Margin="16,0,0,0" Padding="4">
+            <TabControl x:Name="SettingsTabs" Padding="0" BorderThickness="0" Background="Transparent">
+                <TabControl.Template>
+                    <ControlTemplate TargetType="TabControl">
+                        <ContentPresenter Content="{TemplateBinding SelectedContent}"
+                                          ContentTemplate="{TemplateBinding SelectedContentTemplate}"
+                                          ContentStringFormat="{TemplateBinding SelectedContentStringFormat}" />
+                    </ControlTemplate>
+                </TabControl.Template>
+            <TabItem Header="{DynamicResource CompanionTab}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="18,8,18,18" MaxWidth="620" HorizontalAlignment="Left">
+                        <TextBlock Text="{DynamicResource WindowBehaviorHeading}" Style="{StaticResource SectionTitle}" />
+                        <CheckBox x:Name="AlwaysOnTopCheckBox" Content="{DynamicResource AlwaysOnTopLabel}" />
+                        <CheckBox x:Name="StartWithWindowsCheckBox" Content="{DynamicResource StartWithWindowsLabel}" IsEnabled="False" />
+                        <TextBlock Text="{DynamicResource StartupPlaceholder}"
+                                   Style="{StaticResource SecondaryText}" Margin="24,0,0,6" />
+
+                        <TextBlock Text="{DynamicResource LanguageHeading}" Style="{StaticResource SectionTitle}" />
+                        <ComboBox x:Name="LanguageComboBox" DisplayMemberPath="Label" SelectedValuePath="Culture"
+                                  Width="220" HorizontalAlignment="Left" />
+                        <TextBlock Text="{DynamicResource LanguageHelp}" Style="{StaticResource SecondaryText}" Margin="0,6,0,0" />
+
+                        <TextBlock Text="{DynamicResource SizeHeading}" Style="{StaticResource SectionTitle}" />
+                        <DockPanel LastChildFill="True">
+                            <TextBlock x:Name="ScaleValueText" Width="56" VerticalAlignment="Center" FontWeight="SemiBold" />
+                            <Slider x:Name="ScaleSlider" Minimum="0.75" Maximum="1.5" TickFrequency="0.05"
+                                    IsSnapToTickEnabled="True" ValueChanged="OnScaleValueChanged"
+                                    AutomationProperties.Name="{DynamicResource ScaleAutomationName}" />
+                        </DockPanel>
+                        <TextBlock Text="{DynamicResource ScaleHelp}"
+                                   Style="{StaticResource SecondaryText}" Margin="56,5,0,0" />
+
+                        <TextBlock Text="{DynamicResource PositionHeading}" Style="{StaticResource SectionTitle}" />
+                        <StackPanel Orientation="Horizontal">
+                            <ui:Button Content="{DynamicResource ResetPositionButton}" Appearance="Secondary" Click="OnResetPositionClick" />
+                            <TextBlock Text="{DynamicResource ResetPositionHelp}"
+                                       Style="{StaticResource SecondaryText}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="{DynamicResource ActionsTab}">
+                <Grid Margin="18,14,18,18">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="0,0,0,12">
+                        <DockPanel LastChildFill="True">
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="16,0,0,0">
+                                <ui:Button Content="{DynamicResource AddCustomActionButton}" Appearance="Primary"
+                                           Background="{DynamicResource AccentFillColorDefaultBrush}"
+                                           Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
+                                           BorderBrush="{DynamicResource AccentFillColorDefaultBrush}"
+                                           Click="OnAddCustomActionClick" Margin="0,0,8,0" />
+                                <ui:Button Content="{DynamicResource ManageToolGroupsButton}" Appearance="Secondary"
+                                           Click="OnManageToolGroupsClick" Margin="0,0,8,0" />
+                                <ui:Button Content="{DynamicResource ProjectLauncherButton}" Appearance="Secondary" Click="OnAddLauncherClick" />
+                            </StackPanel>
+                            <TextBlock Text="{DynamicResource ActionSearchLabel}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </DockPanel>
+                        <TextBox x:Name="ActionSearchBox" Margin="0,6,0,4" Padding="8,6"
+                                 TextChanged="OnActionSearchChanged" AutomationProperties.Name="{DynamicResource ActionSearchLabel}" />
+                        <TextBlock Text="{DynamicResource ActionSearchHelp}" Style="{StaticResource SecondaryText}" />
+                    </StackPanel>
+                    <ListBox Grid.Row="1" x:Name="ActionList" BorderThickness="0" Background="Transparent">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Label}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Text="{Binding Detail}" Style="{StaticResource SecondaryText}" TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+                                    <ui:Button Grid.Column="1" Content="{DynamicResource RunActionButton}" Appearance="Secondary" Tag="{Binding Id}"
+                                               Click="OnRunActionClick" Margin="12,0,6,0" />
+                                    <ui:Button Grid.Column="2" Content="{DynamicResource RemoveLauncherButton}" Appearance="Danger" Tag="{Binding Id}"
+                                               Click="OnRemoveLauncherClick" IsEnabled="{Binding CanRemove}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="{DynamicResource InteractionsTab}">
+                <Grid Margin="18,14,18,18">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{DynamicResource InteractionsHelp}"
+                               Style="{StaticResource SecondaryText}" Margin="0,0,0,12" />
+                    <ListBox Grid.Row="1" x:Name="InteractionList" BorderThickness="0" Background="Transparent">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="160" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Label}" VerticalAlignment="Center" FontWeight="SemiBold" />
+                                    <ComboBox Grid.Column="1" ItemsSource="{Binding Options}" DisplayMemberPath="Label"
+                                              SelectedValuePath="Id" SelectedValue="{Binding SelectedActionId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              MinWidth="320" AutomationProperties.Name="{Binding Label}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="{DynamicResource ActionPacksTab}">
+                <Grid Margin="18,14,18,18">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="0,0,0,12">
+                        <TextBlock Text="{DynamicResource ActionPacksPurpose}" Style="{StaticResource SecondaryText}" />
+                        <WrapPanel Margin="0,10,0,8">
+                            <ui:Button Content="{DynamicResource ImportPackButton}" Appearance="Primary" Click="OnImportPackClick" Margin="0,0,8,0" />
+                            <ui:Button Content="{DynamicResource OpenPacksFolderButton}" Appearance="Secondary" Click="OnOpenPacksFolderClick" Margin="0,0,8,0" />
+                            <ui:Button Content="{DynamicResource ReloadButton}" Appearance="Transparent" Click="OnReloadExtensionsClick" />
+                        </WrapPanel>
+                        <TextBlock x:Name="PackSummaryText" Style="{StaticResource SecondaryText}" />
+                    </StackPanel>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <ItemsControl x:Name="PackList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1"
+                                        CornerRadius="10" Padding="16" Margin="0,0,0,10">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="15" TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Text="{Binding Metadata}" Style="{StaticResource SecondaryText}" TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Text="{Binding SourceText}" Style="{StaticResource SecondaryText}" Margin="0,3,0,0" />
+                                        </StackPanel>
+                                        <CheckBox Grid.Column="1" Content="{DynamicResource PackEnabledLabel}" IsChecked="{Binding IsEnabled, Mode=TwoWay}"
+                                                  IsEnabled="{Binding CanEnable}" Margin="16,0,0,0" />
+                                        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding CapabilitiesText}"
+                                                   Style="{StaticResource SecondaryText}" Margin="0,10,0,0" />
+                                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0">
+                                            <TextBlock Text="{Binding Error}" Foreground="#B3261E" TextWrapping="Wrap" />
+                                            <WrapPanel Margin="0,8,0,0">
+                                                <ui:Button Content="{DynamicResource OpenPackLocationButton}" Appearance="Secondary"
+                                                           Tag="{Binding ManifestPath}" Click="OnOpenPackLocationClick" Margin="0,0,8,0" />
+                                                <ui:Button Content="{DynamicResource RevokeCapabilitiesButton}" Appearance="Danger"
+                                                           Tag="{Binding PackId}" Click="OnRevokeCapabilitiesClick"
+                                                           IsEnabled="{Binding CanRevoke}" />
+                                            </WrapPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="{DynamicResource PluginsTab}">
+                <Grid Margin="18,14,18,18">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="0,0,0,12">
+                        <TextBlock Text="{DynamicResource PluginsPurpose}" Style="{StaticResource SecondaryText}" />
+                        <WrapPanel Margin="0,10,0,8">
+                            <ui:Button Content="{DynamicResource ImportPluginButton}" Appearance="Primary" Click="OnImportPluginClick" Margin="0,0,8,0" />
+                            <ui:Button Content="{DynamicResource ImportSamplePluginButton}" Appearance="Secondary" Click="OnImportSamplePluginClick" Margin="0,0,8,0" />
+                            <ui:Button Content="{DynamicResource OpenPluginsFolderButton}" Appearance="Secondary" Click="OnOpenPluginsFolderClick" Margin="0,0,8,0" />
+                            <ui:Button Content="{DynamicResource ReloadButton}" Appearance="Transparent" Click="OnReloadExtensionsClick" />
+                        </WrapPanel>
+                        <TextBlock x:Name="PluginSummaryText" Style="{StaticResource SecondaryText}" />
+                    </StackPanel>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <ItemsControl x:Name="PluginList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1"
+                                        CornerRadius="10" Padding="16" Margin="0,0,0,10">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="15" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Text="{Binding Metadata}" Style="{StaticResource SecondaryText}" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Text="{Binding Status}" FontWeight="SemiBold" Foreground="#8A4B08" Margin="0,10,0,0" />
+                                        <TextBlock Text="{Binding CapabilitiesText}" Style="{StaticResource SecondaryText}" Margin="0,6,0,0" />
+                                        <TextBlock Text="{Binding Error}" Foreground="#B3261E" TextWrapping="Wrap" Margin="0,8,0,0" />
+                                        <WrapPanel Margin="0,10,0,0">
+                                            <ui:Button Content="{DynamicResource EnablePluginButton}" Appearance="Primary" Tag="{Binding PluginId}"
+                                                       IsEnabled="{Binding CanEnable}" Click="OnEnablePluginClick" Margin="0,0,8,0" />
+                                            <ui:Button Content="{DynamicResource DisablePluginButton}" Appearance="Danger" Tag="{Binding PluginId}"
+                                                       IsEnabled="{Binding CanDisable}" Click="OnDisablePluginClick" />
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            </TabControl>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,16,0,0">
+            <TextBlock x:Name="StatusText" VerticalAlignment="Center" Foreground="#137333" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ui:Button Content="{DynamicResource CloseButton}" Appearance="Secondary" Click="OnCloseClick" Margin="0,0,8,0" />
+                <ui:Button Content="{DynamicResource SaveChangesButton}" Click="OnSaveClick" IsDefault="True"
+                           Appearance="Primary"
+                           Background="{DynamicResource AccentFillColorDefaultBrush}"
+                           Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
+                           BorderBrush="{DynamicResource AccentFillColorDefaultBrush}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

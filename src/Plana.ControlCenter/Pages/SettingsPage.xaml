@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="Plana_ControlCenter.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Plana_ControlCenter.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer>
+    <StackPanel Padding="32,24,32,40" Spacing="28" MaxWidth="760" HorizontalAlignment="Left">
+        <StackPanel Spacing="6">
+            <TextBlock x:Name="PageTitle" Style="{StaticResource PageTitleStyle}" Text="Settings" />
+            <TextBlock x:Name="PageDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="Changes are saved immediately to the existing Plana configuration." />
+        </StackPanel>
+
+        <StackPanel Spacing="12">
+            <TextBlock x:Name="BehaviorHeading" Style="{StaticResource SectionTitleStyle}" Text="Companion" />
+            <Grid Padding="4,8" ColumnSpacing="24">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <StackPanel Spacing="3"><TextBlock x:Name="TopmostTitle" FontWeight="SemiBold" Text="Keep above other windows" /><TextBlock x:Name="TopmostDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="The companion remains visible while you work." /></StackPanel>
+                <ToggleSwitch x:Name="TopmostToggle" Grid.Column="1" OnContent="" OffContent="" Toggled="TopmostToggle_Toggled" />
+            </Grid>
+            <Grid Padding="4,8" ColumnSpacing="24">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <StackPanel Spacing="3"><TextBlock x:Name="StartupTitle" FontWeight="SemiBold" Text="Start with Windows" /><TextBlock x:Name="StartupDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="Launch Plana after you sign in." /></StackPanel>
+                <ToggleSwitch x:Name="StartupToggle" Grid.Column="1" OnContent="" OffContent="" Toggled="StartupToggle_Toggled" />
+            </Grid>
+            <Grid Padding="4,8" ColumnSpacing="24">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="240" /></Grid.ColumnDefinitions>
+                <StackPanel Spacing="3"><TextBlock x:Name="ScaleTitle" FontWeight="SemiBold" Text="Companion scale" /><TextBlock x:Name="ScaleDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="Adjust the model without changing its window behavior." /></StackPanel>
+                <Slider x:Name="ScaleSlider" Grid.Column="1" Minimum="0.5" Maximum="2" StepFrequency="0.1" ValueChanged="ScaleSlider_ValueChanged" Header="100%" />
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Spacing="12">
+            <TextBlock x:Name="LanguageHeading" Style="{StaticResource SectionTitleStyle}" Text="Language" />
+            <Grid Padding="4,8" ColumnSpacing="24">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="220" /></Grid.ColumnDefinitions>
+                <StackPanel Spacing="3"><TextBlock x:Name="LanguageTitle" FontWeight="SemiBold" Text="Display language" /><TextBlock x:Name="LanguageDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="English and Simplified Chinese are available." /></StackPanel>
+                <ComboBox x:Name="LanguagePicker" Grid.Column="1" HorizontalAlignment="Stretch" SelectionChanged="LanguagePicker_SelectionChanged">
+                    <ComboBoxItem Tag="en" Content="English" />
+                    <ComboBoxItem Tag="zh-CN" Content="简体中文" />
+                </ComboBox>
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Spacing="12">
+            <TextBlock x:Name="InteractionsHeading" Style="{StaticResource SectionTitleStyle}" Text="Interactions" />
+            <Grid Padding="4,8" ColumnSpacing="24">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
+                <StackPanel Spacing="3"><TextBlock x:Name="ClickTitle" FontWeight="SemiBold" Text="Single click" /><TextBlock x:Name="ClickDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="Choose what happens when Plana is clicked." /></StackPanel>
+                <ComboBox x:Name="ClickActionPicker" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="InteractionPicker_SelectionChanged" Tag="click" />
+            </Grid>
+            <Grid Padding="4,8" ColumnSpacing="24">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
+                <StackPanel Spacing="3"><TextBlock x:Name="DoubleClickTitle" FontWeight="SemiBold" Text="Double click" /><TextBlock x:Name="DoubleClickDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="Choose an optional double-click Action." /></StackPanel>
+                <ComboBox x:Name="DoubleClickActionPicker" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="InteractionPicker_SelectionChanged" Tag="doubleClick" />
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Spacing="12">
+            <TextBlock x:Name="AiHeading" Style="{StaticResource SectionTitleStyle}" Text="AI conversation" />
+            <Grid Padding="4,8" ColumnSpacing="24">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
+                <StackPanel Spacing="3"><TextBlock x:Name="AiProviderTitle" FontWeight="SemiBold" Text="Provider" /><TextBlock x:Name="AiProviderDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="Use the local Codex subscription login or an OpenAI-compatible API." TextWrapping="Wrap" /></StackPanel>
+                <ComboBox x:Name="AiProviderPicker" Grid.Column="1" HorizontalAlignment="Stretch" SelectionChanged="AiProviderPicker_SelectionChanged">
+                    <ComboBoxItem Tag="codex" Content="Codex CLI subscription" />
+                    <ComboBoxItem Tag="api" Content="OpenAI-compatible API" />
+                </ComboBox>
+            </Grid>
+            <TextBox x:Name="AiModelInput" Header="Model (optional for Codex)" PlaceholderText="Use provider default" />
+            <StackPanel x:Name="AiApiPanel" Spacing="12" Visibility="Collapsed">
+                <TextBox x:Name="AiApiBaseUrlInput" Header="API base URL" PlaceholderText="https://api.openai.com/v1" />
+                <TextBox x:Name="AiApiKeyVariableInput" Header="API key environment variable" PlaceholderText="OPENAI_API_KEY" />
+            </StackPanel>
+            <TextBlock x:Name="AiHelpText" Foreground="{StaticResource PlanaSubtleBrush}" Text="Codex uses your existing local CLI login. API mode reads the key from the named environment variable." TextWrapping="Wrap" />
+            <Button x:Name="SaveAiButton" HorizontalAlignment="Left" Click="SaveAiButton_Click"><TextBlock x:Name="SaveAiLabel" Text="Save AI settings" /></Button>
+        </StackPanel>
+
+        <InfoBar x:Name="SaveStatus" IsOpen="False" IsClosable="True" Severity="Success" Title="Saved" Message="Changes are active." />
+        <InfoBar x:Name="RestartNotice" IsOpen="False" IsClosable="True" Severity="Informational" Title="Language saved" Message="Reopen this window to apply the language everywhere." />
+    </StackPanel>
+    </ScrollViewer>
+</Page>

@@ -2,13 +2,71 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         Title="Plana Desktop"
-        Width="340" Height="520"
-        MinWidth="240" MinHeight="360"
+        Width="340" Height="602"
+        MinWidth="240" MinHeight="442"
         AllowsTransparency="True" Background="Transparent"
         WindowStyle="None" ResizeMode="NoResize"
         ShowInTaskbar="False" Topmost="True">
     <Grid Background="Transparent">
-        <wv2:WebView2CompositionControl x:Name="WebView" DefaultBackgroundColor="Transparent" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="82" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border x:Name="QuickToolbar" Grid.Row="0"
+                HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                MaxWidth="360" Margin="6,4,6,4" Padding="7"
+                Background="#E61B1F2A"
+                BorderBrush="#4DFFFFFF"
+                BorderThickness="1" CornerRadius="16">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <ui:TextBox x:Name="QuickSearchTextBox" Grid.Column="0"
+                                PlaceholderText="{DynamicResource QuickSearchPlaceholder}"
+                                Background="#F2FFFFFF" Foreground="#FF1B1F2A" BorderBrush="#66FFFFFF"
+                                KeyDown="OnQuickSearchKeyDown" Margin="0,0,6,0" />
+                    <ui:Button Grid.Column="1" Content="&#xE721;" Appearance="Primary"
+                               FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14"
+                               Width="30" Height="28" Click="OnQuickSearchClick"
+                               ToolTip="{DynamicResource QuickSearchTooltip}" />
+                    <ui:Button Grid.Column="2" Content="&#xE713;" Appearance="Transparent"
+                               Foreground="White" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14"
+                               Width="30" Height="28" Click="OnQuickSettingsClick"
+                               ToolTip="{DynamicResource QuickSettingsTooltip}" />
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <ComboBox x:Name="QuickGroupComboBox" Grid.Column="0"
+                              DisplayMemberPath="Name" SelectionChanged="OnQuickGroupChanged"
+                              Background="#F2FFFFFF" Foreground="#FF1B1F2A" BorderBrush="#66FFFFFF"
+                              Margin="0,0,6,0" />
+                    <ComboBox x:Name="QuickActionComboBox" Grid.Column="1"
+                              DisplayMemberPath="Label" SelectedValuePath="Id"
+                              Background="#F2FFFFFF" Foreground="#FF1B1F2A" BorderBrush="#66FFFFFF"
+                              Margin="0,0,6,0" />
+                    <ui:Button x:Name="QuickRunButton" Grid.Column="2" Content="&#xE768;"
+                               Appearance="Primary" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14"
+                               Width="30" Height="28" Click="OnQuickRunClick"
+                               ToolTip="{DynamicResource QuickRunTooltip}" />
+                </Grid>
+            </Grid>
+        </Border>
+        <wv2:WebView2CompositionControl Grid.Row="1" x:Name="WebView" DefaultBackgroundColor="Transparent" />
     </Grid>
 </Window>

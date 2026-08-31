@@ -1,0 +1,3 @@
+This file belongs to the bundled Plana Starter Pack.
+
+It demonstrates file.open without granting process or script execution.

@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Adobe After Effects exports TargetPath globally; MSBuild otherwise mistakes it for every project's output. -->
+    <TargetPath Condition="$([System.String]::Copy('$(TargetPath)').EndsWith('AfterFX.exe'))"></TargetPath>
+  </PropertyGroup>
+</Project>

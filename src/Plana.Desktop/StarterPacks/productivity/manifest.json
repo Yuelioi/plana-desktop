@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "plana.starter.productivity",
+  "name": "Plana Starter Pack",
+  "version": "1.0.0",
+  "publisher": "Plana Desktop",
+  "actions": [
+    {
+      "id": "starter.open-website",
+      "label": "Open Plana example website",
+      "kind": "url.open",
+      "parameters": { "url": "https://example.com" },
+      "capabilities": ["url.open"]
+    },
+    {
+      "id": "starter.open-notes",
+      "label": "Open starter notes",
+      "kind": "file.open",
+      "parameters": { "path": "notes.txt" },
+      "capabilities": ["file.open"]
+    },
+    {
+      "id": "starter.open-folder",
+      "label": "Open Starter Pack folder",
+      "kind": "folder.open",
+      "parameters": { "path": "." },
+      "capabilities": ["folder.open"]
+    },
+    {
+      "id": "starter.run-script",
+      "label": "Run starter script",
+      "kind": "script.run",
+      "parameters": {
+        "interpreter": "powershell.exe",
+        "script": "scripts/hello.ps1",
+        "arg.0": "Plana"
+      },
+      "capabilities": ["script.run"],
+      "requiresConfirmation": true
+    }
+  ]
+}

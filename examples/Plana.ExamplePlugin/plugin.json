@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "plana.example.hello",
+  "version": "1.0.0",
+  "publisher": "Plana Desktop",
+  "hostApi": "1",
+  "entryPoint": "Plana.ExamplePlugin.exe",
+  "defaultLocale": "en",
+  "locales": {},
+  "capabilities": ["folder.open"]
+}

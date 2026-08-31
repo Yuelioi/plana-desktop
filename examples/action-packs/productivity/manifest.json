@@ -18,6 +18,25 @@
       "kind": "process.launch",
       "parameters": { "executable": "notepad.exe" },
       "capabilities": ["process.launch"]
+    },
+    {
+      "id": "example.open-pack-folder",
+      "label": "Open this pack folder",
+      "kind": "folder.open",
+      "parameters": { "path": "." },
+      "capabilities": ["folder.open"]
+    },
+    {
+      "id": "example.run-hello-script",
+      "label": "Run the example script",
+      "kind": "script.run",
+      "parameters": {
+        "interpreter": "powershell.exe",
+        "script": "scripts/hello.ps1",
+        "arg.0": "Plana"
+      },
+      "capabilities": ["script.run"],
+      "requiresConfirmation": true
     }
   ]
 }

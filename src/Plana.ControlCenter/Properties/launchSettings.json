@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Plana.ControlCenter (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Plana.ControlCenter (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

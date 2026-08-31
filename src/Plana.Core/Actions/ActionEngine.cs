@@ -54,7 +54,7 @@ public sealed class ActionEngine
         var authorized = entry.Pack.BuiltIn || await capabilityPolicy.AuthorizeAsync(
             entry.Pack,
             entry.Action,
-            handler.RequiredCapabilities,
+            entry.Action.Capabilities,
             cancellationToken);
         if (!authorized)
         {
@@ -63,7 +63,11 @@ public sealed class ActionEngine
 
         try
         {
-            return await handler.ExecuteAsync(entry.Action, context ?? new ActionContext(), cancellationToken);
+            var requestedContext = context ?? new ActionContext();
+            var effectiveContext = new ActionContext(
+                requestedContext.WorkingDirectory ?? entry.Pack.SourceDirectory,
+                requestedContext.Variables);
+            return await handler.ExecuteAsync(entry.Action, effectiveContext, cancellationToken);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {

@@ -1,6 +1,7 @@
 using System.Windows;
 using Plana.Core.Actions;
-using Plana.Desktop.Settings;
+using Plana.Core.Settings;
+using Plana.Desktop.Localization;
 
 namespace Plana.Desktop.Actions;
 
@@ -11,8 +12,8 @@ internal sealed class DesktopCapabilityPolicy(DesktopSettings settings, Func<Tas
         if (action.RequiresConfirmation)
         {
             var confirmation = System.Windows.MessageBox.Show(
-                $"Run '{action.Label}' from Action Pack '{pack.Name}'?",
-                "Confirm Action",
+                LocalizationCatalog.Text("ConfirmActionMessage", action.Label, pack.Name),
+                LocalizationCatalog.Text("ConfirmActionTitle"),
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
             if (confirmation != MessageBoxResult.Yes) return false;
@@ -22,8 +23,8 @@ internal sealed class DesktopCapabilityPolicy(DesktopSettings settings, Func<Tas
 
         var capabilityList = string.Join(Environment.NewLine, capabilities.Select(capability => $"• {capability}"));
         var result = System.Windows.MessageBox.Show(
-            $"Action Pack '{pack.Name}' wants to run '{action.Label}' using:\n\n{capabilityList}\n\nAllow these capabilities for this pack?",
-            "Allow Action Pack",
+            LocalizationCatalog.Text("CapabilityPromptMessage", pack.Name, action.Label, capabilityList),
+            LocalizationCatalog.Text("AllowPackTitle"),
             MessageBoxButton.YesNo,
             MessageBoxImage.Question);
         if (result != MessageBoxResult.Yes) return false;

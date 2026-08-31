@@ -28,11 +28,41 @@ public sealed class ActionPackLoaderTests
                 }
                 """);
 
-            var packs = await new ActionPackLoader().LoadDirectoryAsync(directory);
+            var result = await new ActionPackLoader().LoadDirectoryAsync(directory);
 
-            var pack = Assert.Single(packs);
+            var pack = Assert.Single(result.ValidPacks);
             Assert.Equal("test.pack", pack.Id);
             Assert.Equal("test.open", Assert.Single(pack.Actions).Id);
+            Assert.Equal(directory, pack.SourceDirectory);
+        }
+        finally
+        {
+            Directory.Delete(directory, true);
+        }
+    }
+
+    [Fact]
+    public async Task ReportsMalformedManifestWithoutDiscardingValidPacks()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), $"plana-pack-{Guid.NewGuid():N}");
+        var goodDirectory = Path.Combine(directory, "good");
+        var badDirectory = Path.Combine(directory, "bad");
+        Directory.CreateDirectory(goodDirectory);
+        Directory.CreateDirectory(badDirectory);
+        try
+        {
+            await File.WriteAllTextAsync(Path.Combine(goodDirectory, "manifest.json"), """
+                { "schemaVersion": 1, "id": "good.pack", "name": "Good", "version": "1", "publisher": "Tests", "actions": [] }
+                """);
+            await File.WriteAllTextAsync(Path.Combine(badDirectory, "manifest.json"), "{ not-json");
+
+            var result = await new ActionPackLoader().LoadDirectoryAsync(directory);
+
+            Assert.Equal(2, result.Discoveries.Count);
+            Assert.Single(result.ValidPacks);
+            var invalid = Assert.Single(result.Discoveries, discovery => !discovery.IsValid);
+            Assert.NotNull(invalid.Error);
+            Assert.Contains("bad", invalid.ManifestPath);
         }
         finally
         {

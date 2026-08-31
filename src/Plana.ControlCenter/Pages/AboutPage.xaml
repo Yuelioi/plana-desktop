@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="Plana_ControlCenter.Pages.AboutPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Plana_ControlCenter.Pages">
+    <Grid Padding="32,24,32,32" RowSpacing="20">
+        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+        <Grid ColumnSpacing="12">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+            <StackPanel Spacing="6">
+                <TextBlock x:Name="PageTitle" Style="{StaticResource PageTitleStyle}" Text="Extensions" />
+                <TextBlock x:Name="PageDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="Manage declarative Action Packs and out-of-process Plugins." />
+            </StackPanel>
+            <Button x:Name="ReloadButton" Grid.Column="1" VerticalAlignment="Center" Click="ReloadButton_Click">
+                <StackPanel Orientation="Horizontal" Spacing="8"><FontIcon FontSize="14" Glyph="&#xE72C;" /><TextBlock x:Name="ReloadLabel" Text="Reload" /></StackPanel>
+            </Button>
+        </Grid>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
+            <Button x:Name="OpenPacksButton" Click="OpenPacksButton_Click"><StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE8B7;" /><TextBlock x:Name="OpenPacksLabel" Text="Open Packs folder" /></StackPanel></Button>
+            <Button x:Name="OpenPluginsButton" Click="OpenPluginsButton_Click"><StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE8B7;" /><TextBlock x:Name="OpenPluginsLabel" Text="Open Plugins folder" /></StackPanel></Button>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="2">
+            <StackPanel Spacing="28">
+                <StackPanel Spacing="10">
+                    <TextBlock x:Name="PacksHeading" Style="{StaticResource SectionTitleStyle}" Text="Action Packs" />
+                    <TextBlock x:Name="PacksEmpty" Foreground="{StaticResource PlanaSubtleBrush}" Text="No installed Action Packs." />
+                    <ItemsControl ItemsSource="{x:Bind Packs}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="local:ExtensionItem">
+                                <Grid Padding="4,10" ColumnSpacing="16">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                    <StackPanel Spacing="3"><TextBlock FontWeight="SemiBold" Text="{x:Bind Name}" /><TextBlock FontSize="12" Foreground="{StaticResource PlanaSubtleBrush}" Text="{x:Bind Detail}" /></StackPanel>
+                                    <ToggleSwitch Grid.Column="1" IsOn="{x:Bind Enabled, Mode=TwoWay}" Tag="{x:Bind}" Toggled="PackToggle_Toggled" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <StackPanel Spacing="10">
+                    <TextBlock x:Name="PluginsHeading" Style="{StaticResource SectionTitleStyle}" Text="Plugins" />
+                    <TextBlock x:Name="PluginsEmpty" Foreground="{StaticResource PlanaSubtleBrush}" Text="No installed Plugins." />
+                    <ItemsControl ItemsSource="{x:Bind Plugins}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="local:ExtensionItem">
+                                <Grid Padding="4,10" ColumnSpacing="16">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                    <StackPanel Spacing="3"><TextBlock FontWeight="SemiBold" Text="{x:Bind Name}" /><TextBlock FontSize="12" Foreground="{StaticResource PlanaSubtleBrush}" Text="{x:Bind Detail}" TextWrapping="Wrap" /></StackPanel>
+                                    <ToggleSwitch Grid.Column="1" IsOn="{x:Bind Enabled, Mode=TwoWay}" Tag="{x:Bind}" Toggled="PluginToggle_Toggled" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

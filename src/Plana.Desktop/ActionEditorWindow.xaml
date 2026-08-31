@@ -1,0 +1,54 @@
+<Window x:Class="Plana.Desktop.ActionEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{DynamicResource AddCustomActionTitle}"
+        Width="560" Height="570" MinWidth="500" MinHeight="520"
+        WindowStartupLocation="CenterOwner" ResizeMode="CanResize"
+        Background="#F5F6F8" ShowInTaskbar="False">
+    <Grid Margin="24,20,24,18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock Text="{DynamicResource AddCustomActionHeading}" FontSize="22" FontWeight="SemiBold" />
+            <TextBlock Text="{DynamicResource AddCustomActionHelp}" Foreground="#5F6368" TextWrapping="Wrap" Margin="0,4,0,0" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,16,0,16">
+            <StackPanel>
+                <TextBlock Text="{DynamicResource ActionNameLabel}" FontWeight="SemiBold" />
+                <TextBox x:Name="ActionNameTextBox" Padding="7,5" Margin="0,5,0,14" />
+
+                <TextBlock Text="{DynamicResource ActionTypeLabel}" FontWeight="SemiBold" />
+                <ComboBox x:Name="ActionKindComboBox" DisplayMemberPath="Label" SelectedValuePath="Kind"
+                          SelectionChanged="OnKindChanged" Padding="6,4" Margin="0,5,0,14" />
+
+                <TextBlock x:Name="PrimaryTargetLabel" FontWeight="SemiBold" />
+                <TextBox x:Name="PrimaryTargetTextBox" Padding="7,5" Margin="0,5,0,4" />
+                <TextBlock x:Name="TargetHelpText" Foreground="#5F6368" TextWrapping="Wrap" Margin="0,0,0,14" />
+
+                <StackPanel x:Name="SecondaryTargetPanel" Visibility="Collapsed">
+                    <TextBlock Text="{DynamicResource ScriptPathLabel}" FontWeight="SemiBold" />
+                    <TextBox x:Name="SecondaryTargetTextBox" Padding="7,5" Margin="0,5,0,14" />
+                </StackPanel>
+
+                <TextBlock Text="{DynamicResource ActionArgumentsLabel}" FontWeight="SemiBold" />
+                <TextBox x:Name="ActionArgumentsTextBox" AcceptsReturn="True" Height="90"
+                         VerticalScrollBarVisibility="Auto" Padding="7,5" Margin="0,5,0,4" />
+                <TextBlock Text="{DynamicResource ActionArgumentsHelp}" Foreground="#5F6368" TextWrapping="Wrap" />
+
+                <CheckBox x:Name="RequiresConfirmationCheckBox" Content="{DynamicResource ConfirmEveryRunLabel}"
+                          Margin="0,14,0,0" />
+                <TextBlock x:Name="EditorErrorText" Foreground="#B3261E" TextWrapping="Wrap" Margin="0,12,0,0" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="{DynamicResource CancelButton}" IsCancel="True" Padding="16,7" Margin="0,0,8,0" />
+            <Button Content="{DynamicResource AddActionButton}" IsDefault="True" Click="OnAddClick"
+                    Padding="16,7" Background="#1A73E8" Foreground="White" BorderBrush="#1A73E8" />
+        </StackPanel>
+    </Grid>
+</Window>
