@@ -1,5 +1,9 @@
 using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Text.Json;
+using Plana.Core.Companion;
 
 var arguments = args.Select((value, index) => (value, index)).ToDictionary(item => item.value, item => item.index);
 if (!arguments.TryGetValue("--godot", out var godotIndex) || godotIndex + 1 >= args.Length ||
@@ -24,6 +28,19 @@ if (smoke)
     supervisor.SetPassThrough(false);
     supervisor.Render("Interactive restored");
     if (supervisor.IsPassThrough) throw new InvalidOperationException("WS_EX_TRANSPARENT was not removed.");
+    var originalBounds = supervisor.Bounds;
+    supervisor.MoveBy(30, 20);
+    supervisor.Render("Window moved +30,+20");
+    if (supervisor.Bounds.Left != originalBounds.Left + 30 || supervisor.Bounds.Top != originalBounds.Top + 20)
+        throw new InvalidOperationException("Renderer window did not move by the requested offset.");
+    supervisor.MoveTo(originalBounds.Left, originalBounds.Top);
+    if (supervisor.Bounds != originalBounds) throw new InvalidOperationException("Renderer window bounds were not restored.");
+    supervisor.Perform(new CharacterPerformanceIntent(CharacterEmotion.Affectionate));
+    supervisor.Render("Affectionate performance acknowledged");
+    supervisor.Perform(new CharacterPerformanceIntent(CharacterEmotion.Happy, CharacterGesture.HeadPat));
+    supervisor.Render("Happy head-pat performance acknowledged");
+    var idle = supervisor.MeasureIdle(TimeSpan.FromSeconds(1));
+    supervisor.Render($"Idle measured: CPU {idle.CpuMilliseconds:F1} ms, WS {idle.WorkingSetBytes / 1024 / 1024} MiB");
     var firstProcessId = supervisor.ProcessId;
     supervisor.Restart();
     supervisor.Render("Renderer restarted");
@@ -42,6 +59,13 @@ while (true)
     if (key == ConsoleKey.Q) break;
     if (key == ConsoleKey.T) supervisor.SetPassThrough(!supervisor.IsPassThrough);
     if (key == ConsoleKey.R) supervisor.Restart();
+    if (key == ConsoleKey.H) supervisor.Perform(new CharacterPerformanceIntent(CharacterEmotion.Happy));
+    if (key == ConsoleKey.P) supervisor.Perform(new CharacterPerformanceIntent(CharacterEmotion.Happy, CharacterGesture.HeadPat));
+    if (key == ConsoleKey.L) supervisor.Perform(new CharacterPerformanceIntent(CharacterEmotion.Affectionate));
+    if (key == ConsoleKey.LeftArrow) supervisor.MoveBy(-10, 0);
+    if (key == ConsoleKey.RightArrow) supervisor.MoveBy(10, 0);
+    if (key == ConsoleKey.UpArrow) supervisor.MoveBy(0, -10);
+    if (key == ConsoleKey.DownArrow) supervisor.MoveBy(0, 10);
 }
 
 return 0;
@@ -59,19 +83,52 @@ sealed class ProofSupervisor(string godotPath, string projectPath) : IDisposable
     private Process? renderer;
     private nint window;
     private long originalStyle;
+    private ManualResetEventSlim rendererReady = new(false);
+    private readonly PlanaPerformancePlanner planner = new();
+    private TcpListener? listener;
+    private TcpClient? controllerClient;
+    private StreamWriter? controllerWriter;
+    private ManualResetEventSlim commandAcknowledged = new(false);
+    private long startupMilliseconds;
 
     public int ProcessId => renderer is { HasExited: false } ? renderer.Id : 0;
     public bool IsPassThrough => window != 0 && (GetWindowLongPtr(window, GwlExStyle).ToInt64() & WsExTransparent) != 0;
+    public uint Dpi => window == 0 ? 0 : GetDpiForWindow(window);
+    public WindowBounds Bounds
+    {
+        get
+        {
+            if (window == 0 || !GetWindowRect(window, out var rect)) return default;
+            return new WindowBounds(rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top);
+        }
+    }
 
     public void Start()
     {
         if (renderer is { HasExited: false }) return;
-        renderer = Process.Start(new ProcessStartInfo
+        rendererReady.Dispose();
+        rendererReady = new ManualResetEventSlim(false);
+        listener = new TcpListener(IPAddress.Loopback, 0);
+        listener.Start();
+        var controllerPort = ((IPEndPoint)listener.LocalEndpoint).Port;
+        var startup = Stopwatch.StartNew();
+        renderer = new Process
         {
-            FileName = godotPath,
-            UseShellExecute = false,
-            ArgumentList = { "--path", projectPath }
-        }) ?? throw new InvalidOperationException("Godot did not start.");
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = godotPath,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                ArgumentList = { "--path", projectPath, "--", $"controller_port={controllerPort}" }
+            },
+            EnableRaisingEvents = true
+        };
+        renderer.OutputDataReceived += (_, eventArgs) => ObserveRendererOutput(eventArgs.Data);
+        renderer.ErrorDataReceived += (_, eventArgs) => ObserveRendererOutput(eventArgs.Data);
+        if (!renderer.Start()) throw new InvalidOperationException("Godot did not start.");
+        renderer.BeginOutputReadLine();
+        renderer.BeginErrorReadLine();
 
         var deadline = DateTime.UtcNow.AddSeconds(10);
         while (DateTime.UtcNow < deadline)
@@ -82,14 +139,33 @@ sealed class ProofSupervisor(string godotPath, string projectPath) : IDisposable
             Thread.Sleep(50);
         }
 
-        window = renderer.MainWindowHandle;
-        if (window == 0) throw new TimeoutException("Godot renderer HWND was not created.");
-        // Godot creates the HWND before its display backend finishes applying final flags.
-        // The production protocol will replace this bounded proof delay with renderer_ready.
-        Thread.Sleep(1200);
+        if (!rendererReady.Wait(TimeSpan.FromSeconds(10))) throw new TimeoutException("Godot did not emit PROOF_READY.");
+        controllerClient = listener.AcceptTcpClientAsync().WaitAsync(TimeSpan.FromSeconds(10)).GetAwaiter().GetResult();
+        controllerWriter = new StreamWriter(controllerClient.GetStream()) { AutoFlush = true };
+        _ = ReadControllerResponsesAsync(controllerClient, commandAcknowledged);
+        startup.Stop();
+        startupMilliseconds = startup.ElapsedMilliseconds;
         renderer.Refresh();
         window = renderer.MainWindowHandle;
+        if (window == 0) throw new TimeoutException("Godot renderer HWND was not created.");
         originalStyle = GetWindowLongPtr(window, GwlExStyle).ToInt64();
+    }
+
+    private static async Task ReadControllerResponsesAsync(TcpClient client, ManualResetEventSlim acknowledged)
+    {
+        using var reader = new StreamReader(client.GetStream());
+        while (await reader.ReadLineAsync() is { } line)
+        {
+            Console.WriteLine($"[controller] {line}");
+            if (line.Contains("\"type\":\"performed\"", StringComparison.Ordinal)) acknowledged.Set();
+        }
+    }
+
+    private void ObserveRendererOutput(string? line)
+    {
+        if (string.IsNullOrWhiteSpace(line)) return;
+        Console.WriteLine($"[renderer] {line}");
+        if (line.Contains("PROOF_READY", StringComparison.Ordinal)) rendererReady.Set();
     }
 
     public void SetPassThrough(bool enabled)
@@ -111,9 +187,46 @@ sealed class ProofSupervisor(string godotPath, string projectPath) : IDisposable
         Start();
     }
 
+    public void MoveBy(int deltaX, int deltaY)
+    {
+        var bounds = Bounds;
+        MoveTo(bounds.Left + deltaX, bounds.Top + deltaY);
+    }
+
+    public void MoveTo(int x, int y)
+    {
+        if (window == 0) throw new InvalidOperationException("Renderer is not running.");
+        SetWindowPos(window, 0, x, y, 0, 0, SwpNoSize | SwpNoZOrder | SwpNoActivate);
+    }
+
+    public void Perform(CharacterPerformanceIntent intent)
+    {
+        if (controllerWriter is null) throw new InvalidOperationException("Renderer command channel is not connected.");
+        var plan = planner.Plan(intent);
+        commandAcknowledged.Reset();
+        controllerWriter.WriteLine(JsonSerializer.Serialize(new { type = "perform", cues = plan.Cues }));
+        if (!commandAcknowledged.Wait(TimeSpan.FromSeconds(5))) throw new TimeoutException("Renderer did not acknowledge performance command.");
+    }
+
+    public IdleMeasurement MeasureIdle(TimeSpan interval)
+    {
+        if (renderer is null || renderer.HasExited) throw new InvalidOperationException("Renderer is not running.");
+        renderer.Refresh();
+        var before = renderer.TotalProcessorTime;
+        Thread.Sleep(interval);
+        renderer.Refresh();
+        return new IdleMeasurement((renderer.TotalProcessorTime - before).TotalMilliseconds, renderer.WorkingSet64);
+    }
+
     public void Stop()
     {
         if (renderer is null) return;
+        controllerWriter?.Dispose();
+        controllerWriter = null;
+        controllerClient?.Dispose();
+        controllerClient = null;
+        listener?.Stop();
+        listener = null;
         if (!renderer.HasExited)
         {
             if (window != 0) SetWindowLongPtr(window, GwlExStyle, new nint(originalStyle));
@@ -137,8 +250,12 @@ sealed class ProofSupervisor(string godotPath, string projectPath) : IDisposable
         Console.WriteLine($"HWND:         0x{window:X}");
         Console.WriteLine($"ExtendedStyle: 0x{style:X}");
         Console.WriteLine($"Transparent:  {(style & WsExTransparent) != 0}");
+        Console.WriteLine($"DPI:          {Dpi}");
+        Console.WriteLine($"Bounds:       {Bounds}");
+        Console.WriteLine($"Startup:      {startupMilliseconds} ms");
+        Console.WriteLine($"Working set:  {(running ? renderer!.WorkingSet64 / 1024 / 1024 : 0)} MiB");
         Console.WriteLine();
-        Console.WriteLine("[T] toggle pass-through  [R] restart renderer  [Q] quit");
+        Console.WriteLine("[H] happy  [P] head pat  [L] love  [T] pass-through  [R] restart  [Arrows] move  [Q] quit");
     }
 
     public void Dispose() => Stop();
@@ -155,4 +272,17 @@ sealed class ProofSupervisor(string godotPath, string projectPath) : IDisposable
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool SetWindowPos(nint window, nint insertAfter, int x, int y, int width, int height, uint flags);
+
+    [DllImport("user32.dll")]
+    private static extern uint GetDpiForWindow(nint window);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool GetWindowRect(nint window, out NativeRect rect);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct NativeRect { public int Left; public int Top; public int Right; public int Bottom; }
 }
+
+readonly record struct WindowBounds(int Left, int Top, int Width, int Height);
+readonly record struct IdleMeasurement(double CpuMilliseconds, long WorkingSetBytes);

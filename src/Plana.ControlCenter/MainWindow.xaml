@@ -41,6 +41,9 @@
                 <NavigationViewItem x:Name="SettingsNavigationItem" Content="Settings" IsSelected="True" Tag="settings">
                     <NavigationViewItem.Icon><FontIcon Glyph="&#xE713;" /></NavigationViewItem.Icon>
                 </NavigationViewItem>
+                <NavigationViewItem x:Name="ChatNavigationItem" Content="Chat" Tag="chat">
+                    <NavigationViewItem.Icon><FontIcon Glyph="&#xE8BD;" /></NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem
                     x:Name="ActionsNavigationItem"
                     Content="Actions"

@@ -10,7 +10,7 @@ using Forms = System.Windows.Forms;
 
 namespace Plana.Companion.Native;
 
-internal sealed class NativeCompanionWindow : ICompanionSurface
+internal sealed class NativeCompanionWindow : ICompanionController
 {
     private static readonly (double X, double Y)[] CharacterHitPolygon =
     [

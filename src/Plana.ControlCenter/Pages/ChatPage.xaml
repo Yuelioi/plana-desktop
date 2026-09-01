@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="Plana_ControlCenter.Pages.ChatPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Padding="32,24,32,32" RowSpacing="20">
+        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+        <StackPanel Spacing="6">
+            <TextBlock x:Name="PageTitle" Style="{StaticResource PageTitleStyle}" Text="Chat with Plana" />
+            <TextBlock x:Name="PageDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="Uses the AI provider configured in Settings." />
+        </StackPanel>
+        <ScrollViewer Grid.Row="1">
+            <TextBlock x:Name="ResponseText" FontSize="16" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
+        </ScrollViewer>
+        <InfoBar x:Name="ChatStatus" Grid.Row="2" IsOpen="False" IsClosable="True" />
+        <Grid Grid.Row="3" ColumnSpacing="10">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+            <TextBox x:Name="PromptInput" MinHeight="44" PlaceholderText="Ask Plana" KeyDown="PromptInput_KeyDown" />
+            <Button x:Name="SendButton" Grid.Column="1" MinWidth="100" Click="SendButton_Click" Style="{StaticResource AccentButtonStyle}"><TextBlock x:Name="SendLabel" Text="Send" /></Button>
+        </Grid>
+    </Grid>
+</Page>

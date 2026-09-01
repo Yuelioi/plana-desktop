@@ -12,9 +12,9 @@ Work has resumed on architecture replacement. The repository builds and the WinU
 
 The host is now localization-ready. Action Packs can open HTTP(S) URLs, files, folders, and applications or run bounded commands and explicitly interpreted scripts; executable/script files cannot hide behind `file.open`. A visible Starter Pack ships with every build. The Plugins page discovers, imports, starts, disables, and diagnoses executable extensions through the out-of-process Plugin Host. No Plugin trust-review or hash-approval workflow remains.
 
-The replacement Companion direction is now a split process: WinUI owns normal UI, tray, AI, plugins, IME, supervision, and durable state; a replaceable renderer process owns the transparent character window. Godot + official `spine-godot` 4.2 is the first proof and native `spine-cpp` + Win32/DComp is the baseline competitor. No production renderer has been selected yet.
+The replacement Companion is now split process and locally usable: WinUI owns normal UI and IME-capable AI Chat; the .NET Host owns tray, settings, plugins, Windows pass-through, semantic control, and recovery; the production Godot process owns transparent Spine rendering, animation state, drag, and pointer events. Godot is the default published Renderer; Native/WebView remains fallback.
 
-The side-by-side migration is complete. `Plana.ControlCenter` is the packaged single-instance WinUI 3 application; `Plana.Companion.Native` is the production Companion; reusable modules and Plugin Host target .NET 10; Core also preserves the WPF net8 rollback reference. The solution passes 28 tests and builds with zero warnings or errors.
+The side-by-side migration is complete. `Plana.ControlCenter` is the packaged single-instance WinUI 3 application; `Plana.Companion.Native` is the production Host and legacy renderer fallback; `Plana.Companion.Godot.Renderer` is the default character renderer. Reusable modules and Plugin Host target .NET 10; Core also preserves the WPF net8 rollback reference. The solution passes 42 tests and builds with zero warnings or errors.
 
 The Actions page now searches the complete Action catalog and runs Actions directly. Users can create persisted Windows Terminal project launchers with a project folder and ordered custom arguments, including `{folder}` substitution and direct `codex` startup. Automatic bounded discovery across project roots remains next.
 
@@ -28,11 +28,11 @@ Valid enabled Plugins launch one-per-Host, complete a bounded identity/API hands
 
 ## Next
 
-Continue the [Companion host rearchitecture](slices/companion-host-rearchitecture.md): extend the working Godot + .NET supervisor proof with native drag and explicit 100%→150% DPI observation. Then replace the bounded startup delay with a narrow `renderer_ready` handshake. Keep the current Native/WebView Companion as evidence and anti-reference.
+Continue Stage 7 from the completed local Godot cutover: sign/document the Control Center MSIX installation path, keep the mixed-DPI test open for suitable hardware, and add remaining interaction polish/project discovery without returning to the Native/WebView renderer.
 
 ## Current execution
 
-Stage 7 — [Companion host rearchitecture](slices/companion-host-rearchitecture.md), continuing Godot Proof A with a Win32 supervisor/pass-through controller.
+Stage 7 — Godot cutover usable; continuing packaging, interaction polish, project discovery, and mixed-DPI verification.
 
 ## Progress
 
@@ -82,6 +82,9 @@ Stage 7 — [Companion host rearchitecture](slices/companion-host-rearchitecture
 - Completed Windows Companion host research and chose split-process WinUI + replaceable renderer as the stable direction. Opened the rearchitecture Slice with Godot/spine-godot Proof A and native spine-cpp Proof B acceptance gates; toolchain audit found Godot/CMake/Ninja missing.
 - Pinned and installed an ignored official Godot 4.6.1 + Spine 4.2 GDExtension toolchain, built disposable Proof A, and rendered the real Plana model with valid alpha in Idle, head-pat, and affection states. Live HWND inspection showed Godot's mouse-passthrough flag does not set `WS_EX_TRANSPARENT`; a narrow Win32 controller is required for cross-application pass-through.
 - Added the disposable .NET Win32 supervisor state prototype. Verified real HWND transitions Interactive `0x40018` → PassThrough `0x40038` → Interactive, plus renderer PID/HWND replacement on restart and complete child shutdown. Confirmed production must wait for `renderer_ready` before applying host-owned styles. Re-verified 42/42 tests and a zero-warning/error full Release build.
+- Replaced the supervisor's readiness delay with a real redirected `PROOF_READY` handshake, added Godot left-button window drag, live DPI/bounds diagnostics, and automated +30/+20 placement/restoration. The proof passes at 96 DPI; hardware audit found only one 3440×1440 display, so mixed-DPI cross-monitor verification remains open.
+- Promoted the validated Proof into `Plana.Companion.Godot.Renderer` and made it the default published Renderer. Added semantic TCP acknowledgements, WinUI-to-Host named-pipe control, click/double-click/context events, tray expressions/pass-through, settings placement, one-second crash recovery, and kill-on-close Job Object cleanup.
+- Added a bilingual WinUI Chat page using the configured Codex/API provider; speaking/success/error states drive semantic Plana performances. Published and launched Host PID 26384 + Renderer PID 4724, verified `Happy + HeadPat` acknowledgement, forced recovery, production-only Renderer contents, 42/42 tests, and the complete build/publish. The unsigned local MSIX remains the packaging blocker; debug identity runs the current Chat page.
 
 ## References
 

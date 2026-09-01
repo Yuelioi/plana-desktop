@@ -31,17 +31,22 @@ internal static class Program
         var pluginDiagnostics = new PluginManifestLoader().LoadDirectoryAsync(Path.Combine(dataDirectory, "plugins")).GetAwaiter().GetResult();
         pluginRuntime.ReconcileAsync(pluginDiagnostics, settings, settings.UiCulture).GetAwaiter().GetResult();
         var actions = LoadActions(settings, dataDirectory, pluginRuntime.SnapshotActionPacks());
-        using var companion = new NativeCompanionWindow(pluginRuntime);
+        using var companion = CreateCompanion(pluginRuntime);
         companion.Apply(state);
-        try
+        if (companion is NativeCompanionWindow nativeCompanion)
         {
-            companion.InitializeRenderer(Path.Combine(AppContext.BaseDirectory, "Renderer"), settings, actions);
+            try
+            {
+                nativeCompanion.InitializeRenderer(Path.Combine(AppContext.BaseDirectory, "Renderer"), settings, actions);
+            }
+            catch (Exception exception)
+            {
+                File.WriteAllText(Path.Combine(dataDirectory, "renderer-error.log"), exception.ToString());
+            }
         }
-        catch (Exception exception)
-        {
-            File.WriteAllText(Path.Combine(dataDirectory, "renderer-error.log"), exception.ToString());
-        }
-        companion.WatchSettings(settingsPath);
+        if (companion is NativeCompanionWindow currentNative) currentNative.WatchSettings(settingsPath);
+        if (companion is GodotCompanionWindow godotCompanion) godotCompanion.WatchSettings(settingsPath);
+        using var controlServer = companion is GodotCompanionWindow controlledGodot ? new CompanionControlServer(controlledGodot) : null;
         using var tray = new NativeTrayIcon(companion, settings);
         companion.Show();
         companion.RunMessageLoop();
@@ -51,6 +56,17 @@ internal static class Program
         new DesktopSettingsStore(settingsPath).SaveAsync(settings).GetAwaiter().GetResult();
         pluginRuntime.TerminateAll();
         Environment.Exit(0);
+    }
+
+    private static ICompanionController CreateCompanion(PluginRuntimeManager pluginRuntime)
+    {
+        var godotPath = Environment.GetEnvironmentVariable("PLANA_GODOT_PATH")
+            ?? Path.Combine(AppContext.BaseDirectory, "Godot", "Godot.exe");
+        var projectPath = Environment.GetEnvironmentVariable("PLANA_GODOT_PROJECT")
+            ?? Path.Combine(AppContext.BaseDirectory, "GodotRenderer");
+        return File.Exists(godotPath) && File.Exists(Path.Combine(projectPath, "project.godot"))
+            ? new GodotCompanionWindow(godotPath, projectPath)
+            : new NativeCompanionWindow(pluginRuntime);
     }
 
     private static IReadOnlyList<NativeActionEntry> LoadActions(DesktopSettings settings, string dataDirectory, IReadOnlyList<ActionPack> pluginPacks)

@@ -24,4 +24,4 @@ Run the Win32 supervisor state prototype:
 .\src\Plana.Companion.Godot.Proof\run-controller.ps1
 ```
 
-The controller owns the renderer process and its whole-window `WS_EX_TRANSPARENT` mode. Press `T` to switch between interactive and pass-through, `R` to kill/restart the renderer, and `Q` to exit. Use `-Smoke` for an automated transition check.
+The controller owns the renderer process and its whole-window `WS_EX_TRANSPARENT` mode. It waits for the renderer's `PROOF_READY` handshake before taking HWND ownership, connects a loopback command channel, and displays live DPI/bounds/startup/working-set data. Press `H` for happy, `P` for happy head-pat, `L` for affection, `T` to switch between interactive and pass-through, `R` to kill/restart the renderer, arrow keys to move it, and `Q` to exit. The character window itself also supports left-button drag. Use `-Smoke` for automated style, movement/restoration, semantic command acknowledgement, resource, restart, and shutdown checks.

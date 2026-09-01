@@ -26,7 +26,7 @@ Plana Desktop is a Windows companion that combines an expressive Spine character
 ## Technology and repository constraints
 
 - Windows is the primary and currently exclusive platform.
-- Migrate reusable modules to .NET 10. WinUI 3 owns ordinary application UI; the transparent Companion uses a native Win32/Composition window and a composition-capable WebView2 adapter.
+- Reusable modules target .NET 10. WinUI 3 owns ordinary application UI, AI text/IME, and configuration; a supervised Godot 4 process owns transparent Spine rendering, while the .NET Companion host owns tray, persistence, Windows pass-through, recovery, and the semantic command seam.
 - Keep the WPF host runnable only as the behavioral migration baseline until parity checks pass.
 - Keep `Plana.Core` free of WPF and Windows dependencies.
 - Treat the Core module's small interface as the primary test surface.

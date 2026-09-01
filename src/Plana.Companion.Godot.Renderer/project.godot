@@ -1,9 +1,8 @@
-; PROTOTYPE — disposable Godot renderer proof.
 config_version=5
 
 [application]
 
-config/name="Plana Companion Godot Proof"
+config/name="Plana Companion Renderer"
 run/main_scene="res://main.tscn"
 run/low_processor_mode=true
 run/low_processor_mode_sleep_usec=16666

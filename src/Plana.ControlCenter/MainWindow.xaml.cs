@@ -22,6 +22,7 @@ public sealed partial class MainWindow : Window
         if (App.IsChinese)
         {
             SettingsNavigationItem.Content = "设置";
+            ChatNavigationItem.Content = "对话";
             ActionsNavigationItem.Content = "操作";
             ToolGroupsNavigationItem.Content = "工具组";
             MigrationNavigationItem.Content = "扩展";
@@ -41,6 +42,12 @@ public sealed partial class MainWindow : Window
         {
             NavView.SelectedItem = ToolGroupsNavigationItem;
             NavFrame.Navigate(typeof(ToolGroupsPage));
+            return;
+        }
+        if (uri?.Host.Equals("chat", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            NavView.SelectedItem = ChatNavigationItem;
+            NavFrame.Navigate(typeof(ChatPage));
             return;
         }
 
@@ -82,6 +89,9 @@ public sealed partial class MainWindow : Window
                     break;
                 case "home":
                     NavFrame.Navigate(typeof(HomePage));
+                    break;
+                case "chat":
+                    NavFrame.Navigate(typeof(ChatPage));
                     break;
                 case "groups":
                     NavFrame.Navigate(typeof(ToolGroupsPage));
