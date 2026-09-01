@@ -23,9 +23,7 @@ func _ready():
 
 func apply_mouse_passthrough_polygon():
 	if full_window_pass_through:
-		get_window().mouse_passthrough_polygon = PackedVector2Array([
-			Vector2(-4, -4), Vector2(-3, -4), Vector2(-4, -3)
-		])
+		get_window().mouse_passthrough_polygon = PackedVector2Array()
 		return
 	var size = Vector2(get_window().size)
 	var normalized = [

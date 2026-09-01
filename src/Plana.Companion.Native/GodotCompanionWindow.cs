@@ -14,7 +14,14 @@ namespace Plana.Companion.Native;
 
 internal sealed class GodotCompanionWindow : ICompanionController
 {
+    private const int GwlExStyle = -20;
+    private const long WsExLayered = 0x00080000;
+    private const long WsExTransparent = 0x20;
+    private const uint SwpNoSize = 0x0001;
+    private const uint SwpNoMove = 0x0002;
+    private const uint SwpNoZOrder = 0x0004;
     private const uint SwpNoActivate = 0x0010;
+    private const uint SwpFrameChanged = 0x0020;
     private const int SwHide = 0;
     private const int SwShowNoActivate = 4;
     private const uint JobObjectLimitKillOnJobClose = 0x00002000;
@@ -42,6 +49,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private bool _closing;
     private bool _visible = true;
     private bool _disposed;
+    private bool _fullPassThrough;
     private readonly nint _rendererJob;
 
     public nint WindowHandle { get; private set; }
@@ -95,6 +103,8 @@ internal sealed class GodotCompanionWindow : ICompanionController
 
     public void SetPassThrough(bool enabled)
     {
+        if (WindowHandle == 0) return;
+        if (!enabled) SetTransparentWindowStyle(false);
         lock (_sync)
         {
             if (_writer is null) return;
@@ -103,6 +113,16 @@ internal sealed class GodotCompanionWindow : ICompanionController
         }
         if (!_inputModeAcknowledged.Wait(TimeSpan.FromSeconds(3)))
             throw new TimeoutException("Renderer did not acknowledge input mode change.");
+        if (enabled) SetTransparentWindowStyle(true);
+        _fullPassThrough = enabled;
+    }
+
+    private void SetTransparentWindowStyle(bool enabled)
+    {
+        var style = GetWindowLongPtr(WindowHandle, GwlExStyle).ToInt64();
+        style = enabled ? style | WsExLayered | WsExTransparent : style & ~WsExTransparent & ~WsExLayered;
+        SetWindowLongPtr(WindowHandle, GwlExStyle, new nint(style));
+        SetWindowPos(WindowHandle, 0, 0, 0, 0, 0, SwpNoSize | SwpNoMove | SwpNoZOrder | SwpNoActivate | SwpFrameChanged);
     }
 
     public void Perform(CharacterPerformanceIntent intent)
@@ -174,6 +194,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         if (WindowHandle == 0) throw new Win32Exception("Godot renderer window was not created.");
         Apply(_state);
         if (!_visible) Hide();
+        if (_fullPassThrough) SetPassThrough(true);
     }
 
     private void ObserveOutput(string? line)
@@ -318,6 +339,10 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private static extern bool GetWindowRect(nint window, out Rect rect);
     [DllImport("user32.dll")]
     private static extern int GetSystemMetrics(int index);
+    [DllImport("user32.dll", EntryPoint = "GetWindowLongPtrW")]
+    private static extern nint GetWindowLongPtr(nint window, int index);
+    [DllImport("user32.dll", EntryPoint = "SetWindowLongPtrW")]
+    private static extern nint SetWindowLongPtr(nint window, int index, nint value);
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     private static extern nint CreateJobObject(nint securityAttributes, string? name);
     [DllImport("kernel32.dll", SetLastError = true)]
