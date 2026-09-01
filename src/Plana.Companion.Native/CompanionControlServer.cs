@@ -6,6 +6,7 @@ namespace Plana.Companion.Native;
 
 internal sealed class CompanionControlServer : IDisposable
 {
+    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
     private readonly GodotCompanionWindow _companion;
     private readonly CancellationTokenSource _stop = new();
     private readonly Task _loop;
@@ -29,7 +30,7 @@ internal sealed class CompanionControlServer : IDisposable
                 using var reader = new StreamReader(pipe, leaveOpen: true);
                 await using var writer = new StreamWriter(pipe, leaveOpen: true) { AutoFlush = true };
                 var line = await reader.ReadLineAsync(_stop.Token);
-                var request = line is null ? null : JsonSerializer.Deserialize<ControlRequest>(line);
+                var request = line is null ? null : JsonSerializer.Deserialize<ControlRequest>(line, JsonOptions);
                 if (request?.Type?.Equals("pass-through", StringComparison.OrdinalIgnoreCase) == true)
                 {
                     _companion.SetPassThrough(request.Enabled);
@@ -46,6 +47,12 @@ internal sealed class CompanionControlServer : IDisposable
                 {
                     _companion.ShowThinkingBubble();
                     await writer.WriteLineAsync("{\"ok\":true}");
+                    continue;
+                }
+                if (request?.Type?.Equals("quick-launch", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    var activated = _companion.ShowQuickLaunch(request.Query);
+                    await writer.WriteLineAsync(JsonSerializer.Serialize(new { ok = true, activated }));
                     continue;
                 }
                 if (request is null || !Enum.TryParse<CharacterEmotion>(request.Emotion ?? string.Empty, true, out var emotion) ||
@@ -69,5 +76,5 @@ internal sealed class CompanionControlServer : IDisposable
         _stop.Dispose();
     }
 
-    private sealed record ControlRequest(string? Type, string? Emotion, string? Gesture, bool IsSpeaking, bool Enabled, string? Text, bool IsError);
+    private sealed record ControlRequest(string? Type, string? Emotion, string? Gesture, bool IsSpeaking, bool Enabled, string? Text, bool IsError, string? Query);
 }

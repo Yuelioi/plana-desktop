@@ -3,7 +3,13 @@ using Plana.Core.Actions;
 
 namespace Plana.Companion.Native;
 
-internal sealed record NativeActionEntry(string Id, string Name, ActionDefinition Definition, string? WorkingDirectory);
+internal sealed record NativeActionEntry(
+    string Id,
+    string Name,
+    ActionDefinition Definition,
+    string? WorkingDirectory,
+    string Description = "",
+    string Source = "");
 
 internal static class NativeActionExecutor
 {

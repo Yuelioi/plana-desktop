@@ -8,11 +8,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
     <AssemblyName>Plana.Desktop</AssemblyName>
     <WebView2EnableCsWinRTProjection>true</WebView2EnableCsWinRTProjection>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Plana.Core\Plana.Core.csproj" />
+    <ProjectReference Include="..\Plana.TransientUI\Plana.TransientUI.csproj" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4191.47" />
   </ItemGroup>
   <ItemGroup>

@@ -52,7 +52,11 @@ internal sealed class NativeTrayIcon : IDisposable
             _menu.Items.Add(passThrough);
         }
         _menu.Items.Add(new Forms.ToolStripSeparator());
-        _menu.Items.Add(chinese ? "快速启动" : "Quick launch", null, (_, _) => Open("plana://commands"));
+        _menu.Items.Add(chinese ? "快速启动" : "Quick launch", null, (_, _) =>
+        {
+            if (_godot is not null) _godot.ShowQuickLaunch();
+            else Open("plana://commands");
+        });
         _menu.Items.Add(chinese ? "设置" : "Settings", null, (_, _) => Open("plana://settings"));
         _menu.Items.Add(new Forms.ToolStripSeparator());
         _menu.Items.Add(chinese ? "退出" : "Exit", null, (_, _) => companion.Close());

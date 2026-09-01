@@ -99,16 +99,19 @@ internal static class Program
 
     private static IReadOnlyList<NativeActionEntry> LoadActions(DesktopSettings settings, string dataDirectory, IReadOnlyList<ActionPack> pluginPacks)
     {
+        var chinese = settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
         var result = new List<NativeActionEntry>();
         result.AddRange(settings.UserActions.Select(action => new NativeActionEntry(
             $"user.action.{action.Id}", action.Name,
-            new ActionDefinition($"user.action.{action.Id}", action.Name, action.Kind, action.Parameters, Capability(action.Kind)), null)));
+            new ActionDefinition($"user.action.{action.Id}", action.Name, action.Kind, action.Parameters, Capability(action.Kind)), null,
+            action.Description, chinese ? "我的动作" : "My actions")));
         result.AddRange(settings.ProjectLaunchers.Select(project =>
         {
             var parameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { ["executable"] = project.Executable };
             for (var index = 0; index < project.Arguments.Count; index++) parameters[$"arg.{index}"] = project.Arguments[index].Replace("{folder}", project.Folder, StringComparison.OrdinalIgnoreCase);
             return new NativeActionEntry($"user.launcher.{project.Id}", project.Name,
-                new ActionDefinition($"user.launcher.{project.Id}", project.Name, ActionKinds.LaunchProcess, parameters, Capability(ActionKinds.LaunchProcess)), project.Folder);
+                new ActionDefinition($"user.launcher.{project.Id}", project.Name, ActionKinds.LaunchProcess, parameters, Capability(ActionKinds.LaunchProcess)), project.Folder,
+                project.Folder, chinese ? "项目" : "Projects");
         }));
 
         var loader = new ActionPackLoader();
@@ -116,10 +119,10 @@ internal static class Program
         {
             var packs = loader.LoadDirectoryAsync(directory).GetAwaiter().GetResult();
             foreach (var pack in packs.ValidPacks.Where(pack => !settings.DisabledActionPacks.Contains(pack.Id)))
-                result.AddRange(pack.Actions.Select(action => new NativeActionEntry(action.Id, action.Label, action, pack.SourceDirectory)));
+                result.AddRange(pack.Actions.Select(action => new NativeActionEntry(action.Id, action.Label, action, pack.SourceDirectory, "", pack.Name)));
         }
         foreach (var pack in pluginPacks)
-            result.AddRange(pack.Actions.Select(action => new NativeActionEntry(action.Id, action.Label, action, pack.SourceDirectory)));
+            result.AddRange(pack.Actions.Select(action => new NativeActionEntry(action.Id, action.Label, action, pack.SourceDirectory, "", pack.Name)));
         return result;
     }
 

@@ -1,0 +1,90 @@
+<Window x:Class="Plana.TransientUI.QuickLaunchWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Width="680" Height="132" MinWidth="680" MinHeight="132"
+        AllowsTransparency="True" Background="Transparent"
+        WindowStyle="None" ResizeMode="NoResize"
+        ShowInTaskbar="False" Topmost="True"
+        WindowStartupLocation="Manual"
+        FontFamily="Segoe UI Variable Text, Segoe UI">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Focusable" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonSurface" Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="ButtonSurface" Property="Background" Value="#E3E8F5" /></Trigger>
+                            <Trigger Property="IsPressed" Value="True"><Setter TargetName="ButtonSurface" Property="Background" Value="#D5DDF1" /></Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="ButtonSurface" Property="BorderBrush" Value="#4E6FD8" /></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ActionRowButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="56" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="12,7" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="RowSurface" Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="RowSurface" Property="Background" Value="#E9EDF7" /></Trigger>
+                            <Trigger Property="IsPressed" Value="True"><Setter TargetName="RowSurface" Property="Background" Value="#DCE4F6" /></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Border x:Name="Surface" Margin="8" Padding="14,14,14,11"
+            CornerRadius="16" Background="#F7F7F7"
+            BorderBrush="#D8D8D8" BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="18" ShadowDepth="4" Opacity="0.22" Color="#182033" />
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48" />
+                <RowDefinition Height="9" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" CornerRadius="7" BorderBrush="#A8A8A8" BorderThickness="1" Background="White">
+                <Grid>
+                    <TextBox x:Name="SearchBox" Margin="13,0,42,0" Padding="0"
+                             BorderThickness="0" Background="Transparent"
+                             VerticalContentAlignment="Center" FontSize="14"
+                             TextChanged="SearchBox_TextChanged" KeyDown="SearchBox_KeyDown" />
+                    <TextBlock x:Name="SearchPlaceholder" Margin="13,0,42,0" VerticalAlignment="Center"
+                               Foreground="#6A6A6A" IsHitTestVisible="False" Text="搜索动作" />
+                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,15,0"
+                               FontFamily="Segoe MDL2 Assets" FontSize="15" Foreground="#666666" Text="&#xE721;" />
+                </Grid>
+            </Border>
+            <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
+                <StackPanel x:Name="GroupPanel" Orientation="Horizontal" />
+            </ScrollViewer>
+            <Border x:Name="DisclosureSurface" Grid.Row="3" Margin="0,9,0,0" Padding="2"
+                    CornerRadius="10" Background="White" BorderBrush="#DDDDDD" BorderThickness="1" Visibility="Collapsed">
+                <ScrollViewer MaxHeight="336" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="DisclosurePanel" />
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

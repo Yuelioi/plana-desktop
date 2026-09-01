@@ -12,11 +12,11 @@ internal sealed class GlobalHotkey : Forms.NativeWindow, IDisposable
     private readonly Action _callback;
     private bool _registered;
 
-    public GlobalHotkey(nint handle, Action callback)
+    public GlobalHotkey(Action callback)
     {
         _callback = callback;
-        AssignHandle(handle);
-        _registered = RegisterHotKey(handle, HotkeyId, ModControl | ModAlt, (uint)Keys.Space);
+        CreateHandle(new Forms.CreateParams { Caption = "Plana.GlobalHotkey" });
+        _registered = RegisterHotKey(Handle, HotkeyId, ModControl | ModAlt, (uint)Keys.Space);
     }
 
     protected override void WndProc(ref Message m)
@@ -29,7 +29,7 @@ internal sealed class GlobalHotkey : Forms.NativeWindow, IDisposable
     {
         if (_registered) UnregisterHotKey(Handle, HotkeyId);
         _registered = false;
-        ReleaseHandle();
+        DestroyHandle();
     }
 
     [DllImport("user32.dll", SetLastError = true)] private static extern bool RegisterHotKey(nint window, int id, uint modifiers, uint key);

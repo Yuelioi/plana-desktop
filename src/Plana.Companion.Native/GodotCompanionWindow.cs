@@ -8,6 +8,7 @@ using Plana.Core.Actions;
 using Plana.Core.Companion;
 using Plana.Core.Plugins;
 using Plana.Core.Settings;
+using Plana.TransientUI;
 using Forms = System.Windows.Forms;
 
 namespace Plana.Companion.Native;
@@ -52,7 +53,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private bool _disposed;
     private bool _fullPassThrough;
     private readonly nint _rendererJob;
-    private readonly CompanionChatInput _chatInput;
+    private readonly TransientUiHost _transientUi;
     private readonly CompanionSpeechBubble _speechBubble;
     private readonly GlobalHotkey _quickLaunchHotkey;
     private DesktopSettings _currentSettings;
@@ -74,17 +75,12 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _currentSettings = settings;
         _actions = actions.ToDictionary(action => action.Id, StringComparer.OrdinalIgnoreCase);
         _interactionBindings = new Dictionary<string, string>(settings.InteractionBindings, StringComparer.OrdinalIgnoreCase);
-        _chatInput = new CompanionChatInput(
-            settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase),
-            SendChatAsync)
-        {
-            TopMost = settings.AlwaysOnTop,
-        };
+        _transientUi = new TransientUiHost();
+        _transientUi.SetDockTopMost(settings.AlwaysOnTop);
         _speechBubble = new CompanionSpeechBubble { TopMost = settings.AlwaysOnTop };
         ConfigurePinnedActions(settings);
         _ = _speechBubble.Handle;
-        _ = _chatInput.Handle;
-        _quickLaunchHotkey = new GlobalHotkey(_chatInput.Handle, OpenQuickLaunch);
+        _quickLaunchHotkey = new GlobalHotkey(() => { _ = ShowQuickLaunch(); });
         _ = AiChatService.WarmUpAsync(settings);
         _rendererJob = CreateKillOnCloseJob();
         StartRenderer();
@@ -120,7 +116,8 @@ internal sealed class GodotCompanionWindow : ICompanionController
     {
         _visible = false;
         if (WindowHandle != 0) ShowWindow(WindowHandle, SwHide);
-        _chatInput.Hide();
+        _transientUi.HideDock();
+        _transientUi.HideQuickLaunch();
         _speechBubble.Hide();
     }
 
@@ -138,7 +135,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
             throw new TimeoutException("Renderer did not acknowledge input mode change.");
         if (enabled) SetTransparentWindowStyle(true);
         _fullPassThrough = enabled;
-        if (enabled) _chatInput.Hide();
+        if (enabled) _transientUi.HideDock();
     }
 
     private void SetTransparentWindowStyle(bool enabled)
@@ -207,45 +204,103 @@ internal sealed class GodotCompanionWindow : ICompanionController
         var width = Math.Max(280, rect.Width);
         var left = Math.Clamp(rect.Left, workingArea.Left, Math.Max(workingArea.Left, workingArea.Right - width));
         var top = rect.Bottom + 8;
-        if (top + _chatInput.Height > workingArea.Bottom) top = Math.Max(workingArea.Top, rect.Top - _chatInput.Height - 8);
-        _chatInput.SetBounds(left, top, width, _chatInput.Height);
+        if (top + _transientUi.DockPixelHeight > workingArea.Bottom) top = Math.Max(workingArea.Top, rect.Top - _transientUi.DockPixelHeight - 8);
+        _transientUi.PositionDockPixels(left, top, width);
     }
 
     private void UpdateHoverSurfaces()
     {
         if (!_visible || _fullPassThrough || WindowHandle == 0 || !GetWindowRect(WindowHandle, out var rect))
         {
-            if (!_chatInput.ShouldRemainVisible) _chatInput.Hide();
+            if (!_transientUi.DockShouldRemainVisible) _transientUi.HideDock();
             return;
         }
 
         var cursor = Forms.Cursor.Position;
         var modelZone = Rectangle.FromLTRB(rect.Left - 16, rect.Top - 16, rect.Right + 16, rect.Bottom + 16);
-        var dockZone = new Rectangle(rect.Left - 20, rect.Bottom - 12, rect.Width + 40, _chatInput.Height + 32);
-        var hovering = modelZone.Contains(cursor) || dockZone.Contains(cursor) || (_chatInput.Visible && _chatInput.Bounds.Contains(cursor));
+        var dockZone = new Rectangle(rect.Left - 20, rect.Bottom - 12, rect.Width + 40, _transientUi.DockPixelHeight + 32);
+        var dockBounds = _transientUi.DockPixelBounds;
+        var hovering = modelZone.Contains(cursor) || dockZone.Contains(cursor) ||
+            (_transientUi.DockIsVisible && dockBounds.Contains(cursor.X, cursor.Y));
         if (hovering)
         {
             _lastHoverUtc = DateTime.UtcNow;
-            if (!_chatInput.Visible) _chatInput.Show();
+            if (!_transientUi.DockIsVisible) _transientUi.ShowDock();
             PositionChatInput();
             return;
         }
 
-        if (!_chatInput.ShouldRemainVisible && DateTime.UtcNow - _lastHoverUtc > TimeSpan.FromMilliseconds(500))
-            _chatInput.Hide();
+        if (!_transientUi.DockShouldRemainVisible && DateTime.UtcNow - _lastHoverUtc > TimeSpan.FromMilliseconds(500))
+            _transientUi.HideDock();
     }
 
-    private static void OpenQuickLaunch() =>
-        Process.Start(new ProcessStartInfo("plana://commands") { UseShellExecute = true });
+    public bool ShowQuickLaunch(string? query = null)
+    {
+        ConfigureQuickLaunch();
+        return _transientUi.ShowQuickLaunch(query);
+    }
 
     private void ConfigurePinnedActions(DesktopSettings settings)
     {
         var entries = settings.PinnedCompanionActionIds
             .Select(id => _actions.GetValueOrDefault(id))
             .Where(entry => entry is not null)
-            .Select(entry => (entry!.Name, (Action)(() => _ = Task.Run(() => ExecuteActionByIdAsync(entry.Id)))))
+            .Select(entry => (entry!.Id, entry.Name))
             .ToArray();
-        _chatInput.ConfigureQuickActions(entries);
+        _transientUi.ConfigureDock(
+            settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase),
+            entries,
+            SendChatAsync,
+            id => _ = Task.Run(() => ExecuteActionByIdAsync(id)));
+    }
+
+    private void ConfigureQuickLaunch()
+    {
+        var items = _actions.Values
+            .Select(entry => new TransientActionItem(
+                entry.Id,
+                entry.Name,
+                DescribeAction(entry),
+                LocalizeActionKind(entry.Definition.Kind),
+                entry.Source))
+            .OrderBy(item => item.Name, StringComparer.CurrentCultureIgnoreCase)
+            .ToArray();
+        var groups = _currentSettings.ToolGroups
+            .Select(group => new TransientActionGroup(group.Id, group.Name, group.ActionIds))
+            .ToArray();
+        _transientUi.ConfigureQuickLaunch(items, groups,
+            _currentSettings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase), ExecuteQuickActionAsync);
+    }
+
+    private string DescribeAction(NativeActionEntry entry)
+    {
+        if (!string.IsNullOrWhiteSpace(entry.Description)) return entry.Description;
+        var parameters = entry.Definition.Parameters;
+        foreach (var key in new[] { "url", "path", "executable", "script", "command" })
+            if (parameters.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value)) return value;
+        return _currentSettings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase) ? "执行这个动作" : "Run this action";
+    }
+
+    private string LocalizeActionKind(string kind)
+    {
+        var chinese = _currentSettings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
+        return kind switch
+        {
+            ActionKinds.OpenUrl => chinese ? "网站" : "Website",
+            ActionKinds.OpenFile => chinese ? "文件" : "File",
+            ActionKinds.OpenFolder => chinese ? "文件夹" : "Folder",
+            ActionKinds.LaunchProcess => chinese ? "应用" : "Application",
+            ActionKinds.RunCommand => chinese ? "命令" : "Command",
+            ActionKinds.RunScript => chinese ? "脚本" : "Script",
+            ActionKinds.PluginInvoke => chinese ? "插件" : "Plugin",
+            _ => kind,
+        };
+    }
+
+    private async Task<(bool Succeeded, string? Message)> ExecuteQuickActionAsync(string id)
+    {
+        var result = await ExecuteActionByIdAsync(id);
+        return (result.Succeeded, result.Message);
     }
 
     private void PositionSpeechBubble()
@@ -260,12 +315,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
 
     private void UpdateChatTopMost(bool topMost)
     {
-        if (_chatInput.IsHandleCreated && _chatInput.InvokeRequired)
-        {
-            _chatInput.BeginInvoke(() => _chatInput.TopMost = topMost);
-            return;
-        }
-        _chatInput.TopMost = topMost;
+        _transientUi.SetDockTopMost(topMost);
     }
 
     private void UpdateBubbleTopMost(bool topMost)
@@ -380,15 +430,14 @@ internal sealed class GodotCompanionWindow : ICompanionController
         await ExecuteActionByIdAsync(actionId);
     }
 
-    private async Task ExecuteActionByIdAsync(string actionId)
+    private async Task<ActionResult> ExecuteActionByIdAsync(string actionId)
     {
-        if (!_actions.TryGetValue(actionId, out var action)) return;
+        if (!_actions.TryGetValue(actionId, out var action)) return ActionResult.Failure("Action not found.");
         if (action.Definition.Kind != ActionKinds.PluginInvoke)
         {
-            NativeActionExecutor.Execute(action);
-            return;
+            return NativeActionExecutor.Execute(action);
         }
-        await _pluginRuntime.InvokeAsync(
+        return await _pluginRuntime.InvokeAsync(
             action.Definition.Parameters["pluginId"],
             action.Definition.Parameters["actionId"],
             action.Definition.Capabilities,
@@ -451,7 +500,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _chatPlacementTimer?.Dispose();
         _settingsTimer?.Dispose();
         _quickLaunchHotkey.Dispose();
-        _chatInput.Dispose();
+        _transientUi.Dispose();
         _speechBubble.Dispose();
         StopRenderer();
         _ready.Dispose();

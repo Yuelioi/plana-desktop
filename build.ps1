@@ -11,6 +11,9 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 dotnet test "$PSScriptRoot\tests\Plana.Core.Tests\Plana.Core.Tests.csproj" -c Release
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+dotnet test "$PSScriptRoot\tests\Plana.TransientUI.Tests\Plana.TransientUI.Tests.csproj" -c Release
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
 if ($Publish) {
     dotnet publish "$PSScriptRoot\src\Plana.Desktop\Plana.Desktop.csproj" `
         -c Release -r win-x64 --self-contained false `

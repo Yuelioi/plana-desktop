@@ -1,6 +1,8 @@
 using Microsoft.UI.Xaml;
 using Microsoft.Windows.AppLifecycle;
 using Microsoft.UI.Dispatching;
+using System.IO.Pipes;
+using System.Text.Json;
 using Plana.Core.Settings;
 using Windows.ApplicationModel.Activation;
 
@@ -9,7 +11,6 @@ namespace Plana_ControlCenter;
 public partial class App : Application
 {
     private Window? _window;
-    private QuickLaunchWindow? _quickLaunchWindow;
     private AppInstance? _appInstance;
     private DispatcherQueue? _dispatcherQueue;
 
@@ -60,14 +61,29 @@ public partial class App : Application
         Settings = await SettingsStore.LoadAsync();
         if (uri?.Host.Equals("commands", StringComparison.OrdinalIgnoreCase) == true)
         {
-            _quickLaunchWindow ??= new QuickLaunchWindow();
-            await _quickLaunchWindow.ShowAsync(ParseQuery(uri.Query, "query"));
-            return;
+            var query = ParseQuery(uri.Query, "query");
+            if (await TryOpenHostQuickLaunchAsync(query)) return;
+            uri = new Uri($"plana://actions?query={Uri.EscapeDataString(query ?? string.Empty)}");
         }
         _window ??= new MainWindow();
         MainWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(_window);
         if (_window is MainWindow mainWindow) mainWindow.Navigate(uri);
         _window.Activate();
+    }
+
+    private static async Task<bool> TryOpenHostQuickLaunchAsync(string? query)
+    {
+        try
+        {
+            await using var pipe = new NamedPipeClientStream(".", "PlanaDesktop.Renderer", PipeDirection.InOut, PipeOptions.Asynchronous);
+            await pipe.ConnectAsync(300);
+            await using var writer = new StreamWriter(pipe, leaveOpen: true) { AutoFlush = true };
+            using var reader = new StreamReader(pipe, leaveOpen: true);
+            await writer.WriteLineAsync(JsonSerializer.Serialize(new { type = "quick-launch", query }));
+            var response = await reader.ReadLineAsync();
+            return response?.Contains("\"ok\":true", StringComparison.OrdinalIgnoreCase) == true;
+        }
+        catch (Exception exception) when (exception is IOException or TimeoutException) { return false; }
     }
 
     private static string? ParseQuery(string queryString, string name)
