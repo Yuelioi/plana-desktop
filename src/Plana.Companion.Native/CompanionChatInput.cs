@@ -166,11 +166,14 @@ internal sealed class CompanionChatInput : Forms.Form
     private void LayoutControls()
     {
         const int gap = 6;
-        var toolWidth = Math.Max(54, (ClientSize.Width - 16 - gap * Math.Max(0, _toolButtons.Count - 1)) / Math.Max(1, _toolButtons.Count));
+        var availableWidth = ClientSize.Width - 16 - gap * Math.Max(0, _toolButtons.Count - 1);
+        var toolWidth = Math.Clamp(availableWidth / Math.Max(1, _toolButtons.Count), 54, 120);
+        var toolsWidth = toolWidth * _toolButtons.Count + gap * Math.Max(0, _toolButtons.Count - 1);
+        var toolsLeft = Math.Max(8, (ClientSize.Width - toolsWidth) / 2);
         for (var index = 0; index < _toolButtons.Count; index++)
         {
             var button = _toolButtons[index];
-            button.SetBounds(8 + index * (toolWidth + gap), 8, toolWidth, 30);
+            button.SetBounds(toolsLeft + index * (toolWidth + gap), 8, toolWidth, 30);
             using var buttonPath = RoundedPath(button.ClientRectangle, 7);
             button.Region?.Dispose();
             button.Region = new Region(buttonPath);
