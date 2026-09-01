@@ -8,9 +8,11 @@ Deliver a usable, localization-ready Windows desktop companion that renders Plan
 
 ## Current
 
-Work is paused by user request. The repository builds and the WinUI control center direction is acceptable, but the native Companion architecture is not accepted as a production baseline. Combining a transparent Win32 window, WebView2 Composition rendering, HTML toolbar/input, native hit testing, WinForms tray, and cross-boundary keyboard/mouse forwarding has produced recurring cursor, drag, focus, menu-lifetime, and settings-refresh failures. Do not resume by patching this stack further.
+Work has resumed on architecture replacement. The repository builds and the WinUI control center direction is accepted, but the native Companion architecture is not a production baseline. Combining a transparent Win32 window, WebView2 Composition rendering, HTML toolbar/input, native hit testing, WinForms tray, and cross-boundary keyboard/mouse forwarding produced recurring cursor, drag, focus, menu-lifetime, and settings-refresh failures. Do not patch this stack further.
 
 The host is now localization-ready. Action Packs can open HTTP(S) URLs, files, folders, and applications or run bounded commands and explicitly interpreted scripts; executable/script files cannot hide behind `file.open`. A visible Starter Pack ships with every build. The Plugins page discovers, imports, starts, disables, and diagnoses executable extensions through the out-of-process Plugin Host. No Plugin trust-review or hash-approval workflow remains.
+
+The replacement Companion direction is now a split process: WinUI owns normal UI, tray, AI, plugins, IME, supervision, and durable state; a replaceable renderer process owns the transparent character window. Godot + official `spine-godot` 4.2 is the first proof and native `spine-cpp` + Win32/DComp is the baseline competitor. No production renderer has been selected yet.
 
 The side-by-side migration is complete. `Plana.ControlCenter` is the packaged single-instance WinUI 3 application; `Plana.Companion.Native` is the production Companion; reusable modules and Plugin Host target .NET 10; Core also preserves the WPF net8 rollback reference. The solution passes 28 tests and builds with zero warnings or errors.
 
@@ -20,15 +22,17 @@ Users can also add personal typed Actions directly from the UI without creating 
 
 The domain model reserves right-click for the Context Menu and limits configurable Interactions to click/double-click. Idle is future Automation and cannot launch external Actions. Pack/Plugin pages provide folder import, managed-folder access, reload, source visibility, and a bundled sample; valid Plugins start automatically unless disabled.
 
+Plana model-source research confirms the game runtime asset is Spine `NP0035_spr`, and the repository already carries the directly usable `.skel/.atlas/.png` set. No public official editable project or complete Plana Cubism model was found. The lowest-cost visual improvement path is to inventory and expose the existing skeleton's animations, skins, slots, and events, then reproduce useful interaction behaviors from public Web wallpaper references without changing renderer format.
+
 Valid enabled Plugins launch one-per-Host, complete a bounded identity/API handshake, contribute declared Actions, and execute them through serialized requests. Typed broker requests for URL, file, folder, process, command, and script capabilities reuse existing adapters. Failure/cancellation tears down the session and removes contributions. The published sample passes lifecycle, contribution, invocation, and broker flow end to end.
 
 ## Next
 
-Before implementation resumes, research mature Windows desktop-pet architectures and compare at least: direct native Spine rendering, a proven game/rendering host with native overlay controls, and a split-process Companion plus WinUI tool palette. Build disposable proofs for transparent rendering, alpha hit testing, drag, text input, IME, tray, and DPI before selecting a replacement. Treat the existing native Companion as evidence and anti-reference, not as the production path.
+Continue the [Companion host rearchitecture](slices/companion-host-rearchitecture.md): extend the working Godot + .NET supervisor proof with native drag and explicit 100%→150% DPI observation. Then replace the bounded startup delay with a narrow `renderer_ready` handshake. Keep the current Native/WebView Companion as evidence and anti-reference.
 
 ## Current execution
 
-Paused — architecture re-evaluation required before further product work.
+Stage 7 — [Companion host rearchitecture](slices/companion-host-rearchitecture.md), continuing Godot Proof A with a Win32 supervisor/pass-through controller.
 
 ## Progress
 
@@ -71,6 +75,13 @@ Paused — architecture re-evaluation required before further product work.
 - Fixed the native context-menu lifetime crash: the menu is reused for the Companion lifetime and is no longer disposed from its own `Closed` event while WinForms is still unwinding the click. Republished and smoke-checked right-click without a .NET error dialog; 28/28 tests and the full build remain green.
 - Replaced toolbar Action search with AI conversation, Enter-to-send, Settings, and a clear Fluent collapse control for the Tool Group row. Added local Codex CLI subscription and OpenAI-compatible API providers, model/base-URL/API-key-environment settings, response/error speech panel, and explicit cursor ownership. Verified the installed Codex CLI subscription path returns `OK` in ephemeral read-only mode.
 - Separated Actions and Tool Groups into dedicated searchable WinUI pages. Actions now use a Name/Description/Type table with edit/delete/run controls and a bilingual create/edit form. Tool Groups have their own search, create/edit/delete flow and allow empty groups. Replaced renderer-dependent drag with native mouse capture and `SetWindowPos`; runtime probe verified +30/+20 movement and exact restoration. Cursor probe verified the model uses the system arrow rather than the busy cursor.
+- Researched official and community Plana model sources. Confirmed `NP0035_spr` is a Spine runtime asset already compatible with the current renderer; found no public complete Plana Cubism or official editable source project; recorded Web wallpaper, Cubism-reference, PMX, and Blender alternatives with integration costs.
+- Added a reusable read-only Spine inspection tool and inventoried `NP0035_spr`: 315 bones, 152 slots, 220 attachments, 37 animations, one skin, no events, and rich mouth/eye/eyebrow/blush/halo variants. Confirmed existing head-pat, look, blink, and directional animation families are not yet driven as intended by the renderer.
+- Built and visually checked a disposable three-mode animation preview. Rendered numbered states `00`–`20` in seven-player contact-sheet pages, assigned provisional emotion labels from their actual frames and attachment changes, and confirmed these clips are expression states rather than suitable random ambient motions.
+- Added the semantic Character Performance model for future AI and Interactions: Emotion, Gesture, and speaking intent map through a Plana-specific deep module to Spine cues and idle recovery. Added 14 planner cases; 42/42 tests and the full seven-project Release build pass with zero warnings/errors.
+- Completed Windows Companion host research and chose split-process WinUI + replaceable renderer as the stable direction. Opened the rearchitecture Slice with Godot/spine-godot Proof A and native spine-cpp Proof B acceptance gates; toolchain audit found Godot/CMake/Ninja missing.
+- Pinned and installed an ignored official Godot 4.6.1 + Spine 4.2 GDExtension toolchain, built disposable Proof A, and rendered the real Plana model with valid alpha in Idle, head-pat, and affection states. Live HWND inspection showed Godot's mouse-passthrough flag does not set `WS_EX_TRANSPARENT`; a narrow Win32 controller is required for cross-application pass-through.
+- Added the disposable .NET Win32 supervisor state prototype. Verified real HWND transitions Interactive `0x40018` → PassThrough `0x40038` → Interactive, plus renderer PID/HWND replacement on restart and complete child shutdown. Confirmed production must wait for `renderer_ready` before applying host-owned styles. Re-verified 42/42 tests and a zero-warning/error full Release build.
 
 ## References
 
@@ -84,5 +95,9 @@ Paused — architecture re-evaluation required before further product work.
 - [Plugin Host ADR](../../../docs/adr/0003-out-of-process-plugin-host.md)
 - [Plugin ecosystem research](references/plugin-ecosystem-research.md)
 - [WinUI 3 migration evaluation](references/winui3-migration-evaluation.md)
+- [Plana model asset research](references/plana-model-assets-research.md)
+- [Plana Spine inventory](references/plana-spine-inventory.md)
+- [Companion host architecture research](references/companion-host-architecture-research.md)
+- [Companion host rearchitecture Slice](slices/companion-host-rearchitecture.md)
 - [WinUI 3 migration Slice](slices/winui3-migration.md)
 - [Hybrid migration ADR](../../../docs/adr/0004-migrate-to-hybrid-winui3-native-companion.md)

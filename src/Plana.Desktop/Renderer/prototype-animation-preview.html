@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PROTOTYPE — Plana animation preview</title>
+  <link rel="stylesheet" href="/vendor/spine-player/spine-player.css">
+  <style>
+    :root { color-scheme: dark; font: 14px/1.4 "Segoe UI", sans-serif; background: #0c1019; color: #edf2ff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; overflow: hidden; }
+    header { position: fixed; inset: 16px auto auto 18px; z-index: 4; pointer-events: none; }
+    h1 { margin: 0; font-size: 17px; }
+    header p { margin: 3px 0 0; color: #98a7c7; }
+    .stage { height: 100vh; display: grid; place-items: center; background: radial-gradient(circle, #283352 0, #111726 48%, #080b12 100%); }
+    .player { width: min(70vw, 620px); height: 92vh; }
+    .rail { position: fixed; z-index: 4; right: 18px; top: 18px; bottom: 70px; width: 176px; overflow: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; align-content: start; padding: 10px; border: 1px solid #354263; border-radius: 14px; background: #111827e8; backdrop-filter: blur(14px); }
+    button, select { font: inherit; color: inherit; border: 1px solid #455579; border-radius: 8px; background: #1c2740; padding: 7px; cursor: pointer; }
+    button.active { background: #7395ff; color: #071022; border-color: transparent; font-weight: 700; }
+    .grid { height: 100vh; padding: 70px 20px 76px; display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); gap: 10px; }
+    .tile { position: relative; overflow: hidden; border: 1px solid #2f3c5b; border-radius: 12px; background: #121927; }
+    .tile .player { width: 100%; height: 100%; }
+    .tile label { position: absolute; inset: 8px auto auto 8px; z-index: 2; padding: 3px 8px; border-radius: 999px; background: #071022d9; font-weight: 700; }
+    .compare { height: 100vh; padding: 70px 18px 76px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .compare .pane { position: relative; border: 1px solid #354263; border-radius: 14px; overflow: hidden; background: radial-gradient(circle, #27304a, #101522 65%); }
+    .compare .player { width: 100%; height: 100%; }
+    .compare select { position: absolute; z-index: 3; top: 10px; left: 10px; }
+    .switcher { position: fixed; z-index: 10; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid #52648e; border-radius: 999px; background: #060a12ed; box-shadow: 0 12px 30px #000a; }
+    .switcher strong { min-width: 180px; text-align: center; }
+    .empty { display: grid; place-items: center; height: 100vh; color: #aab7d3; }
+  </style>
+</head>
+<body>
+  <!-- PROTOTYPE: three animation-inspection layouts, switchable via ?variant=A|B|C. -->
+  <header><h1>PROTOTYPE — NP0035 animation lab</h1><p id="status">Loading skeleton…</p></header>
+  <main id="app"></main>
+  <nav class="switcher" aria-label="Prototype variant switcher">
+    <button id="previous" aria-label="Previous variant">←</button>
+    <strong id="variant-label"></strong>
+    <button id="next" aria-label="Next variant">→</button>
+  </nav>
+  <script src="/vendor/spine-player/spine-player.js"></script>
+  <script>
+    const numbered = Array.from({ length: 21 }, (_, index) => String(index).padStart(2, '0'))
+    const variants = [
+      { key: 'A', name: 'Single stage' },
+      { key: 'B', name: 'Contact sheet' },
+      { key: 'C', name: 'Three-way compare' },
+    ]
+    const params = new URLSearchParams(location.search)
+    const current = Math.max(0, variants.findIndex(item => item.key === (params.get('variant') || 'A')))
+    const app = document.querySelector('#app')
+    const status = document.querySelector('#status')
+
+    function player(target, animation) {
+      return new spine.SpinePlayer(target, {
+        skelUrl: '/spine/plana/NP0035_spr.skel', atlasUrl: '/spine/plana/NP0035_spr.atlas',
+        animation, loop: true, showControls: false, alpha: true, premultipliedAlpha: false,
+        backgroundColor: '#00000000', viewport: { autoSize: true, padLeft: '1%', padRight: '1%', padTop: '1%', padBottom: '1%' },
+        success(instance) { status.textContent = `${animation} · ${instance.skeleton.data.animations.length} animations loaded` },
+      })
+    }
+    function stage() {
+      const selected = numbered.includes(params.get('animation')) ? params.get('animation') : '00'
+      app.innerHTML = `<section class="stage"><div id="stage-player" class="player"></div></section><aside class="rail">${numbered.map(name => `<button data-animation="${name}" class="${name === selected ? 'active' : ''}">${name}</button>`).join('')}</aside>`
+      player('stage-player', selected)
+      document.querySelectorAll('[data-animation]').forEach(button => button.onclick = () => { params.set('animation', button.dataset.animation); location.search = params })
+    }
+    function grid() {
+      const page = Math.min(2, Math.max(0, Number(params.get('page') || 0)))
+      const visible = numbered.slice(page * 7, page * 7 + 7)
+      app.innerHTML = `<section class="grid">${visible.map(name => `<article class="tile"><label>${name}</label><div id="grid-${name}" class="player"></div></article>`).join('')}</section>`
+      visible.forEach(name => player(`grid-${name}`, name))
+      status.textContent = `Contact sheet page ${page + 1}/3 · animations ${visible[0]}–${visible.at(-1)}`
+    }
+    function compare() {
+      const selected = [params.get('left') || '00', params.get('middle') || '01', params.get('right') || '02']
+      app.innerHTML = `<section class="compare">${selected.map((name, index) => `<article class="pane"><select data-index="${index}">${numbered.map(option => `<option ${option === name ? 'selected' : ''}>${option}</option>`).join('')}</select><div id="compare-${index}" class="player"></div></article>`).join('')}</section>`
+      selected.forEach((name, index) => player(`compare-${index}`, name))
+      document.querySelectorAll('select').forEach(select => select.onchange = () => { params.set(['left', 'middle', 'right'][select.dataset.index], select.value); location.search = params })
+    }
+    ;[stage, grid, compare][current]()
+    document.querySelector('#variant-label').textContent = `${variants[current].key} — ${variants[current].name}`
+    function cycle(delta) { params.set('variant', variants[(current + delta + variants.length) % variants.length].key); location.search = params }
+    document.querySelector('#previous').onclick = () => cycle(-1)
+    document.querySelector('#next').onclick = () => cycle(1)
+    addEventListener('keydown', event => { if (!event.target.matches('input, textarea, select, [contenteditable]')) { if (event.key === 'ArrowLeft') cycle(-1); if (event.key === 'ArrowRight') cycle(1) } })
+  </script>
+</body>
+</html>

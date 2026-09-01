@@ -21,6 +21,7 @@ Plana Desktop is a Windows companion that combines an expressive Spine character
 - Configurable Interactions are deliberate user gestures only: click and double-click in the first release. Right-click is host-owned Context Menu navigation. Idle is Automation and may eventually invoke only Ambient Actions unless a distinct background-execution grant is designed.
 - `Your Actions` is the primary path for personal automation. Action Packs are portable import/export bundles; executable Plugins run when discovered unless the user disables them, and have no official catalog in the first release.
 - The Companion window exposes a two-row Quick Toolbar above the model: search/settings, then configurable Tool Group/Action/run. The toolbar has its own hit area; the renderer keeps its original size and other transparent areas remain click-through.
+- AI responses and Interactions express character behavior through a semantic Character Performance Intent: Emotion, Gesture, and speaking state. The Plana model planner owns the mapping to numbered Spine expression states, gesture sequences, and idle recovery; callers do not name Spine animations.
 
 ## Technology and repository constraints
 

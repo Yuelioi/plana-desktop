@@ -59,3 +59,19 @@ _Avoid_: Action Pack, mod, trusted Plugin, approved Plugin
 **Renderer**:
 The embedded surface that displays the Companion and reports animation and pointer information to the desktop host.
 _Avoid_: Frontend, WebView
+
+**Character Performance Intent**:
+A semantic request for how the Companion should present itself, expressed as Emotion, Gesture, and speaking state. AI and Interactions produce this meaning without naming renderer animations.
+_Avoid_: Animation name, prompt animation, renderer command
+
+**Emotion**:
+The Companion's semantic facial/presentation state, such as Happy, Worried, Angry, Affectionate, or Shy. A model-specific planner maps it to renderer data.
+_Avoid_: Mood ID, numbered animation
+
+**Gesture**:
+A short semantic character behavior such as Blink, Head Pat, or Look At Pointer. A Gesture may require several renderer animations and must return to the active Emotion and idle behavior.
+_Avoid_: Interaction, animation clip
+
+**Character Performance Plan**:
+The model-specific ordered cues produced from a Character Performance Intent. Renderer adapters execute the plan; AI, Actions, and Interactions never construct it directly.
+_Avoid_: AI response, Action Binding, raw script

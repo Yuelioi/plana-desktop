@@ -3,3 +3,4 @@
 .vs/
 artifacts/
 *.user
+.tmp-animation-preview/
