@@ -21,7 +21,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <AutoSuggestBox x:Name="SearchBox" QueryIcon="Find" PlaceholderText="Search actions" TextChanged="SearchBox_TextChanged" QuerySubmitted="SearchBox_QuerySubmitted" />
+            <AutoSuggestBox x:Name="SearchBox" Style="{StaticResource SearchBoxStyle}" QueryIcon="Find" PlaceholderText="Search actions" TextChanged="SearchBox_TextChanged" QuerySubmitted="SearchBox_QuerySubmitted" />
             <Button x:Name="AddActionButton" Grid.Column="1" MinWidth="132" Style="{StaticResource CommandButtonStyle}" Click="AddActionButton_Click">
                 <StackPanel Style="{StaticResource CommandButtonContentStyle}">
                     <SymbolIcon Style="{StaticResource CommandIconStyle}" Symbol="Add" />
@@ -33,7 +33,7 @@
         <Grid Grid.Row="2" RowSpacing="12">
             <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
             <InfoBar x:Name="ActionStatus" IsOpen="False" IsClosable="True" />
-            <Grid Grid.Row="1" Padding="16,8" ColumnSpacing="16">
+            <Grid Grid.Row="1" Padding="8,10" ColumnSpacing="16">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="3*" /><ColumnDefinition Width="140" /><ColumnDefinition Width="40" /><ColumnDefinition Width="40" /><ColumnDefinition Width="40" /><ColumnDefinition Width="40" /></Grid.ColumnDefinitions>
                 <TextBlock x:Name="NameColumnHeader" FontWeight="SemiBold" Text="Name" />
                 <TextBlock x:Name="DescriptionColumnHeader" Grid.Column="1" FontWeight="SemiBold" Text="Description" />
@@ -61,11 +61,11 @@
                             <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{x:Bind Name}" TextTrimming="CharacterEllipsis" />
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" Foreground="{StaticResource PlanaSubtleBrush}" Text="{x:Bind Description}" TextTrimming="CharacterEllipsis" />
                             <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind TypeLabel}" />
-                            <Button Grid.Column="3" Style="{StaticResource IconButtonStyle}" Tag="{x:Bind}" Click="PinActionButton_Click" AutomationProperties.Name="Pin to Companion" ToolTipService.ToolTip="{x:Bind PinLabel}"><SymbolIcon Symbol="{x:Bind PinSymbol}" /></Button>
-                            <Button Grid.Column="4" Style="{StaticResource IconButtonStyle}" IsEnabled="{x:Bind CanManage}" Tag="{x:Bind}" Click="EditActionButton_Click" AutomationProperties.Name="Edit action"><SymbolIcon Symbol="Edit" /></Button>
-                            <Button Grid.Column="5" Style="{StaticResource IconButtonStyle}" IsEnabled="{x:Bind CanManage}" Tag="{x:Bind}" Click="DeleteActionButton_Click" AutomationProperties.Name="Delete action"><SymbolIcon Symbol="Delete" /></Button>
+                            <Button Grid.Column="3" Style="{StaticResource IconButtonStyle}" Tag="{x:Bind}" Click="PinActionButton_Click" AutomationProperties.Name="Pin to Companion" ToolTipService.ToolTip="{x:Bind PinLabel}"><Viewbox Style="{StaticResource IconButtonGlyphStyle}"><SymbolIcon Symbol="{x:Bind PinSymbol}" /></Viewbox></Button>
+                            <Button Grid.Column="4" Style="{StaticResource IconButtonStyle}" IsEnabled="{x:Bind CanManage}" Tag="{x:Bind}" Click="EditActionButton_Click" AutomationProperties.Name="Edit action"><Viewbox Style="{StaticResource IconButtonGlyphStyle}"><SymbolIcon Symbol="Edit" /></Viewbox></Button>
+                            <Button Grid.Column="5" Style="{StaticResource IconButtonStyle}" IsEnabled="{x:Bind CanManage}" Tag="{x:Bind}" Click="DeleteActionButton_Click" AutomationProperties.Name="Delete action"><Viewbox Style="{StaticResource IconButtonGlyphStyle}"><SymbolIcon Symbol="Delete" /></Viewbox></Button>
                             <Button Grid.Column="6" Style="{StaticResource IconButtonStyle}" Tag="{x:Bind}" Click="RunActionButton_Click" AutomationProperties.Name="Run action">
-                                <SymbolIcon Symbol="Play" />
+                                <Viewbox Style="{StaticResource IconButtonGlyphStyle}"><SymbolIcon Symbol="Play" /></Viewbox>
                             </Button>
                         </Grid>
                     </DataTemplate>

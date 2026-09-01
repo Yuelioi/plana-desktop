@@ -17,8 +17,9 @@
             <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
             <AutoSuggestBox
                 x:Name="SearchBox"
-                MinHeight="50"
+                MinHeight="48"
                 Padding="14,0"
+                VerticalContentAlignment="Center"
                 QueryIcon="Find"
                 PlaceholderText="搜索动作"
                 TextChanged="SearchBox_TextChanged"

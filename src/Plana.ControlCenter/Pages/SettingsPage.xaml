@@ -9,32 +9,32 @@
     mc:Ignorable="d">
 
     <ScrollViewer>
-    <StackPanel Padding="32,24,32,40" Spacing="28" MaxWidth="760" HorizontalAlignment="Left">
+    <StackPanel Padding="32,24,32,40" Spacing="20" MaxWidth="660" HorizontalAlignment="Left">
         <TextBlock x:Name="PageTitle" Style="{StaticResource PageTitleStyle}" Text="Settings" />
 
-        <StackPanel Spacing="12">
+        <StackPanel Spacing="8">
             <TextBlock x:Name="BehaviorHeading" Style="{StaticResource SectionTitleStyle}" Text="Companion" />
-            <Grid Padding="4,8" ColumnSpacing="24">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+            <Grid Padding="4" ColumnSpacing="20">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="210" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
                 <TextBlock x:Name="TopmostTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Keep above other windows" />
                 <ToggleSwitch x:Name="TopmostToggle" Grid.Column="1" OnContent="" OffContent="" Toggled="TopmostToggle_Toggled" />
             </Grid>
-            <Grid Padding="4,8" ColumnSpacing="24">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+            <Grid Padding="4" ColumnSpacing="20">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="210" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
                 <TextBlock x:Name="StartupTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Start with Windows" />
                 <ToggleSwitch x:Name="StartupToggle" Grid.Column="1" OnContent="" OffContent="" Toggled="StartupToggle_Toggled" />
             </Grid>
-            <Grid Padding="4,8" ColumnSpacing="24">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="240" /></Grid.ColumnDefinitions>
+            <Grid Padding="4" ColumnSpacing="20">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="210" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
                 <TextBlock x:Name="ScaleTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Companion scale" />
                 <Slider x:Name="ScaleSlider" Grid.Column="1" Minimum="0.5" Maximum="2" StepFrequency="0.1" ValueChanged="ScaleSlider_ValueChanged" Header="100%" />
             </Grid>
         </StackPanel>
 
-        <StackPanel Spacing="12">
+        <StackPanel Spacing="8">
             <TextBlock x:Name="LanguageHeading" Style="{StaticResource SectionTitleStyle}" Text="Language" />
-            <Grid Padding="4,8" ColumnSpacing="24">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="220" /></Grid.ColumnDefinitions>
+            <Grid Padding="4" ColumnSpacing="20">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="210" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
                 <TextBlock x:Name="LanguageTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Display language" />
                 <ComboBox x:Name="LanguagePicker" Grid.Column="1" HorizontalAlignment="Stretch" SelectionChanged="LanguagePicker_SelectionChanged">
                     <ComboBoxItem Tag="en" Content="English" />
@@ -43,24 +43,24 @@
             </Grid>
         </StackPanel>
 
-        <StackPanel Spacing="12">
+        <StackPanel Spacing="8">
             <TextBlock x:Name="InteractionsHeading" Style="{StaticResource SectionTitleStyle}" Text="Interactions" />
-            <Grid Padding="4,8" ColumnSpacing="24">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
+            <Grid Padding="4" ColumnSpacing="20">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="210" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
                 <TextBlock x:Name="ClickTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Single click" />
                 <ComboBox x:Name="ClickActionPicker" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="InteractionPicker_SelectionChanged" Tag="click" />
             </Grid>
-            <Grid Padding="4,8" ColumnSpacing="24">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
+            <Grid Padding="4" ColumnSpacing="20">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="210" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
                 <TextBlock x:Name="DoubleClickTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Double click" />
                 <ComboBox x:Name="DoubleClickActionPicker" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="InteractionPicker_SelectionChanged" Tag="doubleClick" />
             </Grid>
         </StackPanel>
 
-        <StackPanel Spacing="12">
+        <StackPanel Spacing="8">
             <TextBlock x:Name="AiHeading" Style="{StaticResource SectionTitleStyle}" Text="AI conversation" />
-            <Grid Padding="4,8" ColumnSpacing="24">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
+            <Grid Padding="4" ColumnSpacing="20">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="210" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
                 <TextBlock x:Name="AiProviderTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Provider" />
                 <ComboBox x:Name="AiProviderPicker" Grid.Column="1" HorizontalAlignment="Stretch" SelectionChanged="AiProviderPicker_SelectionChanged">
                     <ComboBoxItem Tag="codex" Content="Codex CLI subscription" />
