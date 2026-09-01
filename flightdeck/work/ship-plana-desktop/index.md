@@ -28,7 +28,7 @@ Valid enabled Plugins launch one-per-Host, complete a bounded identity/API hands
 
 ## Next
 
-Continue Stage 7 from the completed local Godot cutover: sign/document the Control Center MSIX installation path, keep the mixed-DPI test open for suitable hardware, and add remaining interaction polish/project discovery without returning to the Native/WebView renderer.
+Begin the unified quick-tool Stage 1 from [uTools plugin research](references/utools-plugin-system-research.md): define a host-owned Command Descriptor/Catalog over existing Actions, Plugin contributions, Tool Groups, navigation, and Chat; ship a keyboard-first WinUI Command Palette before redesigning Extensions around the same catalog. Keep the safer Action Pack and out-of-process Plugin Host architecture.
 
 ## Current execution
 
@@ -90,6 +90,8 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Constrained ordinary mouse hit testing to a normalized character polygon that updates with window size: transparent space above Plana now resolves to the underlying desktop while the body remains interactive. Renamed the separate full-window pass-through mode and added a tray balloon explaining its effect/recovery path. Final publish passes all eight live rendering/input checks.
 - Confirmed through user testing that a Renderer-owned out-of-window polygon disables input but also clips the visible model; retained the acknowledged IPC handshake and replaced that intermediate implementation.
 - Corrected the full-window mode after user testing exposed that an out-of-window Godot polygon also clipped the model. The final acknowledged sequence clears the polygon, applies layered+transparent HWND styles, and reverses that order on disable. Live checks prove full pass-through, restored interaction, persistent model visibility, and unchanged placement/size.
+- Audited the WinUI control center and fixed cropped row icons by introducing a shared 36×36 zero-padding Fluent icon-button style in 44 px action columns across Actions and Tool Groups. Runtime screenshot verification shows complete edit/delete/run glyphs; Control Center builds with zero warnings/errors.
+- Researched the official uTools plugin/quick-tool model. Chose to adopt a unified command entry, aliases, typed matching, dynamic commands, pinning, brokered storage, and opt-in AI tools while retaining Plana's safer Action Pack, per-plugin Host, and capability broker; rejected unrestricted Node preload access.
 
 ## References
 
@@ -107,5 +109,6 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - [Plana Spine inventory](references/plana-spine-inventory.md)
 - [Companion host architecture research](references/companion-host-architecture-research.md)
 - [Companion host rearchitecture Slice](slices/companion-host-rearchitecture.md)
+- [uTools plugin and quick-tool research](references/utools-plugin-system-research.md)
 - [WinUI 3 migration Slice](slices/winui3-migration.md)
 - [Hybrid migration ADR](../../../docs/adr/0004-migrate-to-hybrid-winui3-native-companion.md)

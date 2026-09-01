@@ -17,7 +17,7 @@
         <Grid Grid.Row="2">
             <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
             <Grid Padding="16,8" ColumnSpacing="16">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="3*" /><ColumnDefinition Width="40" /><ColumnDefinition Width="40" /></Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="3*" /><ColumnDefinition Width="44" /><ColumnDefinition Width="44" /></Grid.ColumnDefinitions>
                 <TextBlock x:Name="NameHeader" FontWeight="SemiBold" Text="Name" />
                 <TextBlock x:Name="ActionsHeader" Grid.Column="1" FontWeight="SemiBold" Text="Actions" />
             </Grid>
@@ -25,11 +25,11 @@
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="local:ToolGroupRow">
                         <Grid Padding="8,10" ColumnSpacing="16">
-                            <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="3*" /><ColumnDefinition Width="40" /><ColumnDefinition Width="40" /></Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="3*" /><ColumnDefinition Width="44" /><ColumnDefinition Width="44" /></Grid.ColumnDefinitions>
                             <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{x:Bind Name}" />
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" Foreground="{StaticResource PlanaSubtleBrush}" Text="{x:Bind Summary}" TextTrimming="CharacterEllipsis" />
-                            <Button Grid.Column="2" Tag="{x:Bind}" Click="EditGroupButton_Click"><FontIcon Glyph="&#xE70F;" /></Button>
-                            <Button Grid.Column="3" Tag="{x:Bind}" Click="DeleteGroupButton_Click"><FontIcon Glyph="&#xE74D;" /></Button>
+                            <Button Grid.Column="2" Style="{StaticResource IconButtonStyle}" Tag="{x:Bind}" Click="EditGroupButton_Click" AutomationProperties.Name="Edit tool group"><FontIcon FontSize="16" Glyph="&#xE70F;" /></Button>
+                            <Button Grid.Column="3" Style="{StaticResource IconButtonStyle}" Tag="{x:Bind}" Click="DeleteGroupButton_Click" AutomationProperties.Name="Delete tool group"><FontIcon FontSize="16" Glyph="&#xE74D;" /></Button>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
