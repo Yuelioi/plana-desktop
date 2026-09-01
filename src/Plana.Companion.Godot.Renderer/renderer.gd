@@ -1,5 +1,9 @@
 extends SpineSprite
 
+@onready var bubble = $"../Ui/Bubble"
+@onready var bubble_text = $"../Ui/Bubble/Text"
+@onready var bubble_tail = $"../Ui/BubbleTail"
+
 var controller := StreamPeerTCP.new()
 var controller_buffer := ""
 var dragging := false
@@ -8,6 +12,7 @@ var press_position := Vector2.ZERO
 var single_click_deadline := 0
 var suppress_release_click := false
 var full_window_pass_through := false
+var bubble_deadline := 0
 
 func _ready():
 	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
@@ -26,12 +31,20 @@ func apply_mouse_passthrough_polygon():
 		get_window().mouse_passthrough_polygon = PackedVector2Array()
 		return
 	var size = Vector2(get_window().size)
-	var normalized = [
+	var character_shape = [
 		Vector2(0.20, 0.34), Vector2(0.62, 0.34), Vector2(0.70, 0.60),
 		Vector2(0.75, 0.78), Vector2(1.00, 0.82), Vector2(1.00, 0.90),
 		Vector2(0.70, 0.90), Vector2(0.65, 1.00), Vector2(0.00, 1.00),
 		Vector2(0.00, 0.80), Vector2(0.20, 0.76), Vector2(0.15, 0.55)
 	]
+	var normalized = character_shape
+	if bubble.visible:
+		normalized = [
+			Vector2(0.03, 0.02), Vector2(0.97, 0.02), Vector2(0.97, 0.17),
+			Vector2(0.56, 0.17), Vector2(0.56, 0.34)
+		] + character_shape + [
+			Vector2(0.44, 0.34), Vector2(0.44, 0.17), Vector2(0.03, 0.17)
+		]
 	var polygon = PackedVector2Array()
 	for point in normalized:
 		polygon.append(point * size)
@@ -39,6 +52,11 @@ func apply_mouse_passthrough_polygon():
 
 func _process(_delta):
 	poll_controller()
+	if bubble_deadline > 0 and Time.get_ticks_msec() >= bubble_deadline:
+		bubble_deadline = 0
+		bubble.visible = false
+		bubble_tail.visible = false
+		apply_mouse_passthrough_polygon()
 	if single_click_deadline > 0 and Time.get_ticks_msec() >= single_click_deadline:
 		single_click_deadline = 0
 		send_event("interaction", {"interaction": "click"})
@@ -84,6 +102,8 @@ func poll_controller():
 			full_window_pass_through = command.get("passThrough", false)
 			apply_mouse_passthrough_polygon()
 			send_event("input_mode", {"passThrough": full_window_pass_through})
+		if command is Dictionary and command.get("type") == "show_bubble":
+			show_bubble(command.get("text", ""), command.get("isError", false))
 
 func perform_cues(cues: Array):
 	if cues.is_empty():
@@ -102,3 +122,12 @@ func send_event(type: String, data: Dictionary):
 		return
 	data["type"] = type
 	controller.put_data((JSON.stringify(data) + "\n").to_utf8_buffer())
+
+func show_bubble(text: String, is_error: bool):
+	bubble_text.text = text
+	bubble.get_theme_stylebox("panel").border_color = Color(0.82, 0.25, 0.31, 0.75) if is_error else Color(0.31, 0.43, 0.78, 0.55)
+	bubble.visible = not text.is_empty()
+	bubble_tail.visible = bubble.visible
+	apply_mouse_passthrough_polygon()
+	bubble_deadline = Time.get_ticks_msec() + (14000 if is_error else 22000)
+	send_event("bubble_shown", {"visible": bubble.visible})

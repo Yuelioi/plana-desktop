@@ -41,7 +41,9 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private ManualResetEventSlim _ready = new(false);
     private ManualResetEventSlim _acknowledged = new(false);
     private ManualResetEventSlim _inputModeAcknowledged = new(false);
+    private ManualResetEventSlim _bubbleAcknowledged = new(false);
     private Forms.Timer? _healthTimer;
+    private Forms.Timer? _chatPlacementTimer;
     private System.Threading.Timer? _settingsTimer;
     private string? _settingsPath;
     private DateTime _settingsLastWriteUtc;
@@ -51,6 +53,8 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private bool _disposed;
     private bool _fullPassThrough;
     private readonly nint _rendererJob;
+    private readonly CompanionChatInput _chatInput;
+    private DesktopSettings _currentSettings;
 
     public nint WindowHandle { get; private set; }
     public event EventHandler? ContextRequested;
@@ -65,8 +69,13 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _godotPath = godotPath;
         _projectPath = projectPath;
         _pluginRuntime = pluginRuntime;
+        _currentSettings = settings;
         _actions = actions.ToDictionary(action => action.Id, StringComparer.OrdinalIgnoreCase);
         _interactionBindings = new Dictionary<string, string>(settings.InteractionBindings, StringComparer.OrdinalIgnoreCase);
+        _chatInput = new CompanionChatInput(settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase), SendChatAsync)
+        {
+            TopMost = settings.AlwaysOnTop,
+        };
         _rendererJob = CreateKillOnCloseJob();
         StartRenderer();
     }
@@ -81,6 +90,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         var y = state.Top is null ? GetSystemMetrics(1) - height - 72 : (int)Math.Round(state.Top.Value);
         var insertAfter = state.AlwaysOnTop ? new nint(-1) : new nint(-2);
         SetWindowPos(WindowHandle, insertAfter, x, y, width, height, SwpNoActivate);
+        UpdateChatTopMost(state.AlwaysOnTop);
     }
 
     public CompanionSurfaceState Snapshot()
@@ -93,12 +103,15 @@ internal sealed class GodotCompanionWindow : ICompanionController
     {
         _visible = true;
         if (WindowHandle != 0) ShowWindow(WindowHandle, SwShowNoActivate);
+        if (!_chatInput.Visible) _chatInput.Show();
+        PositionChatInput();
     }
 
     public void Hide()
     {
         _visible = false;
         if (WindowHandle != 0) ShowWindow(WindowHandle, SwHide);
+        _chatInput.Hide();
     }
 
     public void SetPassThrough(bool enabled)
@@ -136,6 +149,62 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _acknowledged.Wait(TimeSpan.FromSeconds(3));
     }
 
+    public void ShowBubble(string text, bool isError = false)
+    {
+        lock (_sync)
+        {
+            if (_writer is null) return;
+            _bubbleAcknowledged.Reset();
+            _writer.WriteLine(JsonSerializer.Serialize(new
+            {
+                type = "show_bubble",
+                text = text.Length <= 900 ? text : string.Concat(text.AsSpan(0, 897), "…"),
+                isError,
+            }));
+        }
+        if (!_bubbleAcknowledged.Wait(TimeSpan.FromSeconds(3)))
+            throw new TimeoutException("Renderer did not acknowledge the speech bubble.");
+    }
+
+    private async Task SendChatAsync(string prompt)
+    {
+        var chinese = _currentSettings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
+        ShowBubble(chinese ? "正在思考…" : "Thinking…");
+        Perform(new CharacterPerformanceIntent(IsSpeaking: true));
+        try
+        {
+            var response = await AiChatService.SendAsync(_currentSettings, prompt, CancellationToken.None);
+            ShowBubble(response);
+            Perform(new CharacterPerformanceIntent(CharacterEmotion.Happy));
+        }
+        catch (Exception exception)
+        {
+            ShowBubble(exception.Message, isError: true);
+            Perform(new CharacterPerformanceIntent(CharacterEmotion.Worried));
+        }
+    }
+
+    private void PositionChatInput()
+    {
+        if (!_visible || WindowHandle == 0 || !GetWindowRect(WindowHandle, out var rect)) return;
+        var workingArea = Forms.Screen.FromHandle(WindowHandle).WorkingArea;
+        var width = Math.Max(280, rect.Width);
+        var left = Math.Clamp(rect.Left, workingArea.Left, Math.Max(workingArea.Left, workingArea.Right - width));
+        var top = rect.Bottom + 8;
+        if (top + _chatInput.Height > workingArea.Bottom) top = Math.Max(workingArea.Top, rect.Top - _chatInput.Height - 8);
+        _chatInput.SetBounds(left, top, width, _chatInput.Height);
+    }
+
+    private void UpdateChatTopMost(bool topMost)
+    {
+        if (_chatInput.IsHandleCreated && _chatInput.InvokeRequired)
+        {
+            _chatInput.BeginInvoke(() => _chatInput.TopMost = topMost);
+            return;
+        }
+        _chatInput.TopMost = topMost;
+    }
+
     public void WatchSettings(string settingsPath)
     {
         _settingsPath = settingsPath;
@@ -151,6 +220,9 @@ internal sealed class GodotCompanionWindow : ICompanionController
             if (!_closing && _renderer is { HasExited: true }) RestartRenderer();
         };
         _healthTimer.Start();
+        _chatPlacementTimer = new Forms.Timer { Interval = 100 };
+        _chatPlacementTimer.Tick += (_, _) => PositionChatInput();
+        _chatPlacementTimer.Start();
         Forms.Application.Run();
     }
 
@@ -213,6 +285,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
                 var type = message.RootElement.GetProperty("type").GetString();
                 if (type == "performed") _acknowledged.Set();
                 if (type == "input_mode") _inputModeAcknowledged.Set();
+                if (type == "bubble_shown") _bubbleAcknowledged.Set();
                 if (type == "interaction")
                 {
                     var interaction = message.RootElement.GetProperty("interaction").GetString();
@@ -284,6 +357,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         try
         {
             var settings = new DesktopSettingsStore(_settingsPath).LoadAsync().GetAwaiter().GetResult();
+            _currentSettings = settings;
             _interactionBindings = new Dictionary<string, string>(settings.InteractionBindings, StringComparer.OrdinalIgnoreCase);
             Apply(new CompanionSurfaceState(settings.Left, settings.Top, settings.Width, settings.Height, settings.Scale, settings.AlwaysOnTop));
         }
@@ -296,11 +370,14 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _disposed = true;
         _closing = true;
         _healthTimer?.Dispose();
+        _chatPlacementTimer?.Dispose();
         _settingsTimer?.Dispose();
+        _chatInput.Dispose();
         StopRenderer();
         _ready.Dispose();
         _acknowledged.Dispose();
         _inputModeAcknowledged.Dispose();
+        _bubbleAcknowledged.Dispose();
         CloseHandle(_rendererJob);
     }
 

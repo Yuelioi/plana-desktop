@@ -44,6 +44,14 @@ _Avoid_: Action copy, plugin feature object, search result DTO
 The keyboard-first Quick Launch surface that searches the unified Command Catalog and executes or navigates through the selected Command Descriptor. It is a view of existing capabilities, not another Action store.
 _Avoid_: Actions page, toolbar menu, plugin marketplace
 
+**Companion Chat Input**:
+The normal-focus native text field attached below the Companion for IME-capable AI conversation. It follows the Companion window but remains a Host-owned window rather than part of the transparent Renderer.
+_Avoid_: Chat page, renderer text box, Companion toolbar prompt
+
+**Speech Bubble**:
+The temporary Godot-rendered response surface near Plana. It shows thinking, response, and error text and temporarily expands the Renderer shape only while visible.
+_Avoid_: Chat history, notification toast, settings status
+
 **Quick Toolbar**:
 The two-row control surface above the Companion: Action search and Settings on the first row, then Tool Group, Action selection, and Run on the second. It is direct navigation and invocation, not an Action Pack.
 _Avoid_: Quick Rail, menu bar

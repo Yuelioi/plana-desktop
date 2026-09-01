@@ -32,7 +32,6 @@ public sealed partial class CommandPalettePage : Page
         _actions.Clear();
         var commands = new List<CommandDescriptor>
         {
-            Navigation("builtin.navigate.chat", App.IsChinese ? "和普拉娜对话" : "Chat with Plana", App.IsChinese ? "使用已配置的 AI 服务" : "Use the configured AI provider", "\uE8BD", "chat", ["ai", "ask", "对话"]),
             Navigation("builtin.navigate.settings", App.IsChinese ? "设置" : "Settings", App.IsChinese ? "桌宠、交互、语言和 AI" : "Companion, interactions, language, and AI", "\uE713", "settings", ["preferences", "配置"]),
             Navigation("builtin.navigate.actions", App.IsChinese ? "管理操作" : "Manage Actions", App.IsChinese ? "创建、编辑和运行操作" : "Create, edit, and run Actions", "\uE80F", "actions", ["commands", "快捷方式"]),
             Navigation("builtin.navigate.groups", App.IsChinese ? "工具组" : "Tool groups", App.IsChinese ? "管理收藏和桌宠快捷工具" : "Manage collections and Companion quick tools", "\uE8FD", "groups", ["collections", "favorites", "收藏"]),

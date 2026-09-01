@@ -36,6 +36,12 @@ internal sealed class CompanionControlServer : IDisposable
                     await writer.WriteLineAsync("{\"ok\":true}");
                     continue;
                 }
+                if (request?.Type?.Equals("bubble", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    _companion.ShowBubble(request.Text ?? string.Empty, request.IsError);
+                    await writer.WriteLineAsync("{\"ok\":true}");
+                    continue;
+                }
                 if (request is null || !Enum.TryParse<CharacterEmotion>(request.Emotion ?? string.Empty, true, out var emotion) ||
                     !Enum.TryParse<CharacterGesture>(request.Gesture ?? string.Empty, true, out var gesture))
                 {
@@ -57,5 +63,5 @@ internal sealed class CompanionControlServer : IDisposable
         _stop.Dispose();
     }
 
-    private sealed record ControlRequest(string? Type, string? Emotion, string? Gesture, bool IsSpeaking, bool Enabled);
+    private sealed record ControlRequest(string? Type, string? Emotion, string? Gesture, bool IsSpeaking, bool Enabled, string? Text, bool IsError);
 }
