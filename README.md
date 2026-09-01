@@ -6,7 +6,7 @@ The repository is self-contained for builds. Renderer code, the Spine runtime fi
 
 ## Status
 
-The production application uses a transparent Godot Renderer supervised by a .NET Windows host plus a packaged WinUI 3 control center. It includes an IME-capable chat input attached below the character, Godot speech-bubble responses using a local Codex subscription or an OpenAI-compatible API, semantic character expressions/gestures, unified Quick Launch, user-created Actions, configurable tool groups and interactions, Action Packs, out-of-process Plugins, English/Simplified-Chinese UI, persisted placement/scale, renderer crash recovery, and mouse pass-through. The former Native/WebView and WPF hosts remain as fallback code paths.
+The production application uses a transparent Godot Renderer supervised by a .NET Windows host plus a packaged WinUI 3 control center. It includes an IME-capable chat input below the character and a sharp native speech-bubble response surface using a local Codex subscription or an OpenAI-compatible API, semantic character expressions/gestures, unified Quick Launch, user-created Actions, configurable tool groups and interactions, Action Packs, out-of-process Plugins, English/Simplified-Chinese UI, persisted placement/scale, renderer crash recovery, and mouse pass-through. The former Native/WebView and WPF hosts remain as fallback code paths.
 
 ## Architecture
 

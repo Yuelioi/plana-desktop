@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
 using Forms = System.Windows.Forms;
 
@@ -7,16 +8,19 @@ internal sealed class CompanionChatInput : Forms.Form
 {
     private readonly Forms.TextBox _input;
     private readonly Forms.Button _send;
+    private readonly Forms.Label _placeholder;
     private readonly Func<string, Task> _submit;
+    private readonly string _cueText;
 
     public CompanionChatInput(bool chinese, Func<string, Task> submit)
     {
         _submit = submit;
+        _cueText = chinese ? "和普拉娜说点什么…" : "Ask Plana…";
         FormBorderStyle = Forms.FormBorderStyle.None;
         ShowInTaskbar = false;
         TopMost = true;
         StartPosition = Forms.FormStartPosition.Manual;
-        BackColor = Color.FromArgb(246, 248, 253);
+        BackColor = Color.FromArgb(14, 20, 34);
         Padding = new Padding(12, 8, 8, 8);
         Height = 52;
         MinimumSize = new Size(260, 52);
@@ -27,9 +31,11 @@ internal sealed class CompanionChatInput : Forms.Form
             Dock = Forms.DockStyle.Fill,
             Font = new Font("Segoe UI", 10.5f),
             BackColor = BackColor,
+            ForeColor = Color.FromArgb(246, 248, 255),
             Margin = new Padding(0, 7, 8, 0),
         };
-        SetCueBanner(_input.Handle, chinese ? "和普拉娜说点什么…" : "Ask Plana…");
+        SetCueBanner(_input.Handle, _cueText);
+        _input.HandleCreated += (_, _) => SetCueBanner(_input.Handle, _cueText);
         _input.KeyDown += async (_, args) =>
         {
             if (args.KeyCode != Keys.Enter || args.Shift) return;
@@ -53,9 +59,22 @@ internal sealed class CompanionChatInput : Forms.Form
         _send.Click += async (_, _) => await SubmitAsync();
 
         Controls.Add(_input);
+        _placeholder = new Forms.Label
+        {
+            AutoSize = true,
+            BackColor = BackColor,
+            ForeColor = Color.FromArgb(151, 162, 190),
+            Font = new Font("Segoe UI", 10f),
+            Location = new Point(14, 16),
+            Text = _cueText,
+            Cursor = Cursors.IBeam,
+        };
+        _placeholder.Click += (_, _) => _input.Focus();
+        _input.TextChanged += (_, _) => _placeholder.Visible = _input.TextLength == 0;
+        Controls.Add(_placeholder);
         Controls.Add(_send);
-        Resize += (_, _) => ApplyRoundedRegion();
-        Shown += (_, _) => ApplyRoundedRegion();
+        Shown += (_, _) => { ApplyWindowShape(); SetCueBanner(_input.Handle, _cueText); };
+        Resize += (_, _) => ApplyWindowShape();
     }
 
     protected override CreateParams CreateParams
@@ -88,22 +107,43 @@ internal sealed class CompanionChatInput : Forms.Form
         }
     }
 
-    private void ApplyRoundedRegion()
+    protected override void OnPaint(Forms.PaintEventArgs e)
     {
-        using var path = new GraphicsPath();
-        const int radius = 12;
-        var bounds = new Rectangle(0, 0, Width, Height);
-        path.AddArc(bounds.Left, bounds.Top, radius * 2, radius * 2, 180, 90);
-        path.AddArc(bounds.Right - radius * 2, bounds.Top, radius * 2, radius * 2, 270, 90);
-        path.AddArc(bounds.Right - radius * 2, bounds.Bottom - radius * 2, radius * 2, radius * 2, 0, 90);
-        path.AddArc(bounds.Left, bounds.Bottom - radius * 2, radius * 2, radius * 2, 90, 90);
-        path.CloseFigure();
+        base.OnPaint(e);
+        using var pen = new Pen(Color.FromArgb(92, 119, 198));
+        e.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
+    }
+
+    private void ApplyWindowShape()
+    {
+        if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000))
+        {
+            var preference = 2;
+            DwmSetWindowAttribute(Handle, 33, ref preference, sizeof(int));
+            return;
+        }
+        using var path = RoundedPath(ClientRectangle, 12);
         Region?.Dispose();
         Region = new Region(path);
+    }
+
+    private static GraphicsPath RoundedPath(Rectangle bounds, int radius)
+    {
+        var path = new GraphicsPath();
+        var diameter = radius * 2;
+        path.AddArc(bounds.Left, bounds.Top, diameter, diameter, 180, 90);
+        path.AddArc(bounds.Right - diameter, bounds.Top, diameter, diameter, 270, 90);
+        path.AddArc(bounds.Right - diameter, bounds.Bottom - diameter, diameter, diameter, 0, 90);
+        path.AddArc(bounds.Left, bounds.Bottom - diameter, diameter, diameter, 90, 90);
+        path.CloseFigure();
+        return path;
     }
 
     [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
     private static extern nint SendMessage(nint window, uint message, nint wParam, string lParam);
 
     private static void SetCueBanner(nint handle, string text) => SendMessage(handle, 0x1501, 1, text);
+
+    [DllImport("dwmapi.dll")]
+    private static extern int DwmSetWindowAttribute(nint window, int attribute, ref int value, int size);
 }

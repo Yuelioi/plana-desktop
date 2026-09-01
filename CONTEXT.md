@@ -49,7 +49,7 @@ The normal-focus native text field attached below the Companion for IME-capable 
 _Avoid_: Chat page, renderer text box, Companion toolbar prompt
 
 **Speech Bubble**:
-The temporary Godot-rendered response surface near Plana. It shows thinking, response, and error text and temporarily expands the Renderer shape only while visible.
+The temporary Host-owned native response surface near Plana. It shows thinking, response, and error text in physical pixels without changing the Renderer shape or depending on Renderer acknowledgement.
 _Avoid_: Chat history, notification toast, settings status
 
 **Quick Toolbar**:

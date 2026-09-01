@@ -1,23 +1,7 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://renderer.gd" id="1_script"]
 [ext_resource type="SpineSkeletonDataResource" path="res://plana-data.tres" id="2_spine"]
-
-[sub_resource type="StyleBoxFlat" id="BubbleStyle"]
-bg_color = Color(0.055, 0.071, 0.11, 0.94)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.31, 0.43, 0.78, 0.55)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-content_margin_left = 16.0
-content_margin_top = 12.0
-content_margin_right = 16.0
-content_margin_bottom = 12.0
 
 [node name="Renderer" type="Node2D"]
 
@@ -26,37 +10,3 @@ position = Vector2(320, 835)
 scale = Vector2(0.36, 0.36)
 skeleton_data_res = ExtResource("2_spine")
 script = ExtResource("1_script")
-
-[node name="Ui" type="CanvasLayer" parent="."]
-
-[node name="Bubble" type="PanelContainer" parent="Ui"]
-visible = false
-offset_left = 18.0
-offset_top = 18.0
-offset_right = 622.0
-offset_bottom = 148.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("BubbleStyle")
-
-[node name="Text" type="Label" parent="Ui/Bubble"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.96, 0.97, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.35)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 24
-text = ""
-autowrap_mode = 2
-vertical_alignment = 1
-
-[node name="BubbleTail" type="Label" parent="Ui"]
-visible = false
-offset_left = 292.0
-offset_top = 136.0
-offset_right = 330.0
-offset_bottom = 170.0
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.055, 0.071, 0.11, 0.94)
-theme_override_font_sizes/font_size = 24
-text = "▼"
-horizontal_alignment = 1

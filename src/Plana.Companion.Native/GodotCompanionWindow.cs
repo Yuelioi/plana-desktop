@@ -41,7 +41,6 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private ManualResetEventSlim _ready = new(false);
     private ManualResetEventSlim _acknowledged = new(false);
     private ManualResetEventSlim _inputModeAcknowledged = new(false);
-    private ManualResetEventSlim _bubbleAcknowledged = new(false);
     private Forms.Timer? _healthTimer;
     private Forms.Timer? _chatPlacementTimer;
     private System.Threading.Timer? _settingsTimer;
@@ -54,6 +53,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private bool _fullPassThrough;
     private readonly nint _rendererJob;
     private readonly CompanionChatInput _chatInput;
+    private readonly CompanionSpeechBubble _speechBubble;
     private DesktopSettings _currentSettings;
 
     public nint WindowHandle { get; private set; }
@@ -76,6 +76,8 @@ internal sealed class GodotCompanionWindow : ICompanionController
         {
             TopMost = settings.AlwaysOnTop,
         };
+        _speechBubble = new CompanionSpeechBubble { TopMost = settings.AlwaysOnTop };
+        _ = _speechBubble.Handle;
         _rendererJob = CreateKillOnCloseJob();
         StartRenderer();
     }
@@ -91,6 +93,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         var insertAfter = state.AlwaysOnTop ? new nint(-1) : new nint(-2);
         SetWindowPos(WindowHandle, insertAfter, x, y, width, height, SwpNoActivate);
         UpdateChatTopMost(state.AlwaysOnTop);
+        UpdateBubbleTopMost(state.AlwaysOnTop);
     }
 
     public CompanionSurfaceState Snapshot()
@@ -112,6 +115,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _visible = false;
         if (WindowHandle != 0) ShowWindow(WindowHandle, SwHide);
         _chatInput.Hide();
+        _speechBubble.Hide();
     }
 
     public void SetPassThrough(bool enabled)
@@ -151,19 +155,14 @@ internal sealed class GodotCompanionWindow : ICompanionController
 
     public void ShowBubble(string text, bool isError = false)
     {
-        lock (_sync)
+        if (_speechBubble.InvokeRequired)
         {
-            if (_writer is null) return;
-            _bubbleAcknowledged.Reset();
-            _writer.WriteLine(JsonSerializer.Serialize(new
-            {
-                type = "show_bubble",
-                text = text.Length <= 900 ? text : string.Concat(text.AsSpan(0, 897), "…"),
-                isError,
-            }));
+            _speechBubble.BeginInvoke(() => ShowBubble(text, isError));
+            return;
         }
-        if (!_bubbleAcknowledged.Wait(TimeSpan.FromSeconds(3)))
-            throw new TimeoutException("Renderer did not acknowledge the speech bubble.");
+        if (string.IsNullOrWhiteSpace(text)) _speechBubble.ClearMessage();
+        else _speechBubble.ShowMessage(text.Length <= 900 ? text : string.Concat(text.AsSpan(0, 897), "…"), isError);
+        PositionSpeechBubble();
     }
 
     private async Task SendChatAsync(string prompt)
@@ -195,6 +194,16 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _chatInput.SetBounds(left, top, width, _chatInput.Height);
     }
 
+    private void PositionSpeechBubble()
+    {
+        if (!_visible || !_speechBubble.Visible || WindowHandle == 0 || !GetWindowRect(WindowHandle, out var rect)) return;
+        var workingArea = Forms.Screen.FromHandle(WindowHandle).WorkingArea;
+        var width = Math.Max(260, rect.Width - 20);
+        var left = Math.Clamp(rect.Left + 10, workingArea.Left, Math.Max(workingArea.Left, workingArea.Right - width));
+        var top = Math.Clamp(rect.Top + 12, workingArea.Top, Math.Max(workingArea.Top, workingArea.Bottom - _speechBubble.Height));
+        SetWindowPos(_speechBubble.Handle, new nint(-1), left, top, width, _speechBubble.Height, SwpNoActivate);
+    }
+
     private void UpdateChatTopMost(bool topMost)
     {
         if (_chatInput.IsHandleCreated && _chatInput.InvokeRequired)
@@ -203,6 +212,16 @@ internal sealed class GodotCompanionWindow : ICompanionController
             return;
         }
         _chatInput.TopMost = topMost;
+    }
+
+    private void UpdateBubbleTopMost(bool topMost)
+    {
+        if (_speechBubble.IsHandleCreated && _speechBubble.InvokeRequired)
+        {
+            _speechBubble.BeginInvoke(() => _speechBubble.TopMost = topMost);
+            return;
+        }
+        _speechBubble.TopMost = topMost;
     }
 
     public void WatchSettings(string settingsPath)
@@ -221,7 +240,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         };
         _healthTimer.Start();
         _chatPlacementTimer = new Forms.Timer { Interval = 100 };
-        _chatPlacementTimer.Tick += (_, _) => PositionChatInput();
+        _chatPlacementTimer.Tick += (_, _) => { PositionChatInput(); PositionSpeechBubble(); };
         _chatPlacementTimer.Start();
         Forms.Application.Run();
     }
@@ -285,7 +304,6 @@ internal sealed class GodotCompanionWindow : ICompanionController
                 var type = message.RootElement.GetProperty("type").GetString();
                 if (type == "performed") _acknowledged.Set();
                 if (type == "input_mode") _inputModeAcknowledged.Set();
-                if (type == "bubble_shown") _bubbleAcknowledged.Set();
                 if (type == "interaction")
                 {
                     var interaction = message.RootElement.GetProperty("interaction").GetString();
@@ -373,11 +391,11 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _chatPlacementTimer?.Dispose();
         _settingsTimer?.Dispose();
         _chatInput.Dispose();
+        _speechBubble.Dispose();
         StopRenderer();
         _ready.Dispose();
         _acknowledged.Dispose();
         _inputModeAcknowledged.Dispose();
-        _bubbleAcknowledged.Dispose();
         CloseHandle(_rendererJob);
     }
 

@@ -94,7 +94,8 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Researched the official uTools plugin/quick-tool model. Chose to adopt a unified command entry, aliases, typed matching, dynamic commands, pinning, brokered storage, and opt-in AI tools while retaining Plana's safer Action Pack, per-plugin Host, and capability broker; rejected unrestricted Node preload access.
 - Added the deep Core Command Catalog with stable Command Descriptors, alias/source/multi-token ranking, ID reconciliation, and tests. Shipped a keyboard-first bilingual WinUI Quick Launch page indexing User Actions, project launchers, Action Packs, Tool Groups, Chat, Settings, Actions, and Extensions; made it the default navigation and tray entry.
 - Upgraded Extensions with validated folder import for Action Packs and executable Plugins, managed-folder access, reload/status feedback, and clear primary/secondary hierarchy. Standardized system-supported navigation/folder/refresh icons on WinUI SymbolIcon to avoid codepoint drift. Runtime screenshots verified the Quick Launch and Extensions layouts; 47/47 tests and the full solution build pass with zero warnings/errors.
-- Moved AI conversation out of the Control Center: removed its Chat page/navigation and attached a rounded native IME-capable input bar below the model. The Host follows model movement/scale/visibility, calls the existing AI provider, and sends acknowledged bubble commands; Godot renders temporary thinking/response/error bubbles with a tail and temporarily expands its shaped window only while the bubble is visible. Runtime composite screenshots verified both surfaces.
+- Moved AI conversation out of the Control Center: removed its Chat page/navigation and attached rounded native IME-capable input plus non-activating Speech Bubble windows to the model. The Host follows model movement/scale/visibility and calls the existing AI provider. An initial Godot bubble caused scaled text aliasing and acknowledgement crashes; the final Host-owned physical-pixel bubble uses native text rendering, system/fallback rounded corners, no Renderer dependency, and no shaped-window expansion. Runtime composite screenshots verified the final surfaces.
+- Researched Fluent text-entry/TeachingTip/windowing guidance and desktop-companion patterns; recorded the decision to keep short conversation as a native one-line composer plus transient response card, reserving a full chat-history page only for a future explicit task.
 
 ## References
 
@@ -113,5 +114,6 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - [Companion host architecture research](references/companion-host-architecture-research.md)
 - [Companion host rearchitecture Slice](slices/companion-host-rearchitecture.md)
 - [uTools plugin and quick-tool research](references/utools-plugin-system-research.md)
+- [Companion chat UI research](references/companion-chat-ui-research.md)
 - [WinUI 3 migration Slice](slices/winui3-migration.md)
 - [Hybrid migration ADR](../../../docs/adr/0004-migrate-to-hybrid-winui3-native-companion.md)
