@@ -21,21 +21,34 @@ public sealed partial class MainWindow : Window
         AppWindow.Resize(new Windows.Graphics.SizeInt32(1040, 720));
         if (App.IsChinese)
         {
+            CommandPaletteNavigationItem.Content = "快速启动";
             SettingsNavigationItem.Content = "设置";
             ChatNavigationItem.Content = "对话";
             ActionsNavigationItem.Content = "操作";
             ToolGroupsNavigationItem.Content = "工具组";
             MigrationNavigationItem.Content = "扩展";
         }
-        NavFrame.Navigate(typeof(SettingsPage));
+        NavFrame.Navigate(typeof(CommandPalettePage));
     }
 
     public void Navigate(Uri? uri)
     {
+        if (uri is null)
+        {
+            NavView.SelectedItem = CommandPaletteNavigationItem;
+            NavFrame.Navigate(typeof(CommandPalettePage));
+            return;
+        }
         if (uri?.Host.Equals("settings", StringComparison.OrdinalIgnoreCase) == true)
         {
             NavView.SelectedItem = SettingsNavigationItem;
             NavFrame.Navigate(typeof(SettingsPage));
+            return;
+        }
+        if (uri?.Host.Equals("commands", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            NavView.SelectedItem = CommandPaletteNavigationItem;
+            NavFrame.Navigate(typeof(CommandPalettePage), uri.Query);
             return;
         }
         if (uri?.Host.Equals("groups", StringComparison.OrdinalIgnoreCase) == true)
@@ -48,6 +61,18 @@ public sealed partial class MainWindow : Window
         {
             NavView.SelectedItem = ChatNavigationItem;
             NavFrame.Navigate(typeof(ChatPage));
+            return;
+        }
+        if (uri?.Host.Equals("extensions", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            NavView.SelectedItem = MigrationNavigationItem;
+            NavFrame.Navigate(typeof(AboutPage));
+            return;
+        }
+        if (uri?.Host.Equals("actions", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            NavView.SelectedItem = ActionsNavigationItem;
+            NavFrame.Navigate(typeof(HomePage), ParseQuery(uri.Query, "query"));
             return;
         }
 
@@ -84,6 +109,9 @@ public sealed partial class MainWindow : Window
         {
             switch (item.Tag)
             {
+                case "commands":
+                    NavFrame.Navigate(typeof(CommandPalettePage));
+                    break;
                 case "settings":
                     NavFrame.Navigate(typeof(SettingsPage));
                     break;

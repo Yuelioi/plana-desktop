@@ -4,6 +4,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Plana.Core.Actions;
 using Plana.Core.Plugins;
+using Plana_ControlCenter.Services;
+using Windows.Storage.Pickers;
 
 namespace Plana_ControlCenter.Pages;
 
@@ -12,6 +14,7 @@ public sealed partial class AboutPage : Page
     private readonly string _packsDirectory = Path.Combine(App.DataDirectory, "packs");
     private readonly string _pluginsDirectory = Path.Combine(App.DataDirectory, "plugins");
     private bool _loading = true;
+    private readonly ExtensionImportService _importService = new(App.DataDirectory);
 
     public ObservableCollection<ExtensionItem> Packs { get; } = [];
     public ObservableCollection<ExtensionItem> Plugins { get; } = [];
@@ -68,6 +71,37 @@ public sealed partial class AboutPage : Page
     private void OpenPacksButton_Click(object sender, RoutedEventArgs e) => OpenFolder(_packsDirectory);
     private void OpenPluginsButton_Click(object sender, RoutedEventArgs e) => OpenFolder(_pluginsDirectory);
 
+    private async void ImportPackButton_Click(object sender, RoutedEventArgs e)
+    {
+        var path = await PickFolderAsync();
+        if (path is null) return;
+        await ShowImportResultAsync(await _importService.ImportPackAsync(path));
+    }
+
+    private async void ImportPluginButton_Click(object sender, RoutedEventArgs e)
+    {
+        var path = await PickFolderAsync();
+        if (path is null) return;
+        await ShowImportResultAsync(await _importService.ImportPluginAsync(path));
+    }
+
+    private static async Task<string?> PickFolderAsync()
+    {
+        var picker = new FolderPicker { SuggestedStartLocation = PickerLocationId.Downloads };
+        picker.FileTypeFilter.Add("*");
+        WinRT.Interop.InitializeWithWindow.Initialize(picker, App.MainWindowHandle);
+        return (await picker.PickSingleFolderAsync())?.Path;
+    }
+
+    private async Task ShowImportResultAsync(ExtensionImportResult result)
+    {
+        ImportStatus.Title = result.Succeeded ? (App.IsChinese ? "导入完成" : "Import complete") : (App.IsChinese ? "无法导入" : "Could not import");
+        ImportStatus.Message = result.Message;
+        ImportStatus.Severity = result.Succeeded ? InfoBarSeverity.Success : InfoBarSeverity.Error;
+        ImportStatus.IsOpen = true;
+        if (result.Succeeded) await ReloadAsync();
+    }
+
     private async void PackToggle_Toggled(object sender, RoutedEventArgs e)
     {
         if (_loading || (sender as FrameworkElement)?.Tag is not ExtensionItem item) return;
@@ -95,6 +129,8 @@ public sealed partial class AboutPage : Page
         PageTitle.Text = "扩展";
         PageDescription.Text = "管理声明式 Action Pack 与进程外插件。";
         ReloadLabel.Text = "重新加载";
+        ImportPackLabel.Text = "导入 Action Pack";
+        ImportPluginLabel.Text = "导入插件";
         OpenPacksLabel.Text = "打开 Pack 文件夹";
         OpenPluginsLabel.Text = "打开插件文件夹";
         PacksHeading.Text = "Action Pack";

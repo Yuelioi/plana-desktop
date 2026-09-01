@@ -36,6 +36,14 @@ _Avoid_: Shortcut, event handler
 A user-named ordered collection of Action references shown in the Companion's Quick Toolbar. Tool Groups organize existing Actions; they do not copy or redefine them.
 _Avoid_: Action Pack, Plugin, toolbar command
 
+**Command Descriptor**:
+The host-owned searchable description of one user-invokable feature. It has a stable identity, title, explanation, icon key, aliases, source, and execution target; Actions, Tool Groups, navigation, Chat, and Plugin contributions adapt into this model without replacing their owning domains.
+_Avoid_: Action copy, plugin feature object, search result DTO
+
+**Command Palette**:
+The keyboard-first Quick Launch surface that searches the unified Command Catalog and executes or navigates through the selected Command Descriptor. It is a view of existing capabilities, not another Action store.
+_Avoid_: Actions page, toolbar menu, plugin marketplace
+
 **Quick Toolbar**:
 The two-row control surface above the Companion: Action search and Settings on the first row, then Tool Group, Action selection, and Run on the second. It is direct navigation and invocation, not an Action Pack.
 _Avoid_: Quick Rail, menu bar

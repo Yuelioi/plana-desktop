@@ -28,7 +28,7 @@ Valid enabled Plugins launch one-per-Host, complete a bounded identity/API hands
 
 ## Next
 
-Begin the unified quick-tool Stage 1 from [uTools plugin research](references/utools-plugin-system-research.md): define a host-owned Command Descriptor/Catalog over existing Actions, Plugin contributions, Tool Groups, navigation, and Chat; ship a keyboard-first WinUI Command Palette before redesigning Extensions around the same catalog. Keep the safer Action Pack and out-of-process Plugin Host architecture.
+Continue the unified quick-tool roadmap from [uTools plugin research](references/utools-plugin-system-research.md): expose live Plugin contributions through the Command Catalog, then add aliases/pinyin indexing, recency ranking, pinning, and typed text/URL/file/folder inputs. Keep the safer Action Pack, out-of-process Plugin Host, and capability broker architecture.
 
 ## Current execution
 
@@ -92,6 +92,8 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Corrected the full-window mode after user testing exposed that an out-of-window Godot polygon also clipped the model. The final acknowledged sequence clears the polygon, applies layered+transparent HWND styles, and reverses that order on disable. Live checks prove full pass-through, restored interaction, persistent model visibility, and unchanged placement/size.
 - Audited the WinUI control center and fixed cropped row icons by introducing a shared 36×36 zero-padding Fluent icon-button style in 44 px action columns across Actions and Tool Groups. Runtime screenshot verification shows complete edit/delete/run glyphs; Control Center builds with zero warnings/errors.
 - Researched the official uTools plugin/quick-tool model. Chose to adopt a unified command entry, aliases, typed matching, dynamic commands, pinning, brokered storage, and opt-in AI tools while retaining Plana's safer Action Pack, per-plugin Host, and capability broker; rejected unrestricted Node preload access.
+- Added the deep Core Command Catalog with stable Command Descriptors, alias/source/multi-token ranking, ID reconciliation, and tests. Shipped a keyboard-first bilingual WinUI Quick Launch page indexing User Actions, project launchers, Action Packs, Tool Groups, Chat, Settings, Actions, and Extensions; made it the default navigation and tray entry.
+- Upgraded Extensions with validated folder import for Action Packs and executable Plugins, managed-folder access, reload/status feedback, and clear primary/secondary hierarchy. Standardized system-supported navigation/folder/refresh icons on WinUI SymbolIcon to avoid codepoint drift. Runtime screenshots verified the Quick Launch and Extensions layouts; 47/47 tests and the full solution build pass with zero warnings/errors.
 
 ## References
 

@@ -19,6 +19,7 @@ public partial class App : Application
     public static DesktopSettingsStore SettingsStore { get; } = new(Path.Combine(DataDirectory, "settings.json"));
     public static DesktopSettings Settings { get; private set; } = new();
     public static bool IsChinese => Settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
+    public static nint MainWindowHandle { get; private set; }
 
     public App()
     {
@@ -57,6 +58,7 @@ public partial class App : Application
     {
         Settings = await SettingsStore.LoadAsync();
         _window ??= new MainWindow();
+        MainWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(_window);
         if (_window is MainWindow mainWindow) mainWindow.Navigate(uri);
         _window.Activate();
     }

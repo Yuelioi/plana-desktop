@@ -38,26 +38,29 @@
             IsSettingsVisible="False"
             SelectionChanged="NavView_SelectionChanged">
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Name="SettingsNavigationItem" Content="Settings" IsSelected="True" Tag="settings">
-                    <NavigationViewItem.Icon><FontIcon Glyph="&#xE713;" /></NavigationViewItem.Icon>
+                <NavigationViewItem x:Name="CommandPaletteNavigationItem" Content="Quick launch" IsSelected="True" Tag="commands">
+                    <NavigationViewItem.Icon><SymbolIcon Symbol="Find" /></NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="SettingsNavigationItem" Content="Settings" Tag="settings">
+                    <NavigationViewItem.Icon><SymbolIcon Symbol="Setting" /></NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem x:Name="ChatNavigationItem" Content="Chat" Tag="chat">
-                    <NavigationViewItem.Icon><FontIcon Glyph="&#xE8BD;" /></NavigationViewItem.Icon>
+                    <NavigationViewItem.Icon><SymbolIcon Symbol="Message" /></NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem
                     x:Name="ActionsNavigationItem"
                     Content="Actions"
                     Tag="home">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE80F;" />
+                        <SymbolIcon Symbol="AllApps" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem x:Name="ToolGroupsNavigationItem" Content="Tool groups" Tag="groups">
-                    <NavigationViewItem.Icon><FontIcon Glyph="&#xE8FD;" /></NavigationViewItem.Icon>
+                    <NavigationViewItem.Icon><SymbolIcon Symbol="List" /></NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem x:Name="MigrationNavigationItem" Content="Extensions" Tag="about">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEA3A;" />
+                        <SymbolIcon Symbol="Library" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
