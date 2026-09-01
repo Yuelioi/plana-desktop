@@ -11,8 +11,18 @@ internal sealed class CompanionChatInput : Forms.Form
     private readonly Forms.Label _placeholder;
     private readonly Func<string, Task> _submit;
     private readonly string _cueText;
+    private readonly IReadOnlyList<Forms.Button> _toolButtons;
+    private bool _userEngaged;
 
-    public CompanionChatInput(bool chinese, Func<string, Task> submit)
+    public bool ShouldRemainVisible => _userEngaged && ContainsFocus;
+
+    public CompanionChatInput(
+        bool chinese,
+        Func<string, Task> submit,
+        Action quickLaunch,
+        Action headPat,
+        Action affection,
+        Action hide)
     {
         _submit = submit;
         _cueText = chinese ? "和普拉娜说点什么…" : "Ask Plana…";
@@ -22,13 +32,13 @@ internal sealed class CompanionChatInput : Forms.Form
         StartPosition = Forms.FormStartPosition.Manual;
         BackColor = Color.FromArgb(14, 20, 34);
         Padding = new Padding(12, 8, 8, 8);
-        Height = 52;
-        MinimumSize = new Size(260, 52);
+        Height = 94;
+        MinimumSize = new Size(280, 94);
 
         _input = new Forms.TextBox
         {
             BorderStyle = Forms.BorderStyle.None,
-            Location = new Point(14, 15),
+            Location = new Point(14, 57),
             Size = new Size(220, 24),
             Font = new Font("Segoe UI", 10.5f),
             BackColor = BackColor,
@@ -38,10 +48,12 @@ internal sealed class CompanionChatInput : Forms.Form
         _input.HandleCreated += (_, _) => SetCueBanner(_input.Handle, _cueText);
         _input.KeyDown += async (_, args) =>
         {
+            _userEngaged = true;
             if (args.KeyCode != Keys.Enter || args.Shift) return;
             args.SuppressKeyPress = true;
             await SubmitAsync();
         };
+        _input.MouseDown += (_, _) => _userEngaged = true;
 
         _send = new Forms.Button
         {
@@ -64,16 +76,25 @@ internal sealed class CompanionChatInput : Forms.Form
             BackColor = BackColor,
             ForeColor = Color.FromArgb(151, 162, 190),
             Font = new Font("Segoe UI", 10f),
-            Location = new Point(14, 16),
+            Location = new Point(14, 58),
             Text = _cueText,
             Cursor = Cursors.IBeam,
         };
-        _placeholder.Click += (_, _) => _input.Focus();
+        _placeholder.Click += (_, _) => { _userEngaged = true; _input.Focus(); };
         _input.TextChanged += (_, _) => _placeholder.Visible = _input.TextLength == 0;
         Controls.Add(_placeholder);
         Controls.Add(_send);
+        _toolButtons =
+        [
+            CreateToolButton(chinese ? "⚡ 快启" : "⚡ Launch", quickLaunch, Color.FromArgb(38, 55, 96)),
+            CreateToolButton(chinese ? "♡ 摸头" : "♡ Head pat", headPat, Color.FromArgb(59, 43, 78)),
+            CreateToolButton(chinese ? "♥ 爱心" : "♥ Affection", affection, Color.FromArgb(72, 42, 79)),
+            CreateToolButton(chinese ? "– 隐藏" : "– Hide", hide, Color.FromArgb(31, 38, 55)),
+        ];
+        foreach (var button in _toolButtons) Controls.Add(button);
         Shown += (_, _) => { LayoutControls(); ApplyWindowShape(); SetCueBanner(_input.Handle, _cueText); };
         Resize += (_, _) => { LayoutControls(); ApplyWindowShape(); };
+        VisibleChanged += (_, _) => { if (!Visible) _userEngaged = false; };
     }
 
     protected override CreateParams CreateParams
@@ -85,6 +106,28 @@ internal sealed class CompanionChatInput : Forms.Form
             parameters.ClassStyle |= CsDropShadow;
             return parameters;
         }
+    }
+
+    protected override bool ShowWithoutActivation => true;
+
+    private Forms.Button CreateToolButton(string text, Action action, Color color)
+    {
+        var button = new Forms.Button
+        {
+            Height = 30,
+            FlatStyle = Forms.FlatStyle.Flat,
+            BackColor = color,
+            ForeColor = Color.FromArgb(218, 225, 244),
+            Font = new Font("Segoe UI", 8.5f),
+            Text = text,
+            AccessibleName = text,
+            Cursor = Cursors.Hand,
+            TabStop = false,
+        };
+        button.FlatAppearance.BorderColor = Color.FromArgb(58, 75, 122);
+        button.FlatAppearance.MouseOverBackColor = Color.FromArgb(38, 50, 82);
+        button.Click += (_, _) => action();
+        return button;
     }
 
     private async Task SubmitAsync()
@@ -117,7 +160,17 @@ internal sealed class CompanionChatInput : Forms.Form
 
     private void LayoutControls()
     {
-        _send.Location = new Point(Math.Max(8, ClientSize.Width - 44), 8);
+        const int gap = 6;
+        var toolWidth = Math.Max(54, (ClientSize.Width - 16 - gap * 3) / 4);
+        for (var index = 0; index < _toolButtons.Count; index++)
+        {
+            var button = _toolButtons[index];
+            button.SetBounds(8 + index * (toolWidth + gap), 8, toolWidth, 30);
+            using var buttonPath = RoundedPath(button.ClientRectangle, 7);
+            button.Region?.Dispose();
+            button.Region = new Region(buttonPath);
+        }
+        _send.Location = new Point(Math.Max(8, ClientSize.Width - 44), 50);
         _input.Size = new Size(Math.Max(120, ClientSize.Width - 74), 24);
     }
 

@@ -97,6 +97,7 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Moved AI conversation out of the Control Center: removed its Chat page/navigation and attached rounded native IME-capable input plus non-activating Speech Bubble windows to the model. The Host follows model movement/scale/visibility and calls the existing AI provider. An initial Godot bubble caused scaled text aliasing and acknowledgement crashes; the final Host-owned physical-pixel bubble uses native text rendering, system/fallback rounded corners, no Renderer dependency, and no shaped-window expansion. Runtime composite screenshots verified the final surfaces.
 - Researched Fluent text-entry/TeachingTip/windowing guidance and desktop-companion patterns; recorded the decision to keep short conversation as a native one-line composer plus transient response card, reserving a full chat-history page only for a future explicit task.
 - Reworked the native chat surfaces after user testing: the reply card now anchors near Plana's head, has a physical-pixel rounded outline, triangular tail, and user-controlled close button; thinking remains visible with elapsed seconds until completion, while results/errors persist until closed. The input uses fixed physical layout to avoid idle clipping. Measured Codex subscription requests at 30–43 seconds, confirming provider/CLI latency rather than UI delay; the UI now communicates that wait honestly.
+- Added a researched Plana Persona Prompt to both Codex CLI and API providers: she addresses the user as “老师”, answers directly in 1–3 restrained sentences, and avoids generic assistant menus/emoji/invented lore. Companion hover now reveals a cute compact dock with Quick Launch, Head pat, Affection, Hide, and the chat composer; it retracts after pointer exit unless the input owns focus. Thinking uses focused/worried gaze, success uses a light smile/blink, and errors use a subdued expression.
 
 ## References
 
@@ -116,5 +117,6 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - [Companion host rearchitecture Slice](slices/companion-host-rearchitecture.md)
 - [uTools plugin and quick-tool research](references/utools-plugin-system-research.md)
 - [Companion chat UI research](references/companion-chat-ui-research.md)
+- [Plana persona research](references/plana-persona-research.md)
 - [WinUI 3 migration Slice](slices/winui3-migration.md)
 - [Hybrid migration ADR](../../../docs/adr/0004-migrate-to-hybrid-winui3-native-companion.md)

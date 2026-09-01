@@ -55,6 +55,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private readonly CompanionChatInput _chatInput;
     private readonly CompanionSpeechBubble _speechBubble;
     private DesktopSettings _currentSettings;
+    private DateTime _lastHoverUtc = DateTime.MinValue;
 
     public nint WindowHandle { get; private set; }
     public event EventHandler? ContextRequested;
@@ -72,7 +73,13 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _currentSettings = settings;
         _actions = actions.ToDictionary(action => action.Id, StringComparer.OrdinalIgnoreCase);
         _interactionBindings = new Dictionary<string, string>(settings.InteractionBindings, StringComparer.OrdinalIgnoreCase);
-        _chatInput = new CompanionChatInput(settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase), SendChatAsync)
+        _chatInput = new CompanionChatInput(
+            settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase),
+            SendChatAsync,
+            OpenQuickLaunch,
+            () => Perform(new CharacterPerformanceIntent(CharacterEmotion.Happy, CharacterGesture.HeadPat)),
+            () => Perform(new CharacterPerformanceIntent(CharacterEmotion.Affectionate)),
+            Hide)
         {
             TopMost = settings.AlwaysOnTop,
         };
@@ -106,8 +113,6 @@ internal sealed class GodotCompanionWindow : ICompanionController
     {
         _visible = true;
         if (WindowHandle != 0) ShowWindow(WindowHandle, SwShowNoActivate);
-        if (!_chatInput.Visible) _chatInput.Show();
-        PositionChatInput();
     }
 
     public void Hide()
@@ -132,6 +137,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
             throw new TimeoutException("Renderer did not acknowledge input mode change.");
         if (enabled) SetTransparentWindowStyle(true);
         _fullPassThrough = enabled;
+        if (enabled) _chatInput.Hide();
     }
 
     private void SetTransparentWindowStyle(bool enabled)
@@ -179,17 +185,17 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private async Task SendChatAsync(string prompt)
     {
         ShowThinkingBubble();
-        Perform(new CharacterPerformanceIntent(IsSpeaking: true));
+        Perform(new CharacterPerformanceIntent(CharacterEmotion.Worried, CharacterGesture.LookAtPointer));
         try
         {
             var response = await AiChatService.SendAsync(_currentSettings, prompt, CancellationToken.None);
             ShowBubble(response);
-            Perform(new CharacterPerformanceIntent(CharacterEmotion.Happy));
+            Perform(new CharacterPerformanceIntent(CharacterEmotion.Happy, CharacterGesture.Blink));
         }
         catch (Exception exception)
         {
             ShowBubble(exception.Message, isError: true);
-            Perform(new CharacterPerformanceIntent(CharacterEmotion.Worried));
+            Perform(new CharacterPerformanceIntent(CharacterEmotion.Sad));
         }
     }
 
@@ -203,6 +209,33 @@ internal sealed class GodotCompanionWindow : ICompanionController
         if (top + _chatInput.Height > workingArea.Bottom) top = Math.Max(workingArea.Top, rect.Top - _chatInput.Height - 8);
         _chatInput.SetBounds(left, top, width, _chatInput.Height);
     }
+
+    private void UpdateHoverSurfaces()
+    {
+        if (!_visible || _fullPassThrough || WindowHandle == 0 || !GetWindowRect(WindowHandle, out var rect))
+        {
+            if (!_chatInput.ShouldRemainVisible) _chatInput.Hide();
+            return;
+        }
+
+        var cursor = Forms.Cursor.Position;
+        var modelZone = Rectangle.FromLTRB(rect.Left - 16, rect.Top - 16, rect.Right + 16, rect.Bottom + 16);
+        var dockZone = new Rectangle(rect.Left - 20, rect.Bottom - 12, rect.Width + 40, _chatInput.Height + 32);
+        var hovering = modelZone.Contains(cursor) || dockZone.Contains(cursor) || (_chatInput.Visible && _chatInput.Bounds.Contains(cursor));
+        if (hovering)
+        {
+            _lastHoverUtc = DateTime.UtcNow;
+            if (!_chatInput.Visible) _chatInput.Show();
+            PositionChatInput();
+            return;
+        }
+
+        if (!_chatInput.ShouldRemainVisible && DateTime.UtcNow - _lastHoverUtc > TimeSpan.FromMilliseconds(500))
+            _chatInput.Hide();
+    }
+
+    private static void OpenQuickLaunch() =>
+        Process.Start(new ProcessStartInfo("plana://commands") { UseShellExecute = true });
 
     private void PositionSpeechBubble()
     {
@@ -250,7 +283,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         };
         _healthTimer.Start();
         _chatPlacementTimer = new Forms.Timer { Interval = 100 };
-        _chatPlacementTimer.Tick += (_, _) => { PositionChatInput(); PositionSpeechBubble(); };
+        _chatPlacementTimer.Tick += (_, _) => { UpdateHoverSurfaces(); PositionSpeechBubble(); };
         _chatPlacementTimer.Start();
         Forms.Application.Run();
     }

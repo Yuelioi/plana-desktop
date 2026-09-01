@@ -33,7 +33,7 @@ A user-configurable association from an Interaction to an Action.
 _Avoid_: Shortcut, event handler
 
 **Tool Group**:
-A user-named ordered collection of Action references shown in the Companion's Quick Toolbar. Tool Groups organize existing Actions; they do not copy or redefine them.
+A user-named ordered collection of Action references indexed by Quick Launch and managed in the Control Center. Tool Groups organize existing Actions; they do not copy or redefine them.
 _Avoid_: Action Pack, Plugin, toolbar command
 
 **Command Descriptor**:
@@ -45,16 +45,16 @@ The keyboard-first Quick Launch surface that searches the unified Command Catalo
 _Avoid_: Actions page, toolbar menu, plugin marketplace
 
 **Companion Chat Input**:
-The normal-focus native text field attached below the Companion for IME-capable AI conversation. It follows the Companion window but remains a Host-owned window rather than part of the transparent Renderer.
+The normal-focus native text field inside the hover-revealed Companion Dock for IME-capable AI conversation. It follows the Companion window but remains Host-owned rather than part of the transparent Renderer.
 _Avoid_: Chat page, renderer text box, Companion toolbar prompt
 
 **Speech Bubble**:
 The temporary Host-owned native response surface near Plana. It shows thinking, response, and error text in physical pixels without changing the Renderer shape or depending on Renderer acknowledgement.
 _Avoid_: Chat history, notification toast, settings status
 
-**Quick Toolbar**:
-The two-row control surface above the Companion: Action search and Settings on the first row, then Tool Group, Action selection, and Run on the second. It is direct navigation and invocation, not an Action Pack.
-_Avoid_: Quick Rail, menu bar
+**Companion Dock**:
+The hover-revealed Host-owned surface below the Companion. It provides Quick Launch, small character gestures, Hide, and the Chat Input; it retracts after pointer exit unless text input owns focus.
+_Avoid_: Quick Toolbar, permanent toolbar, Action Pack
 
 **Action Pack**:
 A portable declarative bundle that contributes Actions using capabilities implemented by the host. It is the import/export and distribution form; personal automation created in the UI lives in the local Your Actions Pack.
