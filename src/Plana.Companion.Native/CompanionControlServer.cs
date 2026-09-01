@@ -29,9 +29,15 @@ internal sealed class CompanionControlServer : IDisposable
                 using var reader = new StreamReader(pipe, leaveOpen: true);
                 await using var writer = new StreamWriter(pipe, leaveOpen: true) { AutoFlush = true };
                 var line = await reader.ReadLineAsync(_stop.Token);
-                var request = line is null ? null : JsonSerializer.Deserialize<PerformanceRequest>(line);
-                if (request is null || !Enum.TryParse<CharacterEmotion>(request.Emotion, true, out var emotion) ||
-                    !Enum.TryParse<CharacterGesture>(request.Gesture, true, out var gesture))
+                var request = line is null ? null : JsonSerializer.Deserialize<ControlRequest>(line);
+                if (request?.Type?.Equals("pass-through", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    _companion.SetPassThrough(request.Enabled);
+                    await writer.WriteLineAsync("{\"ok\":true}");
+                    continue;
+                }
+                if (request is null || !Enum.TryParse<CharacterEmotion>(request.Emotion ?? string.Empty, true, out var emotion) ||
+                    !Enum.TryParse<CharacterGesture>(request.Gesture ?? string.Empty, true, out var gesture))
                 {
                     await writer.WriteLineAsync("{\"ok\":false}");
                     continue;
@@ -51,5 +57,5 @@ internal sealed class CompanionControlServer : IDisposable
         _stop.Dispose();
     }
 
-    private sealed record PerformanceRequest(string Emotion, string Gesture, bool IsSpeaking);
+    private sealed record ControlRequest(string? Type, string? Emotion, string? Gesture, bool IsSpeaking, bool Enabled);
 }

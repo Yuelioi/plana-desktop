@@ -14,12 +14,7 @@ namespace Plana.Companion.Native;
 
 internal sealed class GodotCompanionWindow : ICompanionController
 {
-    private const int GwlExStyle = -20;
-    private const long WsExTransparent = 0x20;
-    private const uint SwpNoSize = 0x0001;
-    private const uint SwpNoZOrder = 0x0004;
     private const uint SwpNoActivate = 0x0010;
-    private const uint SwpFrameChanged = 0x0020;
     private const int SwHide = 0;
     private const int SwShowNoActivate = 4;
     private const uint JobObjectLimitKillOnJobClose = 0x00002000;
@@ -38,6 +33,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private StreamWriter? _writer;
     private ManualResetEventSlim _ready = new(false);
     private ManualResetEventSlim _acknowledged = new(false);
+    private ManualResetEventSlim _inputModeAcknowledged = new(false);
     private Forms.Timer? _healthTimer;
     private System.Threading.Timer? _settingsTimer;
     private string? _settingsPath;
@@ -99,11 +95,14 @@ internal sealed class GodotCompanionWindow : ICompanionController
 
     public void SetPassThrough(bool enabled)
     {
-        if (WindowHandle == 0) return;
-        var style = GetWindowLongPtr(WindowHandle, GwlExStyle).ToInt64();
-        style = enabled ? style | WsExTransparent : style & ~WsExTransparent;
-        SetWindowLongPtr(WindowHandle, GwlExStyle, new nint(style));
-        SetWindowPos(WindowHandle, 0, 0, 0, 0, 0, SwpNoSize | SwpNoZOrder | SwpNoActivate | SwpFrameChanged);
+        lock (_sync)
+        {
+            if (_writer is null) return;
+            _inputModeAcknowledged.Reset();
+            _writer.WriteLine(JsonSerializer.Serialize(new { type = "set_input_mode", passThrough = enabled }));
+        }
+        if (!_inputModeAcknowledged.Wait(TimeSpan.FromSeconds(3)))
+            throw new TimeoutException("Renderer did not acknowledge input mode change.");
     }
 
     public void Perform(CharacterPerformanceIntent intent)
@@ -192,6 +191,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
                 using var message = JsonDocument.Parse(line);
                 var type = message.RootElement.GetProperty("type").GetString();
                 if (type == "performed") _acknowledged.Set();
+                if (type == "input_mode") _inputModeAcknowledged.Set();
                 if (type == "interaction")
                 {
                     var interaction = message.RootElement.GetProperty("interaction").GetString();
@@ -279,6 +279,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         StopRenderer();
         _ready.Dispose();
         _acknowledged.Dispose();
+        _inputModeAcknowledged.Dispose();
         CloseHandle(_rendererJob);
     }
 
@@ -309,10 +310,6 @@ internal sealed class GodotCompanionWindow : ICompanionController
         return job;
     }
 
-    [DllImport("user32.dll", EntryPoint = "GetWindowLongPtrW")]
-    private static extern nint GetWindowLongPtr(nint window, int index);
-    [DllImport("user32.dll", EntryPoint = "SetWindowLongPtrW")]
-    private static extern nint SetWindowLongPtr(nint window, int index, nint value);
     [DllImport("user32.dll")]
     private static extern bool SetWindowPos(nint window, nint insertAfter, int x, int y, int width, int height, uint flags);
     [DllImport("user32.dll")]

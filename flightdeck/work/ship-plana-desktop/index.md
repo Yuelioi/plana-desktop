@@ -88,6 +88,7 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Fixed user-reported Godot cutover regressions: removed top/bottom letterboxing, restored configured/random single-click behavior, added deferred single-click versus exclusive double-click dispatch, and made right-click show the native Context Menu immediately. Added a screen-composite/input regression command and deterministic Core test; final publish passes 43/43 tests and all five runtime regression checks, with Host PID 14868 and Renderer PID 28956 left running for user verification.
 - Restored existing double-click bindings stored under the legacy `doubleClick` key while keeping canonical `double-click`. The final republish passes 44/44 tests and all runtime regression checks.
 - Constrained ordinary mouse hit testing to a normalized character polygon that updates with window size: transparent space above Plana now resolves to the underlying desktop while the body remains interactive. Renamed the separate full-window pass-through mode and added a tray balloon explaining its effect/recovery path. Final publish passes all eight live rendering/input checks.
+- Replaced the conflicting HWND-style full-window mode with a Renderer-owned out-of-window input polygon controlled through acknowledged IPC. Full-window pass-through now disables all character input without moving/resizing the model, and turning it off restores body interaction; the dedicated live regression checks both directions and placement stability.
 
 ## References
 

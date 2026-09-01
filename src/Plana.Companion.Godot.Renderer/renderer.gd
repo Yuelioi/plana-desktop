@@ -7,6 +7,7 @@ var drag_offset := Vector2i.ZERO
 var press_position := Vector2.ZERO
 var single_click_deadline := 0
 var suppress_release_click := false
+var full_window_pass_through := false
 
 func _ready():
 	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
@@ -21,6 +22,11 @@ func _ready():
 	print("RENDERER_READY")
 
 func apply_mouse_passthrough_polygon():
+	if full_window_pass_through:
+		get_window().mouse_passthrough_polygon = PackedVector2Array([
+			Vector2(-4, -4), Vector2(-3, -4), Vector2(-4, -3)
+		])
+		return
 	var size = Vector2(get_window().size)
 	var normalized = [
 		Vector2(0.20, 0.34), Vector2(0.62, 0.34), Vector2(0.70, 0.60),
@@ -76,6 +82,10 @@ func poll_controller():
 		controller_buffer = controller_buffer.substr(end + 1)
 		if command is Dictionary and command.get("type") == "perform":
 			perform_cues(command.get("cues", []))
+		if command is Dictionary and command.get("type") == "set_input_mode":
+			full_window_pass_through = command.get("passThrough", false)
+			apply_mouse_passthrough_polygon()
+			send_event("input_mode", {"passThrough": full_window_pass_through})
 
 func perform_cues(cues: Array):
 	if cues.is_empty():
