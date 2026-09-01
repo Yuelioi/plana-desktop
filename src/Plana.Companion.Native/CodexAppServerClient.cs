@@ -37,7 +37,7 @@ internal sealed class CodexAppServerClient : IDisposable
                 @params = new
                 {
                     threadId = _threadId,
-                    effort = "low",
+                    effort = "none",
                     input = new[] { new { type = "text", text = prompt } },
                 },
             }, cancellationToken);
@@ -121,7 +121,7 @@ internal sealed class CodexAppServerClient : IDisposable
                 baseInstructions = _baseInstructions,
                 cwd = AppContext.BaseDirectory,
                 model,
-                config = new { model_reasoning_effort = "low" },
+                config = new { model_reasoning_effort = "none" },
             },
         }, cancellationToken);
         var response = await ReadResponseAsync(threadId, cancellationToken);

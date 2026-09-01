@@ -117,6 +117,7 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Replaced per-message `codex exec --ephemeral` with a Host-lifetime Codex app-server client using the installed 0.151.0 protocol schema. One low-effort read-only thread retains Plana context. A real two-turn probe improved cold response from 30–43 seconds to 9.27 seconds and the warm second response to 3.75 seconds.
 - Fixed the production app-server path after a published-binary probe exposed system-codepage corruption of Chinese JSON frames and the then-present silent CLI fallback. Redirected streams are explicitly UTF-8 and blank Codex model settings now use `gpt-5.6-luna`: the same published probe measured 5.42 seconds cold and 2.71 seconds warm versus 22.95/3.87 seconds on the default coding model.
 - Removed the one-shot CLI fallback before release. Codex chat now has one production path; app-server failures surface immediately instead of being hidden as 30-second responses.
+- Set Luna reasoning effort to `none` for latency-sensitive short Companion turns. The published probe measured 0.66-second app-server initialization, 10.93-second cold generation, and 2.64-second warm generation; no hidden quota-consuming model request is sent during startup.
 
 ## References
 

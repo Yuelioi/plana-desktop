@@ -53,3 +53,10 @@ probe, the default coding model took 22.95 seconds cold / 3.87 seconds warm, whi
 resolve to Luna for short Companion chat; explicit user model choices remain unchanged. The
 pre-release application has no legacy CLI fallback: app-server failures surface directly in the
 speech bubble so they cannot masquerade as slow responses.
+
+Luna supports reasoning effort `none`, so Companion chat now uses `none` rather than `low` for both
+thread configuration and each turn. A published probe measured 0.66 seconds for app-server/thread
+initialization, 10.93 seconds for a cold first generation, and 2.64 seconds for the warm second
+turn. Cold generation remains service/model-cache dependent. The Host does not send a hidden model
+request at startup merely to prewarm it, because that would consume subscription usage without a
+user message.
