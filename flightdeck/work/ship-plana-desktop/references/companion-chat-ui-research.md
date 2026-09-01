@@ -42,14 +42,14 @@ locally generated v2 protocol schema defines `initialize`, `thread/start`, `turn
 
 A two-turn probe against one ephemeral, read-only, low-effort app-server thread measured 9.27
 seconds for cold initialization plus the first answer and 3.75 seconds for the second answer. The
-production Host now owns one app-server client for its lifetime, keeps the Plana conversation in a
-single thread, and falls back to one-shot `codex exec` only when app-server startup or protocol
-handling fails.
+production Host now owns one app-server client for its lifetime and keeps the Plana conversation in
+a single thread.
 
 The first production attempt silently fell back because redirected app-server streams were not
 explicitly UTF-8; Chinese JSON notifications became invalid after system-codepage decoding. A
 published-binary probe reproduced the exception and verified the UTF-8 correction. On the same
 probe, the default coding model took 22.95 seconds cold / 3.87 seconds warm, while
 `gpt-5.6-luna` took 5.42 seconds cold / 2.71 seconds warm. Blank Codex model settings therefore
-resolve to Luna for short Companion chat; explicit user model choices remain unchanged. Fallback
-exceptions are written to `%LOCALAPPDATA%\PlanaDesktop\ai-chat-fallback.log`.
+resolve to Luna for short Companion chat; explicit user model choices remain unchanged. The
+pre-release application has no legacy CLI fallback: app-server failures surface directly in the
+speech bubble so they cannot masquerade as slow responses.

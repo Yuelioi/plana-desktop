@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -29,61 +28,14 @@ internal static class AiChatService
     {
         if (!settings.AiProvider.Equals("codex", StringComparison.OrdinalIgnoreCase)) return;
         try { await CodexClient.WarmUpAsync(EffectiveCodexModel(settings), CancellationToken.None); }
-        catch { /* A real request will retry and retain the CLI fallback. */ }
+        catch { /* Warm-up is opportunistic; the real request retries and surfaces its error. */ }
     }
 
-    private static async Task<string> SendCodexAsync(DesktopSettings settings, string prompt, CancellationToken cancellationToken)
-    {
-        try { return await CodexClient.SendAsync(EffectiveCodexModel(settings), prompt, cancellationToken); }
-        catch (Exception exception) when (!cancellationToken.IsCancellationRequested)
-        {
-            var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PlanaDesktop", "ai-chat-fallback.log");
-            Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
-            await File.WriteAllTextAsync(logPath, $"{DateTimeOffset.Now:O}{Environment.NewLine}{exception}", cancellationToken);
-            return await SendCodexExecAsync(settings, prompt, cancellationToken);
-        }
-    }
+    private static Task<string> SendCodexAsync(DesktopSettings settings, string prompt, CancellationToken cancellationToken) =>
+        CodexClient.SendAsync(EffectiveCodexModel(settings), prompt, cancellationToken);
 
     private static string EffectiveCodexModel(DesktopSettings settings) =>
         string.IsNullOrWhiteSpace(settings.AiModel) ? "gpt-5.6-luna" : settings.AiModel.Trim();
-
-    private static async Task<string> SendCodexExecAsync(DesktopSettings settings, string prompt, CancellationToken cancellationToken)
-    {
-        var outputPath = Path.Combine(Path.GetTempPath(), $"plana-codex-{Guid.NewGuid():N}.txt");
-        try
-        {
-            var npmCodex = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "npm", "node_modules", "@openai", "codex", "bin", "codex.js");
-            var info = new ProcessStartInfo(File.Exists(npmCodex) ? "node.exe" : "codex.exe")
-            {
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardError = true,
-            };
-            if (File.Exists(npmCodex)) info.ArgumentList.Add(npmCodex);
-            info.ArgumentList.Add("exec");
-            info.ArgumentList.Add("--ephemeral");
-            info.ArgumentList.Add("--skip-git-repo-check");
-            info.ArgumentList.Add("--sandbox");
-            info.ArgumentList.Add("read-only");
-            info.ArgumentList.Add("--output-last-message");
-            info.ArgumentList.Add(outputPath);
-            info.ArgumentList.Add("--model");
-            info.ArgumentList.Add(EffectiveCodexModel(settings));
-            info.ArgumentList.Add($"{PersonaPrompt}\n\n老师的消息：{prompt}");
-            using var process = Process.Start(info) ?? throw new InvalidOperationException("Codex CLI could not be started.");
-            var errorTask = process.StandardError.ReadToEndAsync(cancellationToken);
-            await process.WaitForExitAsync(cancellationToken);
-            var error = await errorTask;
-            if (process.ExitCode != 0) throw new InvalidOperationException(string.IsNullOrWhiteSpace(error) ? $"Codex exited with code {process.ExitCode}." : error.Trim());
-            return File.Exists(outputPath) ? (await File.ReadAllTextAsync(outputPath, cancellationToken)).Trim() : "Codex completed without a response.";
-        }
-        finally
-        {
-            if (File.Exists(outputPath)) File.Delete(outputPath);
-        }
-    }
 
     private static async Task<string> SendApiAsync(DesktopSettings settings, string prompt, CancellationToken cancellationToken)
     {
