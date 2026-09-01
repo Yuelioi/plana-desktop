@@ -5,8 +5,11 @@ var controller_buffer := ""
 var dragging := false
 var drag_offset := Vector2i.ZERO
 var press_position := Vector2.ZERO
+var single_click_deadline := 0
+var suppress_release_click := false
 
 func _ready():
+	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)
 	for argument in OS.get_cmdline_user_args():
@@ -17,18 +20,28 @@ func _ready():
 
 func _process(_delta):
 	poll_controller()
+	if single_click_deadline > 0 and Time.get_ticks_msec() >= single_click_deadline:
+		single_click_deadline = 0
+		send_event("interaction", {"interaction": "click"})
 
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
+				if event.double_click:
+					single_click_deadline = 0
+					dragging = false
+					suppress_release_click = true
+					send_event("interaction", {"interaction": "double-click"})
+					return
 				dragging = true
 				press_position = event.position
 				drag_offset = DisplayServer.mouse_get_position() - DisplayServer.window_get_position()
 			elif dragging:
 				dragging = false
-				if event.position.distance_to(press_position) < 6:
-					send_event("interaction", {"interaction": "double-click" if event.double_click else "click"})
+				if event.position.distance_to(press_position) < 6 and not suppress_release_click:
+					single_click_deadline = Time.get_ticks_msec() + 250
+				suppress_release_click = false
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			send_event("context", {})
 	if event is InputEventMouseMotion and dragging:

@@ -22,6 +22,10 @@ The Host waits for a real `RENDERER_READY` handshake, then owns styles and place
 
 Published runtime checks passed with the real package: semantic `Happy + HeadPat` and `Affectionate` commands acknowledged; forced Renderer termination recovered within about one second; a kill-on-close Job Object prevents orphans when the Host is terminated. Low-processor mode plus a 30 FPS cap reduced the one-second idle CPU sample from about 172 ms to the measurement floor; cold start is about 1.1 seconds and working set about 150 MiB on the target machine.
 
+Post-cutover input/rendering defects are fixed. Godot now ignores content aspect when the Host resizes the window, eliminating opaque top/bottom letterbox bars. Single click is delayed 250 ms so a second press can cancel it and emit exactly one double-click; the Host respects configured Interaction Bindings and the built-in interaction produces varied semantic performances rather than a hard-coded head-pat. Right-click raises the same native Context Menu used by the tray instead of activating a possibly obscured Control Center window.
+
+The agent-runnable regression command is `tools/check-companion-regressions.ps1`. On the final published Host it reports zero top/bottom black ratio and passes aspect, double-click phase, configured-interaction, and context-handler checks. Synthetic live input additionally produced six clicks with six distinct random performances, one double-click without an extra click, and a visible native context-menu HWND. Core now has 43 passing tests including a deterministic random-interaction regression.
+
 WinUI now has a dedicated bilingual Chat page with normal text focus/IME. It uses the configured Codex CLI subscription or OpenAI-compatible API and drives speaking/happy/worried character intent through the Host. The tray exposes Show, Hide, Head pat, Affection, Mouse pass-through, Actions, Settings, and Exit.
 
 The current machine exposes only one 3440×1440 display at 96 DPI. Real 100%→150% cross-monitor behavior cannot be verified on this hardware without changing the user's system display configuration, so that acceptance check remains open rather than simulated.

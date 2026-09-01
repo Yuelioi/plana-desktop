@@ -79,3 +79,25 @@ public sealed class PlanaPerformancePlanner
         return new CharacterPerformancePlan(cues);
     }
 }
+
+public sealed class PlanaInteractionPlanner(Random? random = null)
+{
+    private static readonly CharacterEmotion[] Emotions =
+    [
+        CharacterEmotion.Happy, CharacterEmotion.Excited, CharacterEmotion.Surprised,
+        CharacterEmotion.Shy, CharacterEmotion.Affectionate, CharacterEmotion.Dizzy,
+        CharacterEmotion.Worried, CharacterEmotion.Angry
+    ];
+
+    private static readonly CharacterGesture[] Gestures =
+    [
+        CharacterGesture.None, CharacterGesture.Blink,
+        CharacterGesture.LookAtPointer, CharacterGesture.HeadPat
+    ];
+
+    private readonly Random _random = random ?? Random.Shared;
+
+    public CharacterPerformanceIntent PlanRandomInteraction() => new(
+        Emotions[_random.Next(Emotions.Length)],
+        Gestures[_random.Next(Gestures.Length)]);
+}

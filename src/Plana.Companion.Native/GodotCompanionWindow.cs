@@ -4,7 +4,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using Plana.Core.Actions;
 using Plana.Core.Companion;
+using Plana.Core.Plugins;
 using Plana.Core.Settings;
 using Forms = System.Windows.Forms;
 
@@ -25,6 +27,10 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private readonly string _godotPath;
     private readonly string _projectPath;
     private readonly PlanaPerformancePlanner _planner = new();
+    private readonly PlanaInteractionPlanner _interactionPlanner = new();
+    private readonly PluginRuntimeManager _pluginRuntime;
+    private IReadOnlyDictionary<string, NativeActionEntry> _actions;
+    private IReadOnlyDictionary<string, string> _interactionBindings;
     private readonly object _sync = new();
     private Process? _renderer;
     private TcpListener? _listener;
@@ -43,11 +49,20 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private readonly nint _rendererJob;
 
     public nint WindowHandle { get; private set; }
+    public event EventHandler? ContextRequested;
 
-    public GodotCompanionWindow(string godotPath, string projectPath)
+    public GodotCompanionWindow(
+        string godotPath,
+        string projectPath,
+        PluginRuntimeManager pluginRuntime,
+        DesktopSettings settings,
+        IReadOnlyList<NativeActionEntry> actions)
     {
         _godotPath = godotPath;
         _projectPath = projectPath;
+        _pluginRuntime = pluginRuntime;
+        _actions = actions.ToDictionary(action => action.Id, StringComparer.OrdinalIgnoreCase);
+        _interactionBindings = new Dictionary<string, string>(settings.InteractionBindings, StringComparer.OrdinalIgnoreCase);
         _rendererJob = CreateKillOnCloseJob();
         StartRenderer();
     }
@@ -180,14 +195,33 @@ internal sealed class GodotCompanionWindow : ICompanionController
                 if (type == "interaction")
                 {
                     var interaction = message.RootElement.GetProperty("interaction").GetString();
-                    _ = Task.Run(() => Perform(interaction == "double-click"
-                        ? new CharacterPerformanceIntent(CharacterEmotion.Affectionate)
-                        : new CharacterPerformanceIntent(CharacterEmotion.Happy, CharacterGesture.HeadPat)));
+                    if (interaction is not null) _ = Task.Run(() => ExecuteInteractionAsync(interaction));
                 }
-                if (type == "context") Process.Start(new ProcessStartInfo("plana://actions") { UseShellExecute = true });
+                if (type == "context") ContextRequested?.Invoke(this, EventArgs.Empty);
             }
         }
         catch (Exception exception) when (exception is IOException or JsonException && (_closing || client != _client)) { }
+    }
+
+    private async Task ExecuteInteractionAsync(string interaction)
+    {
+        if (!_interactionBindings.TryGetValue(interaction, out var actionId)) return;
+        if (actionId.Equals("builtin.companion.interact", StringComparison.OrdinalIgnoreCase))
+        {
+            Perform(_interactionPlanner.PlanRandomInteraction());
+            return;
+        }
+        if (!_actions.TryGetValue(actionId, out var action)) return;
+        if (action.Definition.Kind != ActionKinds.PluginInvoke)
+        {
+            NativeActionExecutor.Execute(action);
+            return;
+        }
+        await _pluginRuntime.InvokeAsync(
+            action.Definition.Parameters["pluginId"],
+            action.Definition.Parameters["actionId"],
+            action.Definition.Capabilities,
+            (request, token) => NativePluginBroker.ExecuteAsync(request, action.WorkingDirectory, token));
     }
 
     private void RestartRenderer()
@@ -229,6 +263,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         try
         {
             var settings = new DesktopSettingsStore(_settingsPath).LoadAsync().GetAwaiter().GetResult();
+            _interactionBindings = new Dictionary<string, string>(settings.InteractionBindings, StringComparer.OrdinalIgnoreCase);
             Apply(new CompanionSurfaceState(settings.Left, settings.Top, settings.Width, settings.Height, settings.Scale, settings.AlwaysOnTop));
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or JsonException) { }

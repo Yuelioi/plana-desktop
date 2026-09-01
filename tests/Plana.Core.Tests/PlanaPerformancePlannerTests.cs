@@ -43,4 +43,15 @@ public sealed class PlanaPerformancePlannerTests
 
         Assert.Equal("03", plan.Cues[0].Animation);
     }
+
+    [Fact]
+    public void RandomInteractionsDoNotCollapseToOneHardCodedPerformance()
+    {
+        var interactions = new PlanaInteractionPlanner(new Random(12345));
+
+        var results = Enumerable.Range(0, 12).Select(_ => interactions.PlanRandomInteraction()).ToHashSet();
+
+        Assert.True(results.Count >= 4);
+        Assert.All(results, intent => Assert.NotEqual(CharacterEmotion.Neutral, intent.Emotion));
+    }
 }
