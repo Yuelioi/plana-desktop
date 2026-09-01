@@ -47,12 +47,19 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
+    <Style x:Key="SearchTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource DefaultTextBoxStyle}">
+        <Setter Property="TextAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
     <Style x:Key="CommandButtonContentStyle" TargetType="StackPanel">
         <Setter Property="Orientation" Value="Horizontal" />
         <Setter Property="Spacing" Value="6" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
-    <Style x:Key="CommandIconStyle" TargetType="SymbolIcon">
+    <Style x:Key="CommandIconStyle" TargetType="Viewbox">
+        <Setter Property="Width" Value="14" />
+        <Setter Property="Height" Value="14" />
+        <Setter Property="Stretch" Value="Uniform" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
     <Style x:Key="CommandLabelStyle" TargetType="TextBlock">

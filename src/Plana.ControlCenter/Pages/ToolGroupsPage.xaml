@@ -8,8 +8,8 @@
         <TextBlock x:Name="PageTitle" Style="{StaticResource PageTitleStyle}" Text="Action groups" />
         <Grid Grid.Row="1" ColumnSpacing="10">
             <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-            <AutoSuggestBox x:Name="SearchBox" Style="{StaticResource SearchBoxStyle}" QueryIcon="Find" PlaceholderText="Search action groups" TextChanged="SearchBox_TextChanged" />
-            <Button Grid.Column="1" MinWidth="132" Style="{StaticResource CommandButtonStyle}" Click="NewGroupButton_Click"><StackPanel Style="{StaticResource CommandButtonContentStyle}"><SymbolIcon Style="{StaticResource CommandIconStyle}" Symbol="Add" /><TextBlock x:Name="NewGroupLabel" Style="{StaticResource CommandLabelStyle}" Text="New group" /></StackPanel></Button>
+            <AutoSuggestBox x:Name="SearchBox" Style="{StaticResource SearchBoxStyle}" TextBoxStyle="{StaticResource SearchTextBoxStyle}" QueryIcon="Find" PlaceholderText="Search action groups" TextChanged="SearchBox_TextChanged" />
+            <Button Grid.Column="1" MinWidth="132" Style="{StaticResource CommandButtonStyle}" Click="NewGroupButton_Click"><StackPanel Style="{StaticResource CommandButtonContentStyle}"><Viewbox Style="{StaticResource CommandIconStyle}"><SymbolIcon Symbol="Add" /></Viewbox><TextBlock x:Name="NewGroupLabel" Style="{StaticResource CommandLabelStyle}" Text="New group" /></StackPanel></Button>
         </Grid>
         <Grid Grid.Row="2">
             <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>

@@ -12,6 +12,7 @@ foreach ($file in $xamlFiles) {
     if ($text -match '<FontIcon\b') { $violations.Add("$relative uses FontIcon; use SymbolIcon or a reviewed SVG PathIcon.") }
     if ($text -match '\bGlyph\s*=') { $violations.Add("$relative contains a raw glyph.") }
     if ($text -match '<SymbolIcon[^>]*\b(FontSize|Width|Height)\s*=') { $violations.Add("$relative sizes a SymbolIcon locally; use CommandIconStyle or the native SymbolIcon size.") }
+    if ($text -match '<SymbolIcon[^>]*CommandIconStyle') { $violations.Add("$relative applies CommandIconStyle directly; wrap the SymbolIcon in a styled Viewbox.") }
 }
 
 foreach ($file in Get-ChildItem -LiteralPath $uiRoot -Recurse -Filter '*.cs' | Where-Object { $_.FullName -notmatch '[\\/](bin|obj)[\\/]' }) {

@@ -10,13 +10,13 @@
             <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
             <TextBlock x:Name="PageTitle" VerticalAlignment="Center" Style="{StaticResource PageTitleStyle}" Text="Extensions" />
             <Button x:Name="ReloadButton" Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource CommandButtonStyle}" Click="ReloadButton_Click">
-                <StackPanel Style="{StaticResource CommandButtonContentStyle}"><SymbolIcon Style="{StaticResource CommandIconStyle}" Symbol="Refresh" /><TextBlock Style="{StaticResource CommandLabelStyle}" x:Name="ReloadLabel" Text="Reload" /></StackPanel>
+                <StackPanel Style="{StaticResource CommandButtonContentStyle}"><Viewbox Style="{StaticResource CommandIconStyle}"><SymbolIcon Symbol="Refresh" /></Viewbox><TextBlock Style="{StaticResource CommandLabelStyle}" x:Name="ReloadLabel" Text="Reload" /></StackPanel>
             </Button>
         </Grid>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
-            <Button x:Name="ImportPackButton" Click="ImportPackButton_Click" Style="{StaticResource AccentCommandButtonStyle}"><StackPanel Style="{StaticResource CommandButtonContentStyle}"><SymbolIcon Style="{StaticResource CommandIconStyle}" Symbol="Download" /><TextBlock Style="{StaticResource CommandLabelStyle}" x:Name="ImportPackLabel" Text="Import Action Pack" /></StackPanel></Button>
-            <Button x:Name="ImportPluginButton" Click="ImportPluginButton_Click" Style="{StaticResource CommandButtonStyle}"><StackPanel Style="{StaticResource CommandButtonContentStyle}"><SymbolIcon Style="{StaticResource CommandIconStyle}" Symbol="Download" /><TextBlock Style="{StaticResource CommandLabelStyle}" x:Name="ImportPluginLabel" Text="Import Plugin" /></StackPanel></Button>
+            <Button x:Name="ImportPackButton" Click="ImportPackButton_Click" Style="{StaticResource AccentCommandButtonStyle}"><StackPanel Style="{StaticResource CommandButtonContentStyle}"><Viewbox Style="{StaticResource CommandIconStyle}"><SymbolIcon Symbol="Download" /></Viewbox><TextBlock Style="{StaticResource CommandLabelStyle}" x:Name="ImportPackLabel" Text="Import Action Pack" /></StackPanel></Button>
+            <Button x:Name="ImportPluginButton" Click="ImportPluginButton_Click" Style="{StaticResource CommandButtonStyle}"><StackPanel Style="{StaticResource CommandButtonContentStyle}"><Viewbox Style="{StaticResource CommandIconStyle}"><SymbolIcon Symbol="Download" /></Viewbox><TextBlock Style="{StaticResource CommandLabelStyle}" x:Name="ImportPluginLabel" Text="Import Plugin" /></StackPanel></Button>
             <Button x:Name="OpenPacksButton" Click="OpenPacksButton_Click" Style="{StaticResource CommandButtonStyle}"><TextBlock Style="{StaticResource CommandLabelStyle}" x:Name="OpenPacksLabel" Text="Open Packs folder" /></Button>
             <Button x:Name="OpenPluginsButton" Click="OpenPluginsButton_Click" Style="{StaticResource CommandButtonStyle}"><TextBlock Style="{StaticResource CommandLabelStyle}" x:Name="OpenPluginsLabel" Text="Open Plugins folder" /></Button>
         </StackPanel>
