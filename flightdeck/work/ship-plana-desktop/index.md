@@ -14,7 +14,9 @@ The host is now localization-ready. Action Packs can open HTTP(S) URLs, files, f
 
 The replacement Companion is now split process and locally usable: WinUI owns normal UI and IME-capable AI Chat; the .NET Host owns tray, settings, plugins, Windows pass-through, semantic control, and recovery; the production Godot process owns transparent Spine rendering, animation state, drag, and pointer events. Godot is the default published Renderer; Native/WebView remains fallback.
 
-The side-by-side migration is complete. `Plana.ControlCenter` is the packaged single-instance WinUI 3 application; `Plana.Companion.Native` is the production Host and legacy renderer fallback; `Plana.Companion.Godot.Renderer` is the default character renderer. Reusable modules and Plugin Host target .NET 10; Core also preserves the WPF net8 rollback reference. The solution passes 42 tests and builds with zero warnings or errors.
+The side-by-side migration is complete. `Plana.ControlCenter` is the packaged single-instance WinUI 3 application; `Plana.Companion.Native` is the production Host and legacy renderer fallback; `Plana.Companion.Godot.Renderer` is the default character renderer. Reusable modules and Plugin Host target .NET 10; Core also preserves the WPF net8 rollback reference. The solution passes 47 tests and builds with zero warnings or errors.
+
+Quick Launch is now independent from the Control Center: `plana://commands`, the tray, and `Ctrl+Alt+Space` open a compact borderless WinUI launcher containing one all-Action search field and a single row of Action Group menu buttons. Results use the native suggestion flyout; Enter executes and Escape hides it. Management/settings commands and the old Quick Launch page/navigation item are removed. Up to four Actions can be pinned from the Actions page to the Companion hover dock, replacing its former fixed Launch/Head pat/Affection/Hide row.
 
 The Actions page now searches the complete Action catalog and runs Actions directly. Users can create persisted Windows Terminal project launchers with a project folder and ordered custom arguments, including `{folder}` substitution and direct `codex` startup. Automatic bounded discovery across project roots remains next.
 
@@ -27,6 +29,10 @@ Plana model-source research confirms the game runtime asset is Spine `NP0035_spr
 Valid enabled Plugins launch one-per-Host, complete a bounded identity/API handshake, contribute declared Actions, and execute them through serialized requests. Typed broker requests for URL, file, folder, process, command, and script capabilities reuse existing adapters. Failure/cancellation tears down the session and removes contributions. The published sample passes lifecycle, contribution, invocation, and broker flow end to end.
 
 ## Next
+
+- Visually verify the independent Quick Launch window and four pinned Companion Actions on the
+  published package, then continue live Plugin contributions, aliases/pinyin indexing, and recency ranking. See
+  [quick-launch-ui-research.md](references/quick-launch-ui-research.md).
 
 Continue the unified quick-tool roadmap from [uTools plugin research](references/utools-plugin-system-research.md): expose live Plugin contributions through the Command Catalog, then add aliases/pinyin indexing, recency ranking, pinning, and typed text/URL/file/folder inputs. Keep the safer Action Pack, out-of-process Plugin Host, and capability broker architecture.
 
@@ -98,6 +104,9 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Researched Fluent text-entry/TeachingTip/windowing guidance and desktop-companion patterns; recorded the decision to keep short conversation as a native one-line composer plus transient response card, reserving a full chat-history page only for a future explicit task.
 - Reworked the native chat surfaces after user testing: the reply card now anchors near Plana's head, has a physical-pixel rounded outline, triangular tail, and user-controlled close button; thinking remains visible with elapsed seconds until completion, while results/errors persist until closed. The input uses fixed physical layout to avoid idle clipping. Measured Codex subscription requests at 30–43 seconds, confirming provider/CLI latency rather than UI delay; the UI now communicates that wait honestly.
 - Added a researched Plana Persona Prompt to both Codex CLI and API providers: she addresses the user as “老师”, answers directly in 1–3 restrained sentences, and avoids generic assistant menus/emoji/invented lore. Companion hover now reveals a cute compact dock with Quick Launch, Head pat, Affection, Hide, and the chat composer; it retracts after pointer exit unless the input owns focus. Thinking uses focused/worried gaze, success uses a light smile/blink, and errors use a subdued expression.
+- Replaced the Control Center Quick Launch page with a borderless independent WinUI launcher inspired by Listary: one search field, one horizontal group row, and native suggestions. Added shared protocol/tray/dock activation, `Ctrl+Alt+Space`, Enter execution, Escape dismissal, and non-fatal hotkey conflict handling. Verified protocol-only startup, 47/47 tests, and warning-free Release builds.
+- Refined Quick Launch around Actions only: removed management/settings results and search-scope filters, turned the lower row into Action Group dropdown buttons, renamed Chinese “操作” UI to “动作”, and added a persisted maximum of four Actions pinned to the Companion dock. Removed its fixed Quick Launch/Hide buttons and tightened Control Center icon sizing/alignment. Legacy IDs normalize safely and 47/47 tests pass.
+- Replaced the ineffective empty-query suggestion trick with real button-anchored Action Group menus. Added cross-process outside-click dismissal for the Host-owned context menu, because Godot clicks never enter the WinForms message stream. A live input probe observed two Host menu windows after model right-click and zero after an outside left-click. Distilled Control Center copy by removing redundant page and setting-row descriptions while retaining recovery and API-key safety guidance. Release builds and 47/47 tests pass.
 
 ## References
 
@@ -118,5 +127,6 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - [uTools plugin and quick-tool research](references/utools-plugin-system-research.md)
 - [Companion chat UI research](references/companion-chat-ui-research.md)
 - [Plana persona research](references/plana-persona-research.md)
+- [Quick Launch UI research](references/quick-launch-ui-research.md)
 - [WinUI 3 migration Slice](slices/winui3-migration.md)
 - [Hybrid migration ADR](../../../docs/adr/0004-migrate-to-hybrid-winui3-native-companion.md)

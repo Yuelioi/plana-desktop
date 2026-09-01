@@ -41,7 +41,7 @@ public sealed partial class ToolGroupsPage : Page
     private string Summarize(ToolGroupSettings group)
     {
         var names = group.ActionIds.Select(id => _actions.FirstOrDefault(action => action.Id.Equals(id, StringComparison.OrdinalIgnoreCase))?.Name).Where(name => name is not null).ToArray();
-        return names.Length == 0 ? (App.IsChinese ? "空工具组" : "Empty group") : string.Join("、", names!);
+        return names.Length == 0 ? (App.IsChinese ? "空动作组" : "Empty group") : string.Join("、", names!);
     }
 
     private void SearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args) => Filter(sender.Text);
@@ -75,7 +75,7 @@ public sealed partial class ToolGroupsPage : Page
         if (group is not null)
             foreach (var action in _actions.Where(action => group.ActionIds.Contains(action.Id, StringComparer.OrdinalIgnoreCase))) GroupActionsList.SelectedItems.Add(action);
         EditorError.Text = string.Empty;
-        GroupDialog.Title = group is null ? (App.IsChinese ? "新建工具组" : "New Tool Group") : (App.IsChinese ? "编辑工具组" : "Edit Tool Group");
+        GroupDialog.Title = group is null ? (App.IsChinese ? "新建动作组" : "New Action Group") : (App.IsChinese ? "编辑动作组" : "Edit Action Group");
         GroupDialog.PrimaryButtonText = App.IsChinese ? "保存" : "Save";
         GroupDialog.CloseButtonText = App.IsChinese ? "取消" : "Cancel";
         GroupDialog.XamlRoot = XamlRoot;
@@ -99,7 +99,7 @@ public sealed partial class ToolGroupsPage : Page
             var name = GroupNameInput.Text.Trim();
             if (string.IsNullOrWhiteSpace(name))
             {
-                EditorError.Text = App.IsChinese ? "请输入工具组名称。" : "Enter a Tool Group name.";
+                EditorError.Text = App.IsChinese ? "请输入动作组名称。" : "Enter an Action Group name.";
                 args.Cancel = true;
                 return;
             }
@@ -120,16 +120,15 @@ public sealed partial class ToolGroupsPage : Page
     private void ApplyLanguage()
     {
         if (!App.IsChinese) return;
-        PageTitle.Text = "工具组";
-        PageDescription.Text = "整理桌宠工具栏中的可选快捷操作。";
-        SearchBox.PlaceholderText = "搜索工具组";
-        NewGroupLabel.Text = "新建工具组";
+        PageTitle.Text = "动作组";
+        SearchBox.PlaceholderText = "搜索动作组";
+        NewGroupLabel.Text = "新建动作组";
         NameHeader.Text = "名称";
-        ActionsHeader.Text = "操作";
+        ActionsHeader.Text = "动作";
         GroupNameInput.Header = "名称";
         GroupNameInput.PlaceholderText = "例如：Codex 项目";
-        OptionalActionsLabel.Text = "操作（可选）";
-        OptionalActionsHelp.Text = "允许创建空工具组；可以现在关联操作，也可以以后再编辑。";
+        OptionalActionsLabel.Text = "动作（可选）";
+        OptionalActionsHelp.Text = "允许创建空动作组；可以现在关联动作，也可以以后再编辑。";
     }
 }
 

@@ -9,6 +9,7 @@ Plana Desktop pairs an expressive transparent character with quiet Windows-nativ
 - The Companion is a transparent always-on-top Win32/Composition window. The Spine character owns most of the canvas.
 - The quick toolbar sits directly above the character in two compact rows: AI conversation/settings/collapse first, Tool Group/Action/run second. Collapsing hides the complete second row.
 - The control center is a conventional WinUI 3 window with Mica, a left NavigationView, one content column, and native Fluent controls.
+- Quick Launch is a separate transient WinUI surface: one large all-action search field, one horizontal row of Action Group menu buttons, and native suggestion results only while searching or browsing a group. It has no title bar, sidebar, page heading, management commands, or permanent results list.
 - Dialogs are reserved for short creation tasks such as a new Action or Tool Group. Persistent management belongs on a page.
 
 ## Color and material
@@ -32,6 +33,7 @@ Plana Desktop pairs an expressive transparent character with quiet Windows-nativ
 - Character drag begins only after the renderer's movement threshold. Toolbar fields remain directly interactive.
 - Settings persist immediately. Scale, topmost, interaction bindings, personal Actions, and Tool Groups refresh the running Companion without opening the storage format.
 - Enter submits the AI prompt; the response appears in a compact speech panel. The toolbar run button executes the selected Action directly.
+- `Ctrl+Alt+Space` and the tray open Quick Launch; Enter executes the top match and Escape hides the surface. The Companion hover dock exposes only up to four user-pinned Actions above its chat composer.
 
 ## Content and localization
 

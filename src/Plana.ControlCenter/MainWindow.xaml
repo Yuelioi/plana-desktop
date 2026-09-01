@@ -38,10 +38,7 @@
             IsSettingsVisible="False"
             SelectionChanged="NavView_SelectionChanged">
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Name="CommandPaletteNavigationItem" Content="Quick launch" IsSelected="True" Tag="commands">
-                    <NavigationViewItem.Icon><SymbolIcon Symbol="Find" /></NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem x:Name="SettingsNavigationItem" Content="Settings" Tag="settings">
+                <NavigationViewItem x:Name="SettingsNavigationItem" Content="Settings" IsSelected="True" Tag="settings">
                     <NavigationViewItem.Icon><SymbolIcon Symbol="Setting" /></NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem
@@ -52,7 +49,7 @@
                         <SymbolIcon Symbol="AllApps" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Name="ToolGroupsNavigationItem" Content="Tool groups" Tag="groups">
+                <NavigationViewItem x:Name="ToolGroupsNavigationItem" Content="Action groups" Tag="groups">
                     <NavigationViewItem.Icon><SymbolIcon Symbol="List" /></NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem x:Name="MigrationNavigationItem" Content="Extensions" Tag="about">

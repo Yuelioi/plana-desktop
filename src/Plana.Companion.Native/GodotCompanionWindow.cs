@@ -54,6 +54,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private readonly nint _rendererJob;
     private readonly CompanionChatInput _chatInput;
     private readonly CompanionSpeechBubble _speechBubble;
+    private readonly GlobalHotkey _quickLaunchHotkey;
     private DesktopSettings _currentSettings;
     private DateTime _lastHoverUtc = DateTime.MinValue;
 
@@ -75,16 +76,15 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _interactionBindings = new Dictionary<string, string>(settings.InteractionBindings, StringComparer.OrdinalIgnoreCase);
         _chatInput = new CompanionChatInput(
             settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase),
-            SendChatAsync,
-            OpenQuickLaunch,
-            () => Perform(new CharacterPerformanceIntent(CharacterEmotion.Happy, CharacterGesture.HeadPat)),
-            () => Perform(new CharacterPerformanceIntent(CharacterEmotion.Affectionate)),
-            Hide)
+            SendChatAsync)
         {
             TopMost = settings.AlwaysOnTop,
         };
         _speechBubble = new CompanionSpeechBubble { TopMost = settings.AlwaysOnTop };
+        ConfigurePinnedActions(settings);
         _ = _speechBubble.Handle;
+        _ = _chatInput.Handle;
+        _quickLaunchHotkey = new GlobalHotkey(_chatInput.Handle, OpenQuickLaunch);
         _rendererJob = CreateKillOnCloseJob();
         StartRenderer();
     }
@@ -237,6 +237,16 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private static void OpenQuickLaunch() =>
         Process.Start(new ProcessStartInfo("plana://commands") { UseShellExecute = true });
 
+    private void ConfigurePinnedActions(DesktopSettings settings)
+    {
+        var entries = settings.PinnedCompanionActionIds
+            .Select(id => _actions.GetValueOrDefault(id))
+            .Where(entry => entry is not null)
+            .Select(entry => (entry!.Name, (Action)(() => _ = Task.Run(() => ExecuteActionByIdAsync(entry.Id)))))
+            .ToArray();
+        _chatInput.ConfigureQuickActions(entries);
+    }
+
     private void PositionSpeechBubble()
     {
         if (!_visible || !_speechBubble.Visible || WindowHandle == 0 || !GetWindowRect(WindowHandle, out var rect)) return;
@@ -366,6 +376,11 @@ internal sealed class GodotCompanionWindow : ICompanionController
             Perform(_interactionPlanner.PlanRandomInteraction());
             return;
         }
+        await ExecuteActionByIdAsync(actionId);
+    }
+
+    private async Task ExecuteActionByIdAsync(string actionId)
+    {
         if (!_actions.TryGetValue(actionId, out var action)) return;
         if (action.Definition.Kind != ActionKinds.PluginInvoke)
         {
@@ -420,6 +435,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
             var settings = new DesktopSettingsStore(_settingsPath).LoadAsync().GetAwaiter().GetResult();
             _currentSettings = settings;
             _interactionBindings = new Dictionary<string, string>(settings.InteractionBindings, StringComparer.OrdinalIgnoreCase);
+            ConfigurePinnedActions(settings);
             Apply(new CompanionSurfaceState(settings.Left, settings.Top, settings.Width, settings.Height, settings.Scale, settings.AlwaysOnTop));
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or JsonException) { }
@@ -433,6 +449,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _healthTimer?.Dispose();
         _chatPlacementTimer?.Dispose();
         _settingsTimer?.Dispose();
+        _quickLaunchHotkey.Dispose();
         _chatInput.Dispose();
         _speechBubble.Dispose();
         StopRenderer();

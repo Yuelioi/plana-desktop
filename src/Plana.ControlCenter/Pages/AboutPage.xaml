@@ -8,20 +8,17 @@
         <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
         <Grid ColumnSpacing="12">
             <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-            <StackPanel Spacing="6">
-                <TextBlock x:Name="PageTitle" Style="{StaticResource PageTitleStyle}" Text="Extensions" />
-                <TextBlock x:Name="PageDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="Manage declarative Action Packs and out-of-process Plugins." />
-            </StackPanel>
+            <TextBlock x:Name="PageTitle" VerticalAlignment="Center" Style="{StaticResource PageTitleStyle}" Text="Extensions" />
             <Button x:Name="ReloadButton" Grid.Column="1" VerticalAlignment="Center" Click="ReloadButton_Click">
-                <StackPanel Orientation="Horizontal" Spacing="8"><SymbolIcon Symbol="Refresh" /><TextBlock x:Name="ReloadLabel" Text="Reload" /></StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="6"><SymbolIcon Width="16" Symbol="Refresh" /><TextBlock VerticalAlignment="Center" x:Name="ReloadLabel" Text="Reload" /></StackPanel>
             </Button>
         </Grid>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
-            <Button x:Name="ImportPackButton" Click="ImportPackButton_Click" Style="{StaticResource AccentButtonStyle}"><StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE8E5;" /><TextBlock x:Name="ImportPackLabel" Text="Import Action Pack" /></StackPanel></Button>
-            <Button x:Name="ImportPluginButton" Click="ImportPluginButton_Click"><StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE896;" /><TextBlock x:Name="ImportPluginLabel" Text="Import Plugin" /></StackPanel></Button>
-            <Button x:Name="OpenPacksButton" Click="OpenPacksButton_Click"><StackPanel Orientation="Horizontal" Spacing="8"><SymbolIcon Symbol="Folder" /><TextBlock x:Name="OpenPacksLabel" Text="Open Packs folder" /></StackPanel></Button>
-            <Button x:Name="OpenPluginsButton" Click="OpenPluginsButton_Click"><StackPanel Orientation="Horizontal" Spacing="8"><SymbolIcon Symbol="Folder" /><TextBlock x:Name="OpenPluginsLabel" Text="Open Plugins folder" /></StackPanel></Button>
+            <Button x:Name="ImportPackButton" Click="ImportPackButton_Click" Style="{StaticResource AccentButtonStyle}"><StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="6"><FontIcon Style="{StaticResource InlineButtonIconStyle}" Glyph="&#xE8E5;" /><TextBlock VerticalAlignment="Center" x:Name="ImportPackLabel" Text="Import Action Pack" /></StackPanel></Button>
+            <Button x:Name="ImportPluginButton" Click="ImportPluginButton_Click"><StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="6"><FontIcon Style="{StaticResource InlineButtonIconStyle}" Glyph="&#xE896;" /><TextBlock VerticalAlignment="Center" x:Name="ImportPluginLabel" Text="Import Plugin" /></StackPanel></Button>
+            <Button x:Name="OpenPacksButton" Click="OpenPacksButton_Click"><StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="6"><SymbolIcon Width="16" Symbol="Folder" /><TextBlock VerticalAlignment="Center" x:Name="OpenPacksLabel" Text="Open Packs folder" /></StackPanel></Button>
+            <Button x:Name="OpenPluginsButton" Click="OpenPluginsButton_Click"><StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="6"><SymbolIcon Width="16" Symbol="Folder" /><TextBlock VerticalAlignment="Center" x:Name="OpenPluginsLabel" Text="Open Plugins folder" /></StackPanel></Button>
         </StackPanel>
 
         <InfoBar x:Name="ImportStatus" Grid.Row="2" IsOpen="False" IsClosable="True" />

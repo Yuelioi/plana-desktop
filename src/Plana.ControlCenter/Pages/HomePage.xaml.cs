@@ -41,17 +41,17 @@ public sealed partial class HomePage : Page
         _allActions.AddRange(App.Settings.UserActions.Select(action => new ActionListItem(
             $"user.action.{action.Id}", action.Name,
             string.IsNullOrWhiteSpace(action.Description) ? DescribeKind(action.Kind) : action.Description,
-            GlyphFor(action.Kind), action.Kind, ToDefinition(action), null) { UserAction = action }));
+            GlyphFor(action.Kind), action.Kind, ToDefinition(action), null) { UserAction = action, IsPinned = App.Settings.PinnedCompanionActionIds.Contains($"user.action.{action.Id}", StringComparer.OrdinalIgnoreCase) }));
         _allActions.AddRange(App.Settings.ProjectLaunchers.Select(project => new ActionListItem(
             $"user.launcher.{project.Id}", project.Name, project.Folder, "\uE756", ActionKinds.LaunchProcess,
-            ToDefinition(project), project.Folder)));
+            ToDefinition(project), project.Folder) { IsPinned = App.Settings.PinnedCompanionActionIds.Contains($"user.launcher.{project.Id}", StringComparer.OrdinalIgnoreCase) }));
 
         var packs = await new ActionPackLoader().LoadDirectoryAsync(Path.Combine(App.DataDirectory, "packs"));
         foreach (var pack in packs.ValidPacks.Where(pack => !App.Settings.DisabledActionPacks.Contains(pack.Id)))
         {
             _allActions.AddRange(pack.Actions.Select(action => new ActionListItem(
                 action.Id, action.Label, $"{pack.Name} · {DescribeKind(action.Kind)}", GlyphFor(action.Kind), action.Kind,
-                action, pack.SourceDirectory)));
+                action, pack.SourceDirectory) { IsPinned = App.Settings.PinnedCompanionActionIds.Contains(action.Id, StringComparer.OrdinalIgnoreCase) }));
         }
         FilterActions(SearchBox.Text);
     }
@@ -86,6 +86,26 @@ public sealed partial class HomePage : Page
         if ((sender as FrameworkElement)?.Tag is ActionListItem action) await ExecuteActionAsync(action);
     }
 
+    private async void PinActionButton_Click(object sender, RoutedEventArgs e)
+    {
+        if ((sender as FrameworkElement)?.Tag is not ActionListItem action) return;
+        var pinned = App.Settings.PinnedCompanionActionIds;
+        if (pinned.RemoveAll(id => id.Equals(action.Id, StringComparison.OrdinalIgnoreCase)) == 0)
+        {
+            if (pinned.Count >= 4)
+            {
+                ActionStatus.Title = App.IsChinese ? "桌宠快捷动作已满" : "Companion shortcuts are full";
+                ActionStatus.Message = App.IsChinese ? "最多固定 4 个动作，请先取消一个。" : "You can pin up to four actions. Unpin one first.";
+                ActionStatus.Severity = InfoBarSeverity.Warning;
+                ActionStatus.IsOpen = true;
+                return;
+            }
+            pinned.Add(action.Id);
+        }
+        await App.SettingsStore.SaveAsync(App.Settings);
+        await LoadActionsAsync();
+    }
+
     private async Task ExecuteActionAsync(ActionListItem item)
     {
         var result = await ActionExecutionService.ExecuteAsync(item.Definition, item.WorkingDirectory);
@@ -106,7 +126,7 @@ public sealed partial class HomePage : Page
         ActionScriptInput.Text = string.Empty;
         ActionArgumentsInput.Text = string.Empty;
         ActionEditorError.Text = string.Empty;
-        ActionEditorDialog.Title = App.IsChinese ? "新建操作" : "New action";
+        ActionEditorDialog.Title = App.IsChinese ? "新建动作" : "New action";
         ActionEditorDialog.PrimaryButtonText = App.IsChinese ? "添加" : "Add action";
         ActionEditorDialog.CloseButtonText = App.IsChinese ? "取消" : "Cancel";
         try
@@ -145,7 +165,7 @@ public sealed partial class HomePage : Page
             .OrderBy(pair => pair.Key)
             .Select(pair => pair.Value));
         ActionEditorError.Text = string.Empty;
-        ActionEditorDialog.Title = App.IsChinese ? "编辑操作" : "Edit action";
+        ActionEditorDialog.Title = App.IsChinese ? "编辑动作" : "Edit action";
         ActionEditorDialog.PrimaryButtonText = App.IsChinese ? "保存" : "Save";
         ActionEditorDialog.CloseButtonText = App.IsChinese ? "取消" : "Cancel";
         ActionEditorDialog.XamlRoot = XamlRoot;
@@ -156,13 +176,14 @@ public sealed partial class HomePage : Page
     {
         if ((sender as FrameworkElement)?.Tag is not ActionListItem { UserAction: { } action } item) return;
         App.Settings.UserActions.Remove(action);
+        App.Settings.PinnedCompanionActionIds.RemoveAll(id => id.Equals(item.Id, StringComparison.OrdinalIgnoreCase));
         foreach (var group in App.Settings.ToolGroups) group.ActionIds.RemoveAll(id => id.Equals(item.Id, StringComparison.OrdinalIgnoreCase));
         foreach (var interaction in App.Settings.InteractionBindings.Where(pair => pair.Value.Equals(item.Id, StringComparison.OrdinalIgnoreCase)).Select(pair => pair.Key).ToArray())
             App.Settings.InteractionBindings.Remove(interaction);
         await App.SettingsStore.SaveAsync(App.Settings);
         await LoadActionsAsync();
         ActionStatus.Title = action.Name;
-        ActionStatus.Message = App.IsChinese ? "操作已删除。" : "Action deleted.";
+        ActionStatus.Message = App.IsChinese ? "动作已删除。" : "Action deleted.";
         ActionStatus.Severity = InfoBarSeverity.Success;
         ActionStatus.IsOpen = true;
     }
@@ -235,7 +256,7 @@ public sealed partial class HomePage : Page
             await App.SettingsStore.SaveAsync(App.Settings);
             await LoadActionsAsync();
             ActionStatus.Title = name;
-            ActionStatus.Message = App.IsChinese ? "操作已保存，可以立即搜索和运行。" : "Action saved. It is ready to search and run.";
+            ActionStatus.Message = App.IsChinese ? "动作已保存，可以立即搜索和运行。" : "Action saved. It is ready to search and run.";
             ActionStatus.Severity = InfoBarSeverity.Success;
             ActionStatus.IsOpen = true;
         }
@@ -248,15 +269,14 @@ public sealed partial class HomePage : Page
     private void ApplyLanguage()
     {
         if (!App.IsChinese) return;
-        PageTitle.Text = "操作";
-        PageDescription.Text = "搜索快捷方式、项目或 Action Pack 命令。";
-        SearchBox.PlaceholderText = "搜索操作";
-        AddActionLabel.Text = "新建操作";
+        PageTitle.Text = "动作";
+        SearchBox.PlaceholderText = "搜索动作";
+        AddActionLabel.Text = "新建动作";
         NameColumnHeader.Text = "名称";
         DescriptionColumnHeader.Text = "描述";
         TypeColumnHeader.Text = "类型";
-        EmptyTitle.Text = "没有匹配的操作";
-        EmptyDescription.Text = "尝试其他关键词，或新建一个操作。";
+        EmptyTitle.Text = "没有匹配的动作";
+        EmptyDescription.Text = "尝试其他关键词，或新建一个动作。";
     }
 
     private void ApplyActionEditorLanguage()
@@ -265,7 +285,7 @@ public sealed partial class HomePage : Page
         ActionNameInput.Header = "名称";
         ActionNameInput.PlaceholderText = "例如：打开 Codex 项目";
         ActionDescriptionInput.Header = "描述";
-        ActionDescriptionInput.PlaceholderText = "说明这个操作会做什么";
+        ActionDescriptionInput.PlaceholderText = "说明这个动作会做什么";
         ActionKindInput.Header = "类型";
         ActionTargetInput.PlaceholderText = "输入路径、网址、程序或命令";
         ActionScriptInput.Header = "脚本文件";
@@ -355,6 +375,9 @@ public sealed class ActionListItem(string id, string name, string detail, string
     public string? WorkingDirectory { get; set; }
     public UserActionSettings? UserAction { get; set; }
     public bool CanManage => UserAction is not null;
+    public bool IsPinned { get; set; }
+    public string PinGlyph => IsPinned ? "\uE735" : "\uE734";
+    public string PinLabel => IsPinned ? (App.IsChinese ? "从桌宠快捷位移除" : "Remove from Companion") : (App.IsChinese ? "固定到桌宠（最多 4 个）" : "Pin to Companion (up to 4)");
 
     public ActionListItem(string id, string name, string detail, string glyph, string kind, ActionDefinition definition, string? workingDirectory)
         : this(id, name, detail, glyph, kind)

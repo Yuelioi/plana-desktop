@@ -127,7 +127,6 @@ public sealed partial class AboutPage : Page
     {
         if (!App.IsChinese) return;
         PageTitle.Text = "扩展";
-        PageDescription.Text = "管理声明式 Action Pack 与进程外插件。";
         ReloadLabel.Text = "重新加载";
         ImportPackLabel.Text = "导入 Action Pack";
         ImportPluginLabel.Text = "导入插件";

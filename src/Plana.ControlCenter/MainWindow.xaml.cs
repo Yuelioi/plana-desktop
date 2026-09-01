@@ -21,33 +21,26 @@ public sealed partial class MainWindow : Window
         AppWindow.Resize(new Windows.Graphics.SizeInt32(1040, 720));
         if (App.IsChinese)
         {
-            CommandPaletteNavigationItem.Content = "快速启动";
             SettingsNavigationItem.Content = "设置";
-            ActionsNavigationItem.Content = "操作";
-            ToolGroupsNavigationItem.Content = "工具组";
+            ActionsNavigationItem.Content = "动作";
+            ToolGroupsNavigationItem.Content = "动作组";
             MigrationNavigationItem.Content = "扩展";
         }
-        NavFrame.Navigate(typeof(CommandPalettePage));
+        NavFrame.Navigate(typeof(SettingsPage));
     }
 
     public void Navigate(Uri? uri)
     {
         if (uri is null)
         {
-            NavView.SelectedItem = CommandPaletteNavigationItem;
-            NavFrame.Navigate(typeof(CommandPalettePage));
+            NavView.SelectedItem = SettingsNavigationItem;
+            NavFrame.Navigate(typeof(SettingsPage));
             return;
         }
         if (uri?.Host.Equals("settings", StringComparison.OrdinalIgnoreCase) == true)
         {
             NavView.SelectedItem = SettingsNavigationItem;
             NavFrame.Navigate(typeof(SettingsPage));
-            return;
-        }
-        if (uri?.Host.Equals("commands", StringComparison.OrdinalIgnoreCase) == true)
-        {
-            NavView.SelectedItem = CommandPaletteNavigationItem;
-            NavFrame.Navigate(typeof(CommandPalettePage), uri.Query);
             return;
         }
         if (uri?.Host.Equals("groups", StringComparison.OrdinalIgnoreCase) == true)
@@ -102,9 +95,6 @@ public sealed partial class MainWindow : Window
         {
             switch (item.Tag)
             {
-                case "commands":
-                    NavFrame.Navigate(typeof(CommandPalettePage));
-                    break;
                 case "settings":
                     NavFrame.Navigate(typeof(SettingsPage));
                     break;

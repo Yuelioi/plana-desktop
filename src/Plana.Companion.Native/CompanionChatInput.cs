@@ -11,18 +11,14 @@ internal sealed class CompanionChatInput : Forms.Form
     private readonly Forms.Label _placeholder;
     private readonly Func<string, Task> _submit;
     private readonly string _cueText;
-    private readonly IReadOnlyList<Forms.Button> _toolButtons;
+    private readonly List<Forms.Button> _toolButtons = [];
     private bool _userEngaged;
 
     public bool ShouldRemainVisible => _userEngaged && ContainsFocus;
 
     public CompanionChatInput(
         bool chinese,
-        Func<string, Task> submit,
-        Action quickLaunch,
-        Action headPat,
-        Action affection,
-        Action hide)
+        Func<string, Task> submit)
     {
         _submit = submit;
         _cueText = chinese ? "和普拉娜说点什么…" : "Ask Plana…";
@@ -32,13 +28,13 @@ internal sealed class CompanionChatInput : Forms.Form
         StartPosition = Forms.FormStartPosition.Manual;
         BackColor = Color.FromArgb(14, 20, 34);
         Padding = new Padding(12, 8, 8, 8);
-        Height = 94;
-        MinimumSize = new Size(280, 94);
+        Height = 56;
+        MinimumSize = new Size(280, 56);
 
         _input = new Forms.TextBox
         {
             BorderStyle = Forms.BorderStyle.None,
-            Location = new Point(14, 57),
+            Location = new Point(14, 19),
             Size = new Size(220, 24),
             Font = new Font("Segoe UI", 10.5f),
             BackColor = BackColor,
@@ -76,7 +72,7 @@ internal sealed class CompanionChatInput : Forms.Form
             BackColor = BackColor,
             ForeColor = Color.FromArgb(151, 162, 190),
             Font = new Font("Segoe UI", 10f),
-            Location = new Point(14, 58),
+            Location = new Point(14, 20),
             Text = _cueText,
             Cursor = Cursors.IBeam,
         };
@@ -84,17 +80,26 @@ internal sealed class CompanionChatInput : Forms.Form
         _input.TextChanged += (_, _) => _placeholder.Visible = _input.TextLength == 0;
         Controls.Add(_placeholder);
         Controls.Add(_send);
-        _toolButtons =
-        [
-            CreateToolButton(chinese ? "⚡ 快启" : "⚡ Launch", quickLaunch, Color.FromArgb(38, 55, 96)),
-            CreateToolButton(chinese ? "♡ 摸头" : "♡ Head pat", headPat, Color.FromArgb(59, 43, 78)),
-            CreateToolButton(chinese ? "♥ 爱心" : "♥ Affection", affection, Color.FromArgb(72, 42, 79)),
-            CreateToolButton(chinese ? "– 隐藏" : "– Hide", hide, Color.FromArgb(31, 38, 55)),
-        ];
-        foreach (var button in _toolButtons) Controls.Add(button);
         Shown += (_, _) => { LayoutControls(); ApplyWindowShape(); SetCueBanner(_input.Handle, _cueText); };
         Resize += (_, _) => { LayoutControls(); ApplyWindowShape(); };
         VisibleChanged += (_, _) => { if (!Visible) _userEngaged = false; };
+    }
+
+    public void ConfigureQuickActions(IEnumerable<(string Label, Action Execute)> actions)
+    {
+        if (InvokeRequired) { BeginInvoke(() => ConfigureQuickActions(actions.ToArray())); return; }
+        foreach (var button in _toolButtons) { Controls.Remove(button); button.Dispose(); }
+        _toolButtons.Clear();
+        foreach (var action in actions.Take(4))
+        {
+            var button = CreateToolButton(action.Label, action.Execute, Color.FromArgb(38, 55, 96));
+            _toolButtons.Add(button);
+            Controls.Add(button);
+        }
+        Height = _toolButtons.Count == 0 ? 56 : 94;
+        MinimumSize = new Size(280, Height);
+        LayoutControls();
+        Invalidate();
     }
 
     protected override CreateParams CreateParams
@@ -161,7 +166,7 @@ internal sealed class CompanionChatInput : Forms.Form
     private void LayoutControls()
     {
         const int gap = 6;
-        var toolWidth = Math.Max(54, (ClientSize.Width - 16 - gap * 3) / 4);
+        var toolWidth = Math.Max(54, (ClientSize.Width - 16 - gap * Math.Max(0, _toolButtons.Count - 1)) / Math.Max(1, _toolButtons.Count));
         for (var index = 0; index < _toolButtons.Count; index++)
         {
             var button = _toolButtons[index];
@@ -170,7 +175,10 @@ internal sealed class CompanionChatInput : Forms.Form
             button.Region?.Dispose();
             button.Region = new Region(buttonPath);
         }
-        _send.Location = new Point(Math.Max(8, ClientSize.Width - 44), 50);
+        var composerTop = _toolButtons.Count == 0 ? 12 : 50;
+        _send.Location = new Point(Math.Max(8, ClientSize.Width - 44), composerTop);
+        _input.Location = new Point(14, composerTop + 7);
+        _placeholder.Location = new Point(14, composerTop + 8);
         _input.Size = new Size(Math.Max(120, ClientSize.Width - 74), 24);
     }
 

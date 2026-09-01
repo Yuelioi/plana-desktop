@@ -16,6 +16,7 @@ public sealed class DesktopSettingsStoreTests
             {
               "UserActions": [{ "Id": "action-1", "Name": "Test", "Kind": "folder.open", "Parameters": {} }],
               "ToolGroups": [{ "Id": "group-1", "Name": "Test", "ActionIds": ["action-1"] }],
+              "PinnedCompanionActionIds": ["action-1", "action-1", "two", "three", "four", "five"],
               "InteractionBindings": { "click": "action-1" }
             }
             """);
@@ -24,6 +25,7 @@ public sealed class DesktopSettingsStoreTests
             var settings = await new DesktopSettingsStore(path).LoadAsync();
             Assert.Equal(["user.action.action-1"], settings.ToolGroups.Single().ActionIds);
             Assert.Equal("user.action.action-1", settings.InteractionBindings["click"]);
+            Assert.Equal(["user.action.action-1", "two", "three", "four"], settings.PinnedCompanionActionIds);
             Assert.Equal("group-1", settings.SelectedToolGroupId);
         }
         finally

@@ -56,7 +56,7 @@ public sealed partial class SettingsPage : Page
     {
         var options = new List<InteractionActionOption>
         {
-            new(string.Empty, App.IsChinese ? "无操作" : "No action"),
+            new(string.Empty, App.IsChinese ? "无动作" : "No action"),
             new("builtin.companion.interact", App.IsChinese ? "随机互动动画" : "Random interaction animation"),
         };
         options.AddRange(App.Settings.UserActions.Select(action => new InteractionActionOption($"user.action.{action.Id}", action.Name)));
@@ -121,25 +121,17 @@ public sealed partial class SettingsPage : Page
     {
         if (!App.IsChinese) return;
         PageTitle.Text = "设置";
-        PageDescription.Text = "更改会立即保存到现有 Plana 配置。";
         BehaviorHeading.Text = "桌宠";
         TopmostTitle.Text = "保持在其他窗口上方";
-        TopmostDescription.Text = "工作时桌宠仍保持可见。";
         StartupTitle.Text = "登录时启动";
-        StartupDescription.Text = "登录 Windows 后自动启动 Plana。";
         ScaleTitle.Text = "桌宠缩放";
-        ScaleDescription.Text = "调整模型大小，不改变窗口行为。";
         LanguageHeading.Text = "语言";
         LanguageTitle.Text = "显示语言";
-        LanguageDescription.Text = "目前支持英文与简体中文。";
         InteractionsHeading.Text = "交互";
         ClickTitle.Text = "单击";
-        ClickDescription.Text = "选择单击 Plana 时执行的操作。";
         DoubleClickTitle.Text = "双击";
-        DoubleClickDescription.Text = "选择可选的双击操作。";
         AiHeading.Text = "AI 对话";
         AiProviderTitle.Text = "服务来源";
-        AiProviderDescription.Text = "使用本机 Codex 订阅登录，或 OpenAI 兼容 API。";
         if (AiProviderPicker.Items[0] is ComboBoxItem codex) codex.Content = "Codex CLI（订阅）";
         if (AiProviderPicker.Items[1] is ComboBoxItem api) api.Content = "OpenAI 兼容 API";
         AiModelInput.Header = "模型（Codex 可留空）";

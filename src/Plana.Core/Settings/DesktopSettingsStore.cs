@@ -58,6 +58,7 @@ public sealed class DesktopSettingsStore(string path)
         string Normalize(string id) => userActions.GetValueOrDefault(id) ?? launchers.GetValueOrDefault(id) ?? id;
         foreach (var group in settings.ToolGroups)
             group.ActionIds = group.ActionIds.Select(Normalize).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        settings.PinnedCompanionActionIds = settings.PinnedCompanionActionIds.Select(Normalize).Distinct(StringComparer.OrdinalIgnoreCase).Take(4).ToList();
         if (settings.SelectedToolGroupId is null && settings.ToolGroups.Count > 0)
             settings.SelectedToolGroupId = settings.ToolGroups[0].Id;
         else if (settings.SelectedToolGroupId is not null && settings.ToolGroups.All(group => !group.Id.Equals(settings.SelectedToolGroupId, StringComparison.OrdinalIgnoreCase)))

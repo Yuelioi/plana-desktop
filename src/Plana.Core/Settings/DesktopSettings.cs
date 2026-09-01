@@ -21,6 +21,7 @@ public sealed class DesktopSettings
     public HashSet<string> DisabledPlugins { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     public List<ToolGroupSettings> ToolGroups { get; set; } = [];
     public string? SelectedToolGroupId { get; set; }
+    public List<string> PinnedCompanionActionIds { get; set; } = [];
     public string AiProvider { get; set; } = "codex";
     public string AiModel { get; set; } = string.Empty;
     public string AiApiBaseUrl { get; set; } = "https://api.openai.com/v1";

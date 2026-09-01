@@ -14,10 +14,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Spacing="6">
-            <TextBlock x:Name="PageTitle" Style="{StaticResource PageTitleStyle}" Text="Actions" />
-            <TextBlock x:Name="PageDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="Find a shortcut, project, or Action Pack command." />
-        </StackPanel>
+        <TextBlock x:Name="PageTitle" Style="{StaticResource PageTitleStyle}" Text="Actions" />
 
         <Grid Grid.Row="1" ColumnSpacing="10">
             <Grid.ColumnDefinitions>
@@ -37,7 +34,7 @@
             <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
             <InfoBar x:Name="ActionStatus" IsOpen="False" IsClosable="True" />
             <Grid Grid.Row="1" Padding="16,8" ColumnSpacing="16">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="3*" /><ColumnDefinition Width="140" /><ColumnDefinition Width="44" /><ColumnDefinition Width="44" /><ColumnDefinition Width="44" /></Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="3*" /><ColumnDefinition Width="140" /><ColumnDefinition Width="40" /><ColumnDefinition Width="40" /><ColumnDefinition Width="40" /><ColumnDefinition Width="40" /></Grid.ColumnDefinitions>
                 <TextBlock x:Name="NameColumnHeader" FontWeight="SemiBold" Text="Name" />
                 <TextBlock x:Name="DescriptionColumnHeader" Grid.Column="1" FontWeight="SemiBold" Text="Description" />
                 <TextBlock x:Name="TypeColumnHeader" Grid.Column="2" FontWeight="SemiBold" Text="Type" />
@@ -56,17 +53,19 @@
                                 <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="3*" />
                                 <ColumnDefinition Width="140" />
-                                <ColumnDefinition Width="44" />
-                                <ColumnDefinition Width="44" />
-                                <ColumnDefinition Width="44" />
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition Width="40" />
                             </Grid.ColumnDefinitions>
                             <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{x:Bind Name}" TextTrimming="CharacterEllipsis" />
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" Foreground="{StaticResource PlanaSubtleBrush}" Text="{x:Bind Description}" TextTrimming="CharacterEllipsis" />
                             <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind TypeLabel}" />
-                            <Button Grid.Column="3" Style="{StaticResource IconButtonStyle}" IsEnabled="{x:Bind CanManage}" Tag="{x:Bind}" Click="EditActionButton_Click" AutomationProperties.Name="Edit action"><FontIcon FontSize="16" Glyph="&#xE70F;" /></Button>
-                            <Button Grid.Column="4" Style="{StaticResource IconButtonStyle}" IsEnabled="{x:Bind CanManage}" Tag="{x:Bind}" Click="DeleteActionButton_Click" AutomationProperties.Name="Delete action"><FontIcon FontSize="16" Glyph="&#xE74D;" /></Button>
-                            <Button Grid.Column="5" Style="{StaticResource IconButtonStyle}" Tag="{x:Bind}" Click="RunActionButton_Click" AutomationProperties.Name="Run action">
-                                <FontIcon Glyph="&#xE768;" />
+                            <Button Grid.Column="3" Style="{StaticResource IconButtonStyle}" Tag="{x:Bind}" Click="PinActionButton_Click" AutomationProperties.Name="Pin to Companion" ToolTipService.ToolTip="{x:Bind PinLabel}"><FontIcon FontSize="14" Glyph="{x:Bind PinGlyph}" /></Button>
+                            <Button Grid.Column="4" Style="{StaticResource IconButtonStyle}" IsEnabled="{x:Bind CanManage}" Tag="{x:Bind}" Click="EditActionButton_Click" AutomationProperties.Name="Edit action"><FontIcon FontSize="14" Glyph="&#xE70F;" /></Button>
+                            <Button Grid.Column="5" Style="{StaticResource IconButtonStyle}" IsEnabled="{x:Bind CanManage}" Tag="{x:Bind}" Click="DeleteActionButton_Click" AutomationProperties.Name="Delete action"><FontIcon FontSize="14" Glyph="&#xE74D;" /></Button>
+                            <Button Grid.Column="6" Style="{StaticResource IconButtonStyle}" Tag="{x:Bind}" Click="RunActionButton_Click" AutomationProperties.Name="Run action">
+                                <FontIcon FontSize="14" Glyph="&#xE768;" />
                             </Button>
                         </Grid>
                     </DataTemplate>
