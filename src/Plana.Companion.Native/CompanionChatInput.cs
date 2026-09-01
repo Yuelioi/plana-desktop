@@ -26,7 +26,7 @@ internal sealed class CompanionChatInput : Forms.Form
         ShowInTaskbar = false;
         TopMost = true;
         StartPosition = Forms.FormStartPosition.Manual;
-        BackColor = Color.FromArgb(14, 20, 34);
+        BackColor = Color.FromArgb(12, 18, 31);
         Padding = new Padding(12, 8, 8, 8);
         Height = 56;
         MinimumSize = new Size(280, 56);
@@ -37,7 +37,7 @@ internal sealed class CompanionChatInput : Forms.Form
             Location = new Point(14, 19),
             Size = new Size(220, 24),
             Font = new Font("Segoe UI", 10.5f),
-            BackColor = BackColor,
+            BackColor = Color.FromArgb(18, 27, 46),
             ForeColor = Color.FromArgb(246, 248, 255),
         };
         SetCueBanner(_input.Handle, _cueText);
@@ -69,7 +69,7 @@ internal sealed class CompanionChatInput : Forms.Form
         _placeholder = new Forms.Label
         {
             AutoSize = true,
-            BackColor = BackColor,
+            BackColor = Color.FromArgb(18, 27, 46),
             ForeColor = Color.FromArgb(151, 162, 190),
             Font = new Font("Segoe UI", 10f),
             Location = new Point(14, 20),
@@ -96,7 +96,7 @@ internal sealed class CompanionChatInput : Forms.Form
             _toolButtons.Add(button);
             Controls.Add(button);
         }
-        Height = _toolButtons.Count == 0 ? 56 : 94;
+        Height = _toolButtons.Count == 0 ? 56 : 84;
         MinimumSize = new Size(280, Height);
         LayoutControls();
         Invalidate();
@@ -119,9 +119,9 @@ internal sealed class CompanionChatInput : Forms.Form
     {
         var button = new Forms.Button
         {
-            Height = 30,
+            Height = 26,
             FlatStyle = Forms.FlatStyle.Flat,
-            BackColor = color,
+            BackColor = Color.FromArgb(43, 59, 101),
             ForeColor = Color.FromArgb(218, 225, 244),
             Font = new Font("Segoe UI", 8.5f),
             Text = text,
@@ -129,8 +129,8 @@ internal sealed class CompanionChatInput : Forms.Form
             Cursor = Cursors.Hand,
             TabStop = false,
         };
-        button.FlatAppearance.BorderColor = Color.FromArgb(58, 75, 122);
-        button.FlatAppearance.MouseOverBackColor = Color.FromArgb(38, 50, 82);
+        button.FlatAppearance.BorderColor = Color.FromArgb(67, 88, 143);
+        button.FlatAppearance.MouseOverBackColor = Color.FromArgb(54, 72, 119);
         button.Click += (_, _) => action();
         return button;
     }
@@ -158,8 +158,16 @@ internal sealed class CompanionChatInput : Forms.Form
     {
         base.OnPaint(e);
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(Color.FromArgb(92, 119, 198));
-        using var path = RoundedPath(new Rectangle(0, 0, Width - 1, Height - 1), 12);
+        var composerTop = _toolButtons.Count == 0 ? 8 : 36;
+        using (var composerFill = new SolidBrush(Color.FromArgb(18, 27, 46)))
+        using (var composerPen = new Pen(Color.FromArgb(42, 58, 94)))
+        using (var composerPath = RoundedPath(new Rectangle(8, composerTop, Width - 17, 40), 10))
+        {
+            e.Graphics.FillPath(composerFill, composerPath);
+            e.Graphics.DrawPath(composerPen, composerPath);
+        }
+        using var pen = new Pen(Color.FromArgb(72, 96, 160));
+        using var path = RoundedPath(new Rectangle(0, 0, Width - 1, Height - 1), 14);
         e.Graphics.DrawPath(pen, path);
     }
 
@@ -173,12 +181,12 @@ internal sealed class CompanionChatInput : Forms.Form
         for (var index = 0; index < _toolButtons.Count; index++)
         {
             var button = _toolButtons[index];
-            button.SetBounds(toolsLeft + index * (toolWidth + gap), 8, toolWidth, 30);
-            using var buttonPath = RoundedPath(button.ClientRectangle, 7);
+            button.SetBounds(toolsLeft + index * (toolWidth + gap), 7, toolWidth, 26);
+            using var buttonPath = RoundedPath(button.ClientRectangle, 13);
             button.Region?.Dispose();
             button.Region = new Region(buttonPath);
         }
-        var composerTop = _toolButtons.Count == 0 ? 12 : 50;
+        var composerTop = _toolButtons.Count == 0 ? 12 : 40;
         _send.Location = new Point(Math.Max(8, ClientSize.Width - 44), composerTop);
         _input.Location = new Point(14, composerTop + 7);
         _placeholder.Location = new Point(14, composerTop + 8);
@@ -193,7 +201,7 @@ internal sealed class CompanionChatInput : Forms.Form
             DwmSetWindowAttribute(Handle, 33, ref preference, sizeof(int));
             return;
         }
-        using var path = RoundedPath(ClientRectangle, 12);
+        using var path = RoundedPath(ClientRectangle, 14);
         Region?.Dispose();
         Region = new Region(path);
     }

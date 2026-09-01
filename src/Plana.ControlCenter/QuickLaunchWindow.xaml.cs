@@ -19,6 +19,7 @@ public sealed partial class QuickLaunchWindow : Window
     private readonly ObservableCollection<QuickLaunchRow> _suggestions = [];
     private CommandCatalog _catalog = new([]);
     private readonly Dictionary<string, IReadOnlyList<string>> _groupActions = new(StringComparer.OrdinalIgnoreCase);
+    private string? _expandedGroupId;
 
     public QuickLaunchWindow()
     {
@@ -65,13 +66,11 @@ public sealed partial class QuickLaunchWindow : Window
             foreach (var action in pack.Actions) AddAction(commands, action, action.Label, DescribeKind(action.Kind), pack.Name, pack.SourceDirectory, "extensions");
         _groupActions.Clear();
         GroupBar.Children.Clear();
+        CollapseGroupActions();
         foreach (var group in App.Settings.ToolGroups)
         {
             _groupActions[group.Id] = group.ActionIds;
-            var content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6 };
-            content.Children.Add(new TextBlock { Text = group.Name, VerticalAlignment = VerticalAlignment.Center });
-            content.Children.Add(new SymbolIcon { Symbol = Symbol.More, VerticalAlignment = VerticalAlignment.Center });
-            var button = new Button { Tag = group.Id, Content = content, MinHeight = 30, Padding = new Thickness(13, 4, 11, 4), CornerRadius = new CornerRadius(15) };
+            var button = new ToggleButton { Tag = group.Id, Content = group.Name, MinHeight = 30, Padding = new Thickness(13, 4, 13, 4), CornerRadius = new CornerRadius(15) };
             button.Click += Group_Click;
             GroupBar.Children.Add(button);
         }
@@ -87,26 +86,44 @@ public sealed partial class QuickLaunchWindow : Window
 
     private void Group_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is not Button selected || selected.Tag is not string groupId || !_groupActions.TryGetValue(groupId, out var actionIds)) return;
+        if (sender is not ToggleButton selected || selected.Tag is not string groupId || !_groupActions.TryGetValue(groupId, out var actionIds)) return;
+        foreach (var button in GroupBar.Children.OfType<ToggleButton>())
+            if (!ReferenceEquals(button, selected)) button.IsChecked = false;
+        if (selected.IsChecked != true || _expandedGroupId == groupId)
+        {
+            selected.IsChecked = false;
+            CollapseGroupActions();
+            return;
+        }
+        _expandedGroupId = groupId;
         var ids = actionIds.ToHashSet(StringComparer.OrdinalIgnoreCase);
         var rows = _catalog.Search(null).Where(item => ids.Contains(item.Id)).Select(item => new QuickLaunchRow(item)).ToArray();
-        var menu = new MenuFlyout();
+        ActionBar.Children.Clear();
         if (rows.Length == 0)
         {
-            menu.Items.Add(new MenuFlyoutItem { Text = App.IsChinese ? "这个动作组是空的" : "This action group is empty", IsEnabled = false });
+            ActionBar.Children.Add(new TextBlock { Text = App.IsChinese ? "这个动作组是空的" : "This action group is empty", Opacity = 0.65, Margin = new Thickness(8, 6, 8, 0) });
         }
         foreach (var row in rows)
         {
-            var item = new MenuFlyoutItem { Text = row.Title, Icon = new SymbolIcon { Symbol = row.Icon } };
+            var item = new Button { Content = row.Title, MinHeight = 30, Padding = new Thickness(12, 3, 12, 3), CornerRadius = new CornerRadius(8), Tag = row };
             item.Click += async (_, _) => await ExecuteAsync(row);
-            menu.Items.Add(item);
+            ActionBar.Children.Add(item);
         }
-        menu.ShowAt(selected);
+        ActionScroller.Visibility = Visibility.Visible;
+        AppWindow.Resize(new SizeInt32(680, 178));
+    }
+
+    private void CollapseGroupActions()
+    {
+        _expandedGroupId = null;
+        ActionBar.Children.Clear();
+        ActionScroller.Visibility = Visibility.Collapsed;
+        AppWindow.Resize(new SizeInt32(680, 132));
     }
 
     private void SearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
     {
-        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput) Filter(sender.Text);
+        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput) { CollapseGroupActions(); Filter(sender.Text); }
     }
     private void SearchBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args) { if (args.SelectedItem is QuickLaunchRow row) sender.Text = row.Title; }
     private async void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)

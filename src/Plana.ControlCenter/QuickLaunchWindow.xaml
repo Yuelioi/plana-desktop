@@ -13,8 +13,8 @@
         BorderThickness="1"
         CornerRadius="16"
         KeyDown="LauncherSurface_KeyDown">
-        <Grid RowSpacing="10">
-            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+        <Grid RowSpacing="9">
+            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
             <AutoSuggestBox
                 x:Name="SearchBox"
                 MinHeight="48"
@@ -41,6 +41,9 @@
             </AutoSuggestBox>
             <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled">
                 <StackPanel x:Name="GroupBar" Orientation="Horizontal" Spacing="7" />
+            </ScrollViewer>
+            <ScrollViewer x:Name="ActionScroller" Grid.Row="2" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled" Visibility="Collapsed">
+                <StackPanel x:Name="ActionBar" Orientation="Horizontal" Spacing="7" />
             </ScrollViewer>
         </Grid>
     </Border>
