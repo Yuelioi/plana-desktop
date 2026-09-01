@@ -48,9 +48,10 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
     <Style x:Key="SearchTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource DefaultTextBoxStyle}">
+        <Setter Property="MinHeight" Value="40" />
         <Setter Property="TextAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Padding" Value="8,6,36,0" />
+        <Setter Property="Padding" Value="12,6,36,0" />
     </Style>
     <Style x:Key="CommandButtonContentStyle" TargetType="StackPanel">
         <Setter Property="Orientation" Value="Horizontal" />

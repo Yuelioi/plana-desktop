@@ -56,10 +56,14 @@ public sealed partial class HomePage : Page
         FilterActions(SearchBox.Text);
     }
 
-    private void SearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args) => FilterActions(sender.Text);
-    private async void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    private void SearchBox_TextChanged(object sender, TextChangedEventArgs args) => FilterActions(SearchBox.Text);
+    private async void SearchBox_KeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs args)
     {
-        if (VisibleActions.Count == 1) await ExecuteActionAsync(VisibleActions[0]);
+        if (args.Key == Windows.System.VirtualKey.Enter && VisibleActions.Count == 1)
+        {
+            args.Handled = true;
+            await ExecuteActionAsync(VisibleActions[0]);
+        }
     }
 
     private void FilterActions(string? query)

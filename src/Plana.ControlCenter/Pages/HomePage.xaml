@@ -21,7 +21,10 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <AutoSuggestBox x:Name="SearchBox" Style="{StaticResource SearchBoxStyle}" TextBoxStyle="{StaticResource SearchTextBoxStyle}" QueryIcon="Find" PlaceholderText="Search actions" TextChanged="SearchBox_TextChanged" QuerySubmitted="SearchBox_QuerySubmitted" />
+            <Grid>
+                <TextBox x:Name="SearchBox" Style="{StaticResource SearchTextBoxStyle}" PlaceholderText="Search actions" TextChanged="SearchBox_TextChanged" KeyDown="SearchBox_KeyDown" />
+                <Viewbox Width="14" Height="14" Margin="0,0,13,0" HorizontalAlignment="Right" VerticalAlignment="Center" IsHitTestVisible="False"><SymbolIcon Symbol="Find" /></Viewbox>
+            </Grid>
             <Button x:Name="AddActionButton" Grid.Column="1" MinWidth="132" Style="{StaticResource CommandButtonStyle}" Click="AddActionButton_Click">
                 <StackPanel Style="{StaticResource CommandButtonContentStyle}">
                     <Viewbox Style="{StaticResource CommandIconStyle}"><SymbolIcon Symbol="Add" /></Viewbox>
