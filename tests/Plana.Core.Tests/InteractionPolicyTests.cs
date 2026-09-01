@@ -21,4 +21,16 @@ public sealed class InteractionPolicyTests
         Assert.True(InteractionPolicy.IsAutomationEligible(ambient));
         Assert.False(InteractionPolicy.IsAutomationEligible(external));
     }
+
+    [Fact]
+    public void ResolvesLegacyCamelCaseDoubleClickBinding()
+    {
+        var bindings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["doubleClick"] = "user.action.legacy"
+        };
+
+        Assert.True(InteractionPolicy.TryGetBinding(bindings, "double-click", out var actionId));
+        Assert.Equal("user.action.legacy", actionId);
+    }
 }

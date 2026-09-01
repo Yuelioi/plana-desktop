@@ -86,6 +86,7 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Promoted the validated Proof into `Plana.Companion.Godot.Renderer` and made it the default published Renderer. Added semantic TCP acknowledgements, WinUI-to-Host named-pipe control, click/double-click/context events, tray expressions/pass-through, settings placement, one-second crash recovery, and kill-on-close Job Object cleanup.
 - Added a bilingual WinUI Chat page using the configured Codex/API provider; speaking/success/error states drive semantic Plana performances. Published and launched Host PID 26384 + Renderer PID 4724, verified `Happy + HeadPat` acknowledgement, forced recovery, production-only Renderer contents, 42/42 tests, and the complete build/publish. The unsigned local MSIX remains the packaging blocker; debug identity runs the current Chat page.
 - Fixed user-reported Godot cutover regressions: removed top/bottom letterboxing, restored configured/random single-click behavior, added deferred single-click versus exclusive double-click dispatch, and made right-click show the native Context Menu immediately. Added a screen-composite/input regression command and deterministic Core test; final publish passes 43/43 tests and all five runtime regression checks, with Host PID 14868 and Renderer PID 28956 left running for user verification.
+- Restored existing double-click bindings stored under the legacy `doubleClick` key while keeping canonical `double-click`. The final republish passes 44/44 tests and all runtime regression checks.
 
 ## References
 

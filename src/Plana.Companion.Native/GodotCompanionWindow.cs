@@ -205,7 +205,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
 
     private async Task ExecuteInteractionAsync(string interaction)
     {
-        if (!_interactionBindings.TryGetValue(interaction, out var actionId)) return;
+        if (!InteractionPolicy.TryGetBinding(_interactionBindings, interaction, out var actionId)) return;
         if (actionId.Equals("builtin.companion.interact", StringComparison.OrdinalIgnoreCase))
         {
             Perform(_interactionPlanner.PlanRandomInteraction());
