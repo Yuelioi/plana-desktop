@@ -33,3 +33,15 @@ If conversation history becomes necessary, expose it as an explicit full Control
 ## Latency finding
 
 The configured provider is the local Codex subscription path. Replaying the app's minimal `codex exec --ephemeral` request took more than 30 seconds; forcing low reasoning took about 43 seconds, and `codex-mini-latest` was unavailable for the current subscription login. The latency is therefore dominated by CLI/model request startup rather than bubble/input rendering. Official OpenAI documentation describes [`codex-mini-latest`](https://developers.openai.com/api/docs/models/codex-mini-latest) as a fast Codex CLI model, but availability cannot be assumed for this user's subscription. The UI shows a persistent elapsed thinking state; true lower latency requires a provider/model available to the user, such as a configured OpenAI-compatible API model.
+## Codex latency follow-up
+
+The original subscription path launched `codex exec --ephemeral` for every message and measured
+30–43 seconds even with low reasoning. Codex CLI 0.151.0 exposes a persistent stdio app-server. Its
+locally generated v2 protocol schema defines `initialize`, `thread/start`, `turn/start`,
+`item/completed`, and `turn/completed`.
+
+A two-turn probe against one ephemeral, read-only, low-effort app-server thread measured 9.27
+seconds for cold initialization plus the first answer and 3.75 seconds for the second answer. The
+production Host now owns one app-server client for its lifetime, keeps the Plana conversation in a
+single thread, and falls back to one-shot `codex exec` only when app-server startup or protocol
+handling fails.

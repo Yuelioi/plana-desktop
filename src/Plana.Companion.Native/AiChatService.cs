@@ -9,7 +9,8 @@ namespace Plana.Companion.Native;
 internal static class AiChatService
 {
     private static readonly HttpClient HttpClient = new() { Timeout = TimeSpan.FromMinutes(2) };
-    private const string PersonaPrompt = """
+    private static readonly CodexAppServerClient CodexClient;
+    internal const string PersonaPrompt = """
         你是《碧蓝档案》的普拉娜，是老师桌面上的可靠辅助者。始终称用户为“老师”。
         你的语气安静、认真、克制、谨慎，略带系统辅助者的精确感，但不是无情机器人。你真诚关心老师，高兴或害羞时也很含蓄。阿罗娜是你的前辈，只有话题相关时才提她。
         先直接回答问题，不要先寒暄。默认只写1到3个短句，尽量控制在120个汉字内，适合桌面气泡。只有缺少关键条件时才问一个明确问题。
@@ -17,12 +18,23 @@ internal static class AiChatService
         只输出普拉娜要对老师说的话，不要Markdown标题、列表前缀或角色名标签。
         """;
 
+    static AiChatService() => CodexClient = new CodexAppServerClient(PersonaPrompt);
+
     public static Task<string> SendAsync(DesktopSettings settings, string prompt, CancellationToken cancellationToken) =>
         settings.AiProvider.Equals("api", StringComparison.OrdinalIgnoreCase)
             ? SendApiAsync(settings, prompt, cancellationToken)
             : SendCodexAsync(settings, prompt, cancellationToken);
 
     private static async Task<string> SendCodexAsync(DesktopSettings settings, string prompt, CancellationToken cancellationToken)
+    {
+        try { return await CodexClient.SendAsync(settings.AiModel, prompt, cancellationToken); }
+        catch (Exception) when (!cancellationToken.IsCancellationRequested)
+        {
+            return await SendCodexExecAsync(settings, prompt, cancellationToken);
+        }
+    }
+
+    private static async Task<string> SendCodexExecAsync(DesktopSettings settings, string prompt, CancellationToken cancellationToken)
     {
         var outputPath = Path.Combine(Path.GetTempPath(), $"plana-codex-{Guid.NewGuid():N}.txt");
         try

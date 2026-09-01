@@ -114,6 +114,7 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Promoted management search into the reusable `Controls/SearchField`: a 40 px host border contains a borderless 24 px editor at geometric center, with a 2 px optical correction for Segoe UI Chinese glyph metrics and a separate search symbol. Removed the ineffective legacy search styles so future pages cannot silently fall back to the nested template behavior.
 - Simplified `SearchField` after typed-state testing disproved the nested-border design: it now uses one native 40 px TextBox with 8 px optical top padding and an overlay search symbol. A real focused `test` input capture confirms one focus border and centered text; the search symbol hides for non-empty input so it cannot overlap the native clear button.
 - Changed Quick Launch Action Groups from popup menus to inline disclosure: group pills have no ellipsis, selection expands a horizontally scrollable Action row below them and grows the window from 680×132 to 680×178; a live click capture verified the `test` Action inline. The Companion dock is 10 px shorter with 26 px centered Action pills and a distinct rounded composer surface.
+- Replaced per-message `codex exec --ephemeral` with a Host-lifetime Codex app-server client using the installed 0.151.0 protocol schema. One low-effort read-only thread retains Plana context; failures fall back to the old CLI path. A real two-turn probe improved cold response from 30–43 seconds to 9.27 seconds and the warm second response to 3.75 seconds.
 
 ## References
 
