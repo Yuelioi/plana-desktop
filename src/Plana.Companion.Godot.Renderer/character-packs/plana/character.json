@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "builtin.plana",
+  "name": "Plana",
+  "version": "1.0.0",
+  "skeleton": "NP0035_spr.skel",
+  "atlas": "NP0035_spr.atlas",
+  "layout": {
+    "x": 320,
+    "y": 835,
+    "scale": 0.36,
+    "hitPolygon": [
+      { "x": 0.20, "y": 0.34 }, { "x": 0.62, "y": 0.34 },
+      { "x": 0.70, "y": 0.60 }, { "x": 0.75, "y": 0.78 },
+      { "x": 1.00, "y": 0.82 }, { "x": 1.00, "y": 0.90 },
+      { "x": 0.70, "y": 0.90 }, { "x": 0.65, "y": 1.00 },
+      { "x": 0.00, "y": 1.00 }, { "x": 0.00, "y": 0.80 },
+      { "x": 0.20, "y": 0.76 }, { "x": 0.15, "y": 0.55 }
+    ]
+  },
+  "performance": {
+    "idle": "Idle_01",
+    "speaking": "03",
+    "emotions": {
+      "Neutral": "00", "Happy": "16", "Excited": "09", "Surprised": "07",
+      "Sad": "20", "Worried": "12", "Angry": "10", "Affectionate": "17",
+      "Shy": "18", "Dizzy": "13"
+    },
+    "gestures": {
+      "Blink": "Eye_Close_01",
+      "HeadPat": "S_Pat_01_M_all",
+      "LookAtPointer": "S_Look_01_all"
+    }
+  }
+}

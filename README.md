@@ -13,6 +13,7 @@ The production application uses a transparent Godot Renderer supervised by a .NE
 - `src/Plana.Core`: settings, Action/Pack contracts, Plugin protocol/runtime, and the Companion surface seam.
 - `src/Plana.ControlCenter`: packaged .NET 10 WinUI 3 Chat, Settings, Actions, Tool Groups, and Extensions UI.
 - `src/Plana.Companion.Native`: .NET 10 Companion host, tray, settings watcher, Windows window adapter, semantic control pipe, renderer supervision, and legacy WebView fallback.
+- `src/Plana.Core/Characters`: declarative Character Pack loading, validation, selection fallback, and semantic performance planning.
 - `src/Plana.Companion.Godot.Renderer`: production transparent Spine renderer, character animation queue, drag, and pointer events.
 - `src/Plana.PluginHost`: out-of-process executable Plugin supervisor.
 - `src/Plana.Desktop`: retained .NET 8 WPF legacy fallback.
@@ -28,6 +29,8 @@ An Action Pack is a directory containing `manifest.json`. It can contribute acti
 - `command.run`
 
 Opening URLs, launching applications, and executing commands are typed capabilities. Packs declare them and users can disable a pack without uninstalling it. Executable Plugins run through the separate Plugin Host and contribute Actions to the same catalog.
+
+Character appearance is independently extensible through passive Spine [Character Packs](docs/character-packs.md). The bundled Plana pack is the safe fallback; imported packs contain no executable code.
 
 ## Build
 

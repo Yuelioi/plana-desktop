@@ -4,7 +4,7 @@
 
 ## Goal
 
-Deliver a usable, localization-ready Windows desktop companion that renders Plana with Spine, stays out of the user's way, supports configurable interactions, safely invokes extensible Actions from declarative Action Packs, and isolates executable Plugins behind a narrow out-of-process protocol.
+Deliver a usable, localization-ready Windows desktop companion that renders a selected declarative Spine Character Pack, stays out of the user's way, supports configurable interactions, safely invokes extensible Actions from declarative Action Packs, and isolates executable Plugins behind a narrow out-of-process protocol.
 
 ## Current
 
@@ -38,13 +38,17 @@ The domain model reserves right-click for the Context Menu and limits configurab
 
 Plana model-source research confirms the game runtime asset is Spine `NP0035_spr`, and the repository already carries the directly usable `.skel/.atlas/.png` set. No public official editable project or complete Plana Cubism model was found. The lowest-cost visual improvement path is to inventory and expose the existing skeleton's animations, skins, slots, and events, then reproduce useful interaction behaviors from public Web wallpaper references without changing renderer format.
 
+Arona can use the same renderer format. The same `BA-Spine-Viewer-Asset` repository that supplied Plana contains `arona_spr.skel/.atlas/.png`; the checked-in Spine 4.2 runtime parsed the exact files successfully as export version 4.2.33 with 202 bones, 138 slots, 204 attachments, and 44 animations. SVDex is useful viewer/downloader evidence but is not the Arona model source. Character switching therefore needs a declarative Character Pack loader and Arona-specific performance mapping, not another renderer. See [Arona model asset research](references/arona-model-assets-research.md).
+
+Character Pack switching is now implemented. Core discovers bundled and installed `character.json` manifests, contains all paths, verifies atlas texture pages and semantic keys, preserves bundled identities against duplicates, and falls back to bundled Plana. The Host passes validated assets/layout to Godot's runtime Spine resource loaders and owns one serialized Renderer lifecycle; Control Center Settings imports, rescans, and selects Character Packs. A local, uncommitted Arona fixture is installed for this user and hot-switches with its own 44-animation semantic mapping. Community Blue Archive assets are not distributed by the repository.
+
+Conversation entry copy is Character-neutral: the Dock says `说些什么吧…` / `Say something…` in both production WPF and legacy Renderer fallback. Plana remains the bundled Character Pack. Releases can attach `.planacharacter` bootstrap files whose HTTPS assets are downloaded on import and verified by required SHA-256 before ordinary Character Pack validation; local folder import remains available for authors.
+
 Valid enabled Plugins launch one-per-Host, complete a bounded identity/API handshake, contribute declared Actions, and execute them through serialized requests. Typed broker requests for URL, file, folder, process, command, and script capabilities reuse existing adapters. Failure/cancellation tears down the session and removes contributions. The published sample passes lifecycle, contribution, invocation, and broker flow end to end.
 
 ## Next
 
-- Let the user visually verify the per-pixel-alpha Quick Launch and Companion Dock on the current
-  published Host, then continue live Plugin contributions, aliases/pinyin indexing, and recency ranking. See
-  [quick-launch-ui-research.md](references/quick-launch-ui-research.md).
+- Let the user visually verify Arona interactions and the physical-key Quick Launch fallback on the current published Host. Then refine Arona's provisional semantic mapping from visual contact sheets and continue live Plugin contributions, aliases/pinyin indexing, and recency ranking. See [Arona model research](references/arona-model-assets-research.md) and [Quick Launch UI research](references/quick-launch-ui-research.md).
 
 Continue the unified quick-tool roadmap from [uTools plugin research](references/utools-plugin-system-research.md): expose live Plugin contributions through the Command Catalog, then add aliases/pinyin indexing, recency ranking, pinning, and typed text/URL/file/folder inputs. Keep the safer Action Pack, out-of-process Plugin Host, and capability broker architecture.
 
@@ -137,6 +141,10 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Completed the stable first-character fix. Focus-aware placeholders remove the IME visual overlay, and cross-thread `AttachThreadInput` foreground transfer fixes the actual lost first key. The pre-fix atomic probe observed WPF Edit focus with a different foreground HWND; the final Host reports foreground+keyboard activation true, 20/20 physical single-key checks pass, two subsequent 20/20 and 30/30 full-input stress runs pass for Quick/Dock, and scale refresh, lifecycle, 47 Core tests, the STA UI test, and the zero-warning build remain green.
 - Fixed the user-identified odd/even activation cycle by making Quick Launch one-shot instead of hiding/reusing its WPF HWND and IME context. The outside-close probe reproduced 5/10 failures before the lifecycle change; the final committed-input loop succeeds 20/20 with zero foreground, keyboard-focus, or value failures. Independent outside dismissal, scale refresh, 47 Core tests, the STA UI test, and the zero-warning build remain green; physical IME composition remains a visual/user verification item because UI Automation does not expose uncommitted text.
 - Fixed search-after-delete for Chinese IME by filtering against live composition text instead of waiting only for `TextChanged`. The exact physical `t`→Backspace→`t` probe now expands, collapses, and re-expands results (`201→132→201`) across 10/10 loops. Foreground activation, outside dismissal, scale refresh, 47 Core tests, the STA UI test, and the zero-warning build remain green.
+- Verified an Arona standing-model bundle from the same community asset repository as Plana. `arona_spr` parses with the existing Spine 4.2 runtime and matches Plana's 4.2.33 export version; recorded its 202-bone/44-animation inventory and the need for a separate semantic performance mapping. SVDex itself has no Arona model triple.
+- Implemented declarative Character Packs end to end: Core loader/diagnostics/fallback/performance planner, bundled Plana pack, runtime spine-godot loading, serialized/recoverable Renderer switching, persisted selection, and compact bilingual Settings import/select/folder/reload UI. Installed a local Arona fixture without adding its copyrighted assets to Git. Plana→Arona switching, one-child cleanup, Arona rendering, Happy+HeadPat, UI selection persistence, layout detector, 50 Core tests, the STA UI test, committed text input, scale refresh, and the zero-warning build are green.
+- Made Companion conversation entry copy neutral across characters (`说些什么吧…` / `Say something…`). Plana ships bundled, and screenshot verification confirms the production Dock copy.
+- Added Release-ready `.planacharacter` bootstrap import with HTTPS-only assets, fixed hashes, contained target paths, bounded asset count/size, ordinary manifest validation, and a secondary folder-authoring path. Added a verified Arona bootstrap file containing source links rather than model binaries. Added a private-repository Windows GitHub Actions workflow that installs pinned Godot/spine-godot, runs tests/publish, and uploads Host ZIP, Control Center test package, and Arona bootstrap to tagged Releases.
 
 ## References
 
@@ -151,6 +159,7 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - [Plugin ecosystem research](references/plugin-ecosystem-research.md)
 - [WinUI 3 migration evaluation](references/winui3-migration-evaluation.md)
 - [Plana model asset research](references/plana-model-assets-research.md)
+- [Arona model asset research](references/arona-model-assets-research.md)
 - [Plana Spine inventory](references/plana-spine-inventory.md)
 - [Companion host architecture research](references/companion-host-architecture-research.md)
 - [Companion host rearchitecture Slice](slices/companion-host-rearchitecture.md)

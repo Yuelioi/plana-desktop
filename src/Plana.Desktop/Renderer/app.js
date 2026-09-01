@@ -32,7 +32,7 @@ function configureToolbar(config) {
   const settingsButton = document.querySelector('#quick-settings')
   const collapseButton = document.querySelector('#quick-collapse')
   const runButton = document.querySelector('#quick-run')
-  prompt.placeholder = config?.chatPlaceholder || 'Ask Plana'
+  prompt.placeholder = config?.chatPlaceholder || 'Say something…'
   prompt.setAttribute('aria-label', prompt.placeholder)
   settingsButton.title = config?.settingsLabel || 'Settings'
   settingsButton.setAttribute('aria-label', settingsButton.title)

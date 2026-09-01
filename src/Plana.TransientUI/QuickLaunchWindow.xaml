@@ -70,6 +70,8 @@
                              BorderThickness="0" Background="Transparent"
                              VerticalContentAlignment="Center" FontSize="14"
                              TextChanged="SearchBox_TextChanged" KeyDown="SearchBox_KeyDown" />
+                    <TextBlock x:Name="CompositionPreview" Margin="13,0,42,0" VerticalAlignment="Center"
+                               Foreground="#202020" IsHitTestVisible="False" Visibility="Collapsed" />
                     <TextBlock x:Name="SearchPlaceholder" Margin="13,0,42,0" VerticalAlignment="Center"
                                Foreground="#6A6A6A" IsHitTestVisible="False" Text="搜索动作" />
                     <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,15,0"

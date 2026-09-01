@@ -2,6 +2,7 @@ using Plana.Core.Companion;
 using Plana.Core.Actions;
 using Plana.Core.Settings;
 using Plana.Core.Plugins;
+using Plana.Core.Characters;
 
 namespace Plana.Companion.Native;
 
@@ -36,7 +37,12 @@ internal static class Program
         var pluginDiagnostics = new PluginManifestLoader().LoadDirectoryAsync(Path.Combine(dataDirectory, "plugins")).GetAwaiter().GetResult();
         pluginRuntime.ReconcileAsync(pluginDiagnostics, settings, settings.UiCulture).GetAwaiter().GetResult();
         var actions = LoadActions(settings, dataDirectory, pluginRuntime.SnapshotActionPacks());
-        using var companion = CreateCompanion(pluginRuntime, settings, actions);
+        var bundledCharacters = Path.Combine(AppContext.BaseDirectory, "CharacterPacks");
+        var installedCharacters = Path.Combine(dataDirectory, "characters");
+        var characterCatalog = new CharacterPackLoader().LoadCatalogAsync(bundledCharacters, installedCharacters).GetAwaiter().GetResult();
+        var character = characterCatalog.SelectOrFallback(settings.SelectedCharacterPackId);
+        settings.SelectedCharacterPackId = character.Manifest.Id;
+        using var companion = CreateCompanion(pluginRuntime, settings, actions, character, bundledCharacters, installedCharacters);
         companion.Apply(state);
         if (companion is NativeCompanionWindow nativeCompanion)
         {
@@ -86,14 +92,20 @@ internal static class Program
         }
     }
 
-    private static ICompanionController CreateCompanion(PluginRuntimeManager pluginRuntime, DesktopSettings settings, IReadOnlyList<NativeActionEntry> actions)
+    private static ICompanionController CreateCompanion(
+        PluginRuntimeManager pluginRuntime,
+        DesktopSettings settings,
+        IReadOnlyList<NativeActionEntry> actions,
+        CharacterPack character,
+        string bundledCharacters,
+        string installedCharacters)
     {
         var godotPath = Environment.GetEnvironmentVariable("PLANA_GODOT_PATH")
             ?? Path.Combine(AppContext.BaseDirectory, "Godot", "Godot.exe");
         var projectPath = Environment.GetEnvironmentVariable("PLANA_GODOT_PROJECT")
             ?? Path.Combine(AppContext.BaseDirectory, "GodotRenderer");
         return File.Exists(godotPath) && File.Exists(Path.Combine(projectPath, "project.godot"))
-            ? new GodotCompanionWindow(godotPath, projectPath, pluginRuntime, settings, actions)
+            ? new GodotCompanionWindow(godotPath, projectPath, pluginRuntime, settings, actions, character, bundledCharacters, installedCharacters)
             : new NativeCompanionWindow(pluginRuntime);
     }
 

@@ -20,5 +20,9 @@
   <ItemGroup>
     <Content Include="..\Plana.Desktop\Renderer\**\*" Link="Renderer\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\Plana.Desktop\StarterPacks\**\*" Link="StarterPacks\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Plana.Companion.Godot.Renderer\character-packs\plana\character.json" Link="CharacterPacks\plana\character.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Plana.Desktop\Renderer\spine\plana\NP0035_spr.skel" Link="CharacterPacks\plana\NP0035_spr.skel" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Plana.Desktop\Renderer\spine\plana\NP0035_spr.atlas" Link="CharacterPacks\plana\NP0035_spr.atlas" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Plana.Desktop\Renderer\spine\plana\NP0035_spr.png" Link="CharacterPacks\plana\NP0035_spr.png" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

@@ -15,6 +15,7 @@ public sealed class DesktopSettingsStore(string path)
             FileAccess.Read,
             FileShare.ReadWrite | FileShare.Delete);
         var settings = await JsonSerializer.DeserializeAsync<DesktopSettings>(stream).ConfigureAwait(false) ?? new DesktopSettings();
+        if (string.IsNullOrWhiteSpace(settings.SelectedCharacterPackId)) settings.SelectedCharacterPackId = "builtin.plana";
         NormalizeActionIds(settings);
         return settings;
     }

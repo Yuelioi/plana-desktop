@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Install pinned Godot and spine-godot
+        shell: pwsh
+        run: |
+          $root = Join-Path $PWD 'artifacts\proof-toolchain'
+          $godot = Join-Path $root 'godot-4.6.1'
+          $spine = Join-Path $root 'spine-godot-4.2-4.6.1'
+          New-Item -ItemType Directory -Path $godot,$spine -Force | Out-Null
+          Invoke-WebRequest 'https://github.com/godotengine/godot/releases/download/4.6.1-stable/Godot_v4.6.1-stable_win64.exe.zip' -OutFile (Join-Path $root 'godot.zip')
+          Invoke-WebRequest 'https://spine-godot.s3.eu-central-1.amazonaws.com/4.2/4.6.1-stable/spine-godot-extension-4.2-4.6.1-stable.zip' -OutFile (Join-Path $root 'spine-godot.zip')
+          Expand-Archive (Join-Path $root 'godot.zip') -DestinationPath $godot -Force
+          Expand-Archive (Join-Path $root 'spine-godot.zip') -DestinationPath $spine -Force
+
+      - name: Test and publish
+        shell: pwsh
+        run: .\build.ps1 -Publish
+
+      - name: Assemble release assets
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path release-output -Force | Out-Null
+          Compress-Archive -Path artifacts\native-win-x64\* -DestinationPath release-output\Plana-Desktop-win-x64.zip -Force
+          $testPackage = Get-ChildItem artifacts\control-center -Directory -Recurse | Where-Object Name -like '*_Test' | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if (-not $testPackage) { throw 'Control Center test package was not produced.' }
+          Compress-Archive -Path (Join-Path $testPackage.FullName '*') -DestinationPath release-output\Plana-ControlCenter-x64-Test.zip -Force
+          Copy-Item release\Arona.planacharacter release-output\Arona.planacharacter
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            release-output/Plana-Desktop-win-x64.zip
+            release-output/Plana-ControlCenter-x64-Test.zip
+            release-output/Arona.planacharacter

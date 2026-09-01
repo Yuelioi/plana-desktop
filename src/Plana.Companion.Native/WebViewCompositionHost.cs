@@ -110,7 +110,7 @@ internal sealed class WebViewCompositionHost : IDisposable
         {
             groupPlaceholder = AppLanguage(settings, "快捷工具", "Quick tools"),
             actionPlaceholder = AppLanguage(settings, "选择操作", "Choose an action"),
-            chatPlaceholder = AppLanguage(settings, "和 Plana 对话", "Ask Plana"),
+            chatPlaceholder = AppLanguage(settings, "说些什么吧…", "Say something…"),
             settingsLabel = AppLanguage(settings, "设置", "Settings"),
             collapseLabel = AppLanguage(settings, "折叠工具组", "Collapse tools"),
             runLabel = AppLanguage(settings, "运行", "Run"),

@@ -45,7 +45,7 @@ public partial class CompanionDockWindow : Window, IDisposable
         }
         _submit = submit;
         _execute = execute;
-        InputPlaceholder.Text = chinese ? "和普拉娜说点什么…" : "Ask Plana…";
+        InputPlaceholder.Text = chinese ? "说些什么吧…" : "Say something…";
         SendButton.ToolTip = chinese ? "发送消息" : "Send message";
         ActionPanel.Children.Clear();
         foreach (var action in configuredActions)

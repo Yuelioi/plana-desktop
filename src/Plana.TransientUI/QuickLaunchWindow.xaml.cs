@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,6 +10,7 @@ namespace Plana.TransientUI;
 
 public partial class QuickLaunchWindow : Window
 {
+    private const nuint KeyReplayMarker = 0x504C414E;
     private IReadOnlyList<TransientActionItem> _actions = [];
     private IReadOnlyList<TransientActionGroup> _groups = [];
     private Func<string, Task<(bool Succeeded, string? Message)>>? _execute;
@@ -16,10 +18,16 @@ public partial class QuickLaunchWindow : Window
     private string? _expandedGroupId;
     private int _selectedIndex = -1;
     private bool _chinese;
+    private string _compositionText = string.Empty;
+    private int _compositionGeneration;
+    private int _inputEventGeneration;
+    private readonly LowLevelKeyboardProc _keyboardProc;
+    private nint _keyboardHook;
 
     public QuickLaunchWindow()
     {
         InitializeComponent();
+        _keyboardProc = KeyboardHookCallback;
         TextCompositionManager.AddPreviewTextInputStartHandler(SearchBox, SearchBox_CompositionChanged);
         TextCompositionManager.AddPreviewTextInputUpdateHandler(SearchBox, SearchBox_CompositionChanged);
         SearchBox.GotKeyboardFocus += (_, _) => SearchPlaceholder.Visibility = Visibility.Collapsed;
@@ -27,6 +35,7 @@ public partial class QuickLaunchWindow : Window
         Deactivated += (_, _) => Dispatcher.BeginInvoke(
             System.Windows.Threading.DispatcherPriority.ContextIdle,
             ConfirmOutsideDeactivation);
+        Closed += (_, _) => RemoveKeyboardHook();
         PreviewKeyDown += (_, args) =>
         {
             if (args.Key == Key.Escape) { HideLauncher(); args.Handled = true; }
@@ -54,7 +63,11 @@ public partial class QuickLaunchWindow : Window
         PositionOnPrimaryWorkArea();
         if (!IsVisible) Show();
         var handle = new WindowInteropHelper(this).EnsureHandle();
+        InstallKeyboardHook();
         ActivateForTyping(handle);
+        InputMethod.SetIsInputMethodEnabled(SearchBox, true);
+        InputMethod.SetIsInputMethodSuspended(SearchBox, false);
+        SendMessage(handle, 0x0281, new nint(1), new nint(unchecked((int)0xC000000F)));
         SearchBox.Focus();
         Keyboard.Focus(SearchBox);
         SearchBox.SelectAll();
@@ -90,14 +103,25 @@ public partial class QuickLaunchWindow : Window
 
     private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
     {
+        _inputEventGeneration++;
+        if (SearchBox.Text.Length > 0)
+        {
+            _compositionText = string.Empty;
+            _compositionGeneration++;
+            CompositionPreview.Visibility = Visibility.Collapsed;
+        }
         UpdateSearchPlaceholder();
         ApplyQuery(SearchBox.Text);
     }
 
     private void SearchBox_CompositionChanged(object sender, TextCompositionEventArgs e)
     {
+        _inputEventGeneration++;
         var composition = e.TextComposition.CompositionText;
         if (string.IsNullOrEmpty(composition)) composition = e.TextComposition.Text;
+        _compositionText = composition ?? string.Empty;
+        _compositionGeneration++;
+        UpdateCompositionPreview();
         Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, () =>
         {
             if (string.IsNullOrEmpty(composition))
@@ -130,9 +154,17 @@ public partial class QuickLaunchWindow : Window
 
     private async void SearchBox_KeyDown(object sender, KeyEventArgs e)
     {
+        _inputEventGeneration++;
         if (e.Key is Key.Back or Key.Delete)
         {
-            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ContextIdle, () => ApplyQuery(SearchBox.Text));
+            _compositionText = string.Empty;
+            _compositionGeneration++;
+            CompositionPreview.Visibility = Visibility.Collapsed;
+            _ = Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ContextIdle, () => ApplyQuery(SearchBox.Text));
+        }
+        else if (e.Key is >= Key.A and <= Key.Z && Keyboard.Modifiers is ModifierKeys.None or ModifierKeys.Shift)
+        {
+            ScheduleCompositionFallback(e.Key.ToString().ToLowerInvariant());
         }
         if (_visibleResults.Count == 0) return;
         if (e.Key == Key.Down)
@@ -152,6 +184,33 @@ public partial class QuickLaunchWindow : Window
             e.Handled = true;
             await ExecuteAsync(_visibleResults[_selectedIndex >= 0 ? _selectedIndex : 0]);
         }
+    }
+
+    private void ScheduleCompositionFallback(string text)
+    {
+        var generation = ++_compositionGeneration;
+        var timer = new System.Windows.Threading.DispatcherTimer(
+            TimeSpan.FromMilliseconds(40),
+            System.Windows.Threading.DispatcherPriority.Input,
+            (_, _) => { },
+            Dispatcher);
+        timer.Tick += (_, _) =>
+        {
+            timer.Stop();
+            if (generation != _compositionGeneration || SearchBox.Text.Length > 0 || _compositionText.Length > 0 || !SearchBox.IsKeyboardFocusWithin) return;
+            _compositionText = text;
+            UpdateCompositionPreview();
+            ApplyQuery(text);
+        };
+        timer.Start();
+    }
+
+    private void UpdateCompositionPreview()
+    {
+        CompositionPreview.Text = _compositionText;
+        CompositionPreview.Visibility = SearchBox.Text.Length == 0 && _compositionText.Length > 0
+            ? Visibility.Visible
+            : Visibility.Collapsed;
     }
 
     private void ShowDisclosure(IReadOnlyList<TransientActionItem> actions, string emptyText)
@@ -251,6 +310,8 @@ public partial class QuickLaunchWindow : Window
     {
         if (!IsVisible) return;
         Keyboard.ClearFocus();
+        _compositionText = string.Empty;
+        CompositionPreview.Visibility = Visibility.Collapsed;
         FocusManager.SetFocusedElement(this, null);
         Close();
     }
@@ -314,5 +375,80 @@ public partial class QuickLaunchWindow : Window
 
     [DllImport("user32.dll")]
     private static extern nint SetFocus(nint window);
+
+    [DllImport("user32.dll")]
+    private static extern nint SendMessage(nint window, uint message, nint wParam, nint lParam);
+
+    private void InstallKeyboardHook()
+    {
+        if (_keyboardHook != 0) return;
+        _keyboardHook = SetWindowsHookEx(13, _keyboardProc, GetModuleHandle(null), 0);
+        if (_keyboardHook == 0) throw new Win32Exception(Marshal.GetLastWin32Error(), "Could not install the Quick Launch keyboard fallback hook.");
+    }
+
+    private void RemoveKeyboardHook()
+    {
+        if (_keyboardHook == 0) return;
+        UnhookWindowsHookEx(_keyboardHook);
+        _keyboardHook = 0;
+    }
+
+    private nint KeyboardHookCallback(int code, nint message, nint data)
+    {
+        if (code >= 0 && message == 0x0100 && IsVisible)
+        {
+            var input = Marshal.PtrToStructure<KeyboardHookData>(data);
+            if (input.ExtraInfo != KeyReplayMarker && input.VirtualKey is (>= 0x30 and <= 0x39) or (>= 0x41 and <= 0x5A) &&
+                GetForegroundWindow() == new WindowInteropHelper(this).Handle)
+            {
+                ScheduleKeyReplay(input.VirtualKey, _inputEventGeneration);
+            }
+        }
+        return CallNextHookEx(_keyboardHook, code, message, data);
+    }
+
+    private void ScheduleKeyReplay(uint virtualKey, int generation)
+    {
+        var timer = new System.Windows.Threading.DispatcherTimer(
+            TimeSpan.FromMilliseconds(40),
+            System.Windows.Threading.DispatcherPriority.Input,
+            (_, _) => { },
+            Dispatcher);
+        timer.Tick += (_, _) =>
+        {
+            timer.Stop();
+            if (generation != _inputEventGeneration || !IsVisible || !SearchBox.IsKeyboardFocusWithin) return;
+            keybd_event((byte)virtualKey, 0, 0, new UIntPtr(KeyReplayMarker));
+            keybd_event((byte)virtualKey, 0, 0x0002, new UIntPtr(KeyReplayMarker));
+        };
+        timer.Start();
+    }
+
+    private delegate nint LowLevelKeyboardProc(int code, nint message, nint data);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct KeyboardHookData
+    {
+        public uint VirtualKey;
+        public uint ScanCode;
+        public uint Flags;
+        public uint Time;
+        public nuint ExtraInfo;
+    }
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern nint SetWindowsHookEx(int hook, LowLevelKeyboardProc callback, nint module, uint threadId);
+
+    [DllImport("user32.dll")]
+    private static extern bool UnhookWindowsHookEx(nint hook);
+
+    [DllImport("user32.dll")]
+    private static extern nint CallNextHookEx(nint hook, int code, nint message, nint data);
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+    private static extern nint GetModuleHandle(string? moduleName);
+
+    [DllImport("user32.dll")]
+    private static extern void keybd_event(byte virtualKey, byte scanCode, uint flags, UIntPtr extraInfo);
 
 }

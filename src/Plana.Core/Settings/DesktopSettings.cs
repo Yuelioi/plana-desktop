@@ -10,6 +10,7 @@ public sealed class DesktopSettings
     public bool StartWithWindows { get; set; }
     public string UiCulture { get; set; } = "en";
     public double Scale { get; set; } = 1;
+    public string SelectedCharacterPackId { get; set; } = "builtin.plana";
     public Dictionary<string, string> InteractionBindings { get; set; } = new(StringComparer.OrdinalIgnoreCase)
     {
         ["click"] = "builtin.companion.interact",

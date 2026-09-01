@@ -8,8 +8,16 @@ var press_position := Vector2.ZERO
 var single_click_deadline := 0
 var suppress_release_click := false
 var full_window_pass_through := false
+var idle_animation := "Idle_01"
+var hit_polygon_normalized := [
+	Vector2(0.20, 0.34), Vector2(0.62, 0.34), Vector2(0.70, 0.60),
+	Vector2(0.75, 0.78), Vector2(1.00, 0.82), Vector2(1.00, 0.90),
+	Vector2(0.70, 0.90), Vector2(0.65, 1.00), Vector2(0.00, 1.00),
+	Vector2(0.00, 0.80), Vector2(0.20, 0.76), Vector2(0.15, 0.55)
+]
 
 func _ready():
+	load_character_from_arguments()
 	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
 	get_window().size_changed.connect(apply_mouse_passthrough_polygon)
 	apply_mouse_passthrough_polygon()
@@ -18,7 +26,7 @@ func _ready():
 	for argument in OS.get_cmdline_user_args():
 		if argument.begins_with("controller_port="):
 			controller.connect_to_host("127.0.0.1", int(argument.trim_prefix("controller_port=")))
-	get_animation_state().set_animation("Idle_01", true, 0)
+	get_animation_state().set_animation(idle_animation, true, 0)
 	print("RENDERER_READY")
 
 func apply_mouse_passthrough_polygon():
@@ -26,16 +34,48 @@ func apply_mouse_passthrough_polygon():
 		get_window().mouse_passthrough_polygon = PackedVector2Array()
 		return
 	var size = Vector2(get_window().size)
-	var normalized = [
-		Vector2(0.20, 0.34), Vector2(0.62, 0.34), Vector2(0.70, 0.60),
-		Vector2(0.75, 0.78), Vector2(1.00, 0.82), Vector2(1.00, 0.90),
-		Vector2(0.70, 0.90), Vector2(0.65, 1.00), Vector2(0.00, 1.00),
-		Vector2(0.00, 0.80), Vector2(0.20, 0.76), Vector2(0.15, 0.55)
-	]
 	var polygon = PackedVector2Array()
-	for point in normalized:
+	for point in hit_polygon_normalized:
 		polygon.append(point * size)
 	get_window().mouse_passthrough_polygon = polygon
+
+func load_character_from_arguments():
+	var values := {}
+	for argument in OS.get_cmdline_user_args():
+		var separator = argument.find("=")
+		if separator > 0:
+			values[argument.substr(0, separator)] = argument.substr(separator + 1)
+	if not values.has("character_skeleton") or not values.has("character_atlas"):
+		return
+	var atlas = SpineAtlasResource.new()
+	if atlas.load_from_atlas_file(values["character_atlas"]) != OK:
+		push_error("CHARACTER_LOAD_ERROR atlas")
+		return
+	var skeleton_file = SpineSkeletonFileResource.new()
+	if skeleton_file.load_from_file(values["character_skeleton"]) != OK:
+		push_error("CHARACTER_LOAD_ERROR skeleton")
+		return
+	var skeleton_data = SpineSkeletonDataResource.new()
+	skeleton_data.atlas_res = atlas
+	skeleton_data.skeleton_file_res = skeleton_file
+	skeleton_data.default_mix = 0.15
+	skeleton_data.update_skeleton_data()
+	if not skeleton_data.is_skeleton_data_loaded():
+		push_error("CHARACTER_LOAD_ERROR data")
+		return
+	skeleton_data_res = skeleton_data
+	position = Vector2(float(values.get("character_x", "320")), float(values.get("character_y", "835")))
+	var character_scale = float(values.get("character_scale", "0.36"))
+	scale = Vector2(character_scale, character_scale)
+	idle_animation = values.get("character_idle", "Idle_01")
+	if values.has("character_hit_polygon"):
+		var decoded = Marshalls.base64_to_utf8(values["character_hit_polygon"])
+		var points = JSON.parse_string(decoded)
+		if points is Array and points.size() >= 3:
+			hit_polygon_normalized.clear()
+			for point in points:
+				if point is Dictionary:
+					hit_polygon_normalized.append(Vector2(float(point.get("x", 0)), float(point.get("y", 0))))
 
 func _process(_delta):
 	poll_controller()

@@ -1,10 +1,14 @@
 using Plana.Core.Actions;
 using Plana.Core.Plugins;
+using Plana.Core.Characters;
+using System.Security.Cryptography;
+using System.Text.Json;
 
 namespace Plana_ControlCenter.Services;
 
 internal sealed class ExtensionImportService(string dataDirectory)
 {
+    private static readonly HttpClient HttpClient = new() { Timeout = TimeSpan.FromMinutes(2) };
     public async Task<ExtensionImportResult> ImportPackAsync(string sourceDirectory)
     {
         var manifest = Path.Combine(sourceDirectory, "manifest.json");
@@ -24,6 +28,59 @@ internal sealed class ExtensionImportService(string dataDirectory)
         var entryPoint = PluginManifestLoader.ResolveEntryPoint(diagnostic.Manifest!);
         if (!File.Exists(entryPoint)) return ExtensionImportResult.Failure($"Plugin entry point was not found: {entryPoint}");
         return CopyPackage(sourceDirectory, Path.Combine(dataDirectory, "plugins"), diagnostic.Manifest!.Id);
+    }
+
+    public async Task<ExtensionImportResult> ImportCharacterPackAsync(string sourceDirectory)
+    {
+        var manifest = Path.Combine(sourceDirectory, CharacterPackLoader.ManifestFileName);
+        if (!File.Exists(manifest)) return ExtensionImportResult.Failure("character.json was not found in the selected folder.");
+        var discovery = await new CharacterPackLoader().LoadAsync(manifest);
+        if (!discovery.IsValid) return ExtensionImportResult.Failure(discovery.Error ?? "The Character Pack manifest is invalid.");
+        return CopyPackage(sourceDirectory, Path.Combine(dataDirectory, "characters"), discovery.Pack!.Manifest.Id);
+    }
+
+    public async Task<ExtensionImportResult> ImportCharacterPackageAsync(string packagePath)
+    {
+        var temporary = Path.Combine(Path.GetTempPath(), $"plana-character-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(temporary);
+        try
+        {
+            await using var stream = File.OpenRead(packagePath);
+            var package = await JsonSerializer.DeserializeAsync<CharacterPackageDocument>(stream, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (package is null || package.SchemaVersion != 1 || package.Manifest.ValueKind != JsonValueKind.Object)
+                return ExtensionImportResult.Failure("The .planacharacter package is invalid.");
+            if (package.Assets.Count is 0 or > 8) return ExtensionImportResult.Failure("A Character Package must declare between 1 and 8 assets.");
+            await File.WriteAllTextAsync(Path.Combine(temporary, CharacterPackLoader.ManifestFileName), package.Manifest.GetRawText());
+            foreach (var asset in package.Assets)
+            {
+                if (!Uri.TryCreate(asset.Url, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttps)
+                    return ExtensionImportResult.Failure($"Character asset URL must use HTTPS: {asset.Url}");
+                var target = ResolveContained(temporary, asset.Path);
+                Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+                using var response = await HttpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
+                if (response.Content.Headers.ContentLength is > 25_000_000) return ExtensionImportResult.Failure($"Character asset is too large: {asset.Path}");
+                await using (var output = File.Create(target)) await response.Content.CopyToAsync(output);
+                await using var input = File.OpenRead(target);
+                var hash = Convert.ToHexString(await SHA256.HashDataAsync(input));
+                if (!hash.Equals(asset.Sha256, StringComparison.OrdinalIgnoreCase)) return ExtensionImportResult.Failure($"Character asset hash did not match: {asset.Path}");
+            }
+            return await ImportCharacterPackAsync(temporary);
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or HttpRequestException or JsonException or InvalidDataException)
+        {
+            return ExtensionImportResult.Failure(exception.Message);
+        }
+        finally { if (Directory.Exists(temporary)) Directory.Delete(temporary, true); }
+    }
+
+    private static string ResolveContained(string root, string relative)
+    {
+        if (Path.IsPathFullyQualified(relative)) throw new InvalidDataException("Character asset path must be relative.");
+        var fullRoot = Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+        var target = Path.GetFullPath(relative, root);
+        if (!target.StartsWith(fullRoot, StringComparison.OrdinalIgnoreCase)) throw new InvalidDataException("Character asset path escapes the package.");
+        return target;
     }
 
     private static ExtensionImportResult CopyPackage(string sourceDirectory, string libraryDirectory, string id)
@@ -54,6 +111,20 @@ internal sealed class ExtensionImportService(string dataDirectory)
             throw;
         }
     }
+}
+
+internal sealed class CharacterPackageDocument
+{
+    public int SchemaVersion { get; set; }
+    public JsonElement Manifest { get; set; }
+    public List<CharacterPackageAsset> Assets { get; set; } = [];
+}
+
+internal sealed class CharacterPackageAsset
+{
+    public string Path { get; set; } = string.Empty;
+    public string Url { get; set; } = string.Empty;
+    public string Sha256 { get; set; } = string.Empty;
 }
 
 internal sealed record ExtensionImportResult(bool Succeeded, string Message)

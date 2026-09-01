@@ -3,11 +3,13 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.Json;
 using Plana.Core.Actions;
 using Plana.Core.Companion;
 using Plana.Core.Plugins;
 using Plana.Core.Settings;
+using Plana.Core.Characters;
 using Plana.TransientUI;
 using Forms = System.Windows.Forms;
 
@@ -29,12 +31,13 @@ internal sealed class GodotCompanionWindow : ICompanionController
 
     private readonly string _godotPath;
     private readonly string _projectPath;
-    private readonly PlanaPerformancePlanner _planner = new();
+    private CharacterPerformancePlanner _planner;
     private readonly PlanaInteractionPlanner _interactionPlanner = new();
     private readonly PluginRuntimeManager _pluginRuntime;
     private IReadOnlyDictionary<string, NativeActionEntry> _actions;
     private IReadOnlyDictionary<string, string> _interactionBindings;
     private readonly object _sync = new();
+    private readonly object _rendererLifecycle = new();
     private Process? _renderer;
     private TcpListener? _listener;
     private TcpClient? _client;
@@ -47,6 +50,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private System.Threading.Timer? _settingsTimer;
     private string? _settingsPath;
     private DateTime _settingsLastWriteUtc;
+    private int _checkingSettings;
     private CompanionSurfaceState _state = new(null, null, 340, 520, 1, true);
     private bool _closing;
     private bool _visible = true;
@@ -58,6 +62,9 @@ internal sealed class GodotCompanionWindow : ICompanionController
     private readonly GlobalHotkey _quickLaunchHotkey;
     private DesktopSettings _currentSettings;
     private DateTime _lastHoverUtc = DateTime.MinValue;
+    private CharacterPack _characterPack;
+    private readonly string _bundledCharacters;
+    private readonly string _installedCharacters;
 
     public nint WindowHandle { get; private set; }
     public event EventHandler? ContextRequested;
@@ -67,11 +74,18 @@ internal sealed class GodotCompanionWindow : ICompanionController
         string projectPath,
         PluginRuntimeManager pluginRuntime,
         DesktopSettings settings,
-        IReadOnlyList<NativeActionEntry> actions)
+        IReadOnlyList<NativeActionEntry> actions,
+        CharacterPack characterPack,
+        string bundledCharacters,
+        string installedCharacters)
     {
         _godotPath = godotPath;
         _projectPath = projectPath;
         _pluginRuntime = pluginRuntime;
+        _characterPack = characterPack;
+        _planner = new CharacterPerformancePlanner(characterPack);
+        _bundledCharacters = bundledCharacters;
+        _installedCharacters = installedCharacters;
         _currentSettings = settings;
         _actions = actions.ToDictionary(action => action.Id, StringComparer.OrdinalIgnoreCase);
         _interactionBindings = new Dictionary<string, string>(settings.InteractionBindings, StringComparer.OrdinalIgnoreCase);
@@ -362,16 +376,28 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _listener = new TcpListener(IPAddress.Loopback, 0);
         _listener.Start();
         var port = ((IPEndPoint)_listener.LocalEndpoint).Port;
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = _godotPath,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+        };
+        startInfo.ArgumentList.Add("--path");
+        startInfo.ArgumentList.Add(_projectPath);
+        startInfo.ArgumentList.Add("--");
+        startInfo.ArgumentList.Add($"controller_port={port}");
+        startInfo.ArgumentList.Add($"character_skeleton={_characterPack.SkeletonPath}");
+        startInfo.ArgumentList.Add($"character_atlas={_characterPack.AtlasPath}");
+        startInfo.ArgumentList.Add($"character_x={_characterPack.Manifest.Layout.X.ToString(System.Globalization.CultureInfo.InvariantCulture)}");
+        startInfo.ArgumentList.Add($"character_y={_characterPack.Manifest.Layout.Y.ToString(System.Globalization.CultureInfo.InvariantCulture)}");
+        startInfo.ArgumentList.Add($"character_scale={_characterPack.Manifest.Layout.Scale.ToString(System.Globalization.CultureInfo.InvariantCulture)}");
+        startInfo.ArgumentList.Add($"character_idle={_characterPack.Manifest.Performance.Idle}");
+        var polygonJson = JsonSerializer.Serialize(_characterPack.Manifest.Layout.HitPolygon.Select(point => new { x = point.X, y = point.Y }));
+        startInfo.ArgumentList.Add($"character_hit_polygon={Convert.ToBase64String(Encoding.UTF8.GetBytes(polygonJson))}");
         _renderer = new Process
         {
-            StartInfo = new ProcessStartInfo
-            {
-                FileName = _godotPath,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                ArgumentList = { "--path", _projectPath, "--", $"controller_port={port}" }
-            },
+            StartInfo = startInfo,
             EnableRaisingEvents = true
         };
         _renderer.OutputDataReceived += (_, args) => ObserveOutput(args.Data);
@@ -446,8 +472,11 @@ internal sealed class GodotCompanionWindow : ICompanionController
 
     private void RestartRenderer()
     {
-        StopRenderer();
-        if (!_closing) StartRenderer();
+        lock (_rendererLifecycle)
+        {
+            StopRenderer();
+            if (!_closing) StartRenderer();
+        }
     }
 
     private void StopRenderer()
@@ -476,6 +505,13 @@ internal sealed class GodotCompanionWindow : ICompanionController
 
     private void CheckSettings()
     {
+        if (Interlocked.Exchange(ref _checkingSettings, 1) != 0) return;
+        try { CheckSettingsCore(); }
+        finally { Volatile.Write(ref _checkingSettings, 0); }
+    }
+
+    private void CheckSettingsCore()
+    {
         if (_settingsPath is null || !File.Exists(_settingsPath)) return;
         var write = File.GetLastWriteTimeUtc(_settingsPath);
         if (write == _settingsLastWriteUtc) return;
@@ -483,6 +519,26 @@ internal sealed class GodotCompanionWindow : ICompanionController
         try
         {
             var settings = new DesktopSettingsStore(_settingsPath).LoadAsync().GetAwaiter().GetResult();
+            var catalog = new CharacterPackLoader().LoadCatalogAsync(_bundledCharacters, _installedCharacters).GetAwaiter().GetResult();
+            var selectedCharacter = catalog.SelectOrFallback(settings.SelectedCharacterPackId);
+            if (!selectedCharacter.Manifest.Id.Equals(_characterPack.Manifest.Id, StringComparison.OrdinalIgnoreCase) ||
+                !selectedCharacter.SourceDirectory.Equals(_characterPack.SourceDirectory, StringComparison.OrdinalIgnoreCase))
+            {
+                var previousCharacter = _characterPack;
+                _characterPack = selectedCharacter;
+                _planner = new CharacterPerformancePlanner(selectedCharacter);
+                try { RestartRenderer(); }
+                catch (Exception exception) when (exception is TimeoutException or Win32Exception or InvalidOperationException)
+                {
+                    _characterPack = previousCharacter;
+                    _planner = new CharacterPerformancePlanner(previousCharacter);
+                    try { RestartRenderer(); }
+                    catch (Exception recoveryException)
+                    {
+                        File.WriteAllText(Path.Combine(Path.GetDirectoryName(_settingsPath)!, "renderer-error.log"), $"Character switch failed: {exception}\nRecovery failed: {recoveryException}");
+                    }
+                }
+            }
             _currentSettings = settings;
             _interactionBindings = new Dictionary<string, string>(settings.InteractionBindings, StringComparer.OrdinalIgnoreCase);
             ConfigurePinnedActions(settings);
@@ -502,7 +558,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _quickLaunchHotkey.Dispose();
         _transientUi.Dispose();
         _speechBubble.Dispose();
-        StopRenderer();
+        lock (_rendererLifecycle) StopRenderer();
         _ready.Dispose();
         _acknowledged.Dispose();
         _inputModeAcknowledged.Dispose();

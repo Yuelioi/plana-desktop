@@ -49,7 +49,7 @@
                              Foreground="#F6F8FF" CaretBrush="#F6F8FF" VerticalContentAlignment="Center"
                              FontSize="14" KeyDown="InputBox_KeyDown" />
                     <TextBlock x:Name="InputPlaceholder" Margin="11,0,4,0" VerticalAlignment="Center"
-                               Foreground="#97A2BE" IsHitTestVisible="False" Text="和普拉娜说点什么…" />
+                               Foreground="#97A2BE" IsHitTestVisible="False" Text="说些什么吧…" />
                     <Button x:Name="SendButton" Grid.Column="1" Width="30" Height="30" Margin="3"
                             BorderThickness="0" Background="#4E6FD8" Foreground="White"
                             FontFamily="Segoe UI Symbol" FontSize="14" Content="➤"

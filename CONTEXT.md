@@ -72,6 +72,14 @@ _Avoid_: Permission, scope
 Executable extension code hosted outside the desktop process. A valid discovered Plugin runs by default unless the user disables it; Plugins are reserved for behavior that cannot be expressed as an Action Pack.
 _Avoid_: Action Pack, mod, trusted Plugin, approved Plugin
 
+**Character Pack**:
+A declarative installed bundle that supplies one Companion character's Spine skeleton, atlas, textures, display metadata, and semantic Character Performance mappings. It contains no executable code and contributes no Actions.
+_Avoid_: Plugin, Action Pack, model mod, skin
+
+**Character Selection**:
+The user's persisted choice of which valid Character Pack supplies the current Companion appearance and model-specific Character Performance mapping. A missing or invalid selection falls back to the bundled Plana Character Pack.
+_Avoid_: theme, renderer selection, Plugin activation
+
 **Renderer**:
 The embedded surface that displays the Companion and reports animation and pointer information to the desktop host.
 _Avoid_: Frontend, WebView

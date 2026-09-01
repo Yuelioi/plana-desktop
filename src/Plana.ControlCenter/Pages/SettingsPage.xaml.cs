@@ -5,6 +5,9 @@ using System.Diagnostics;
 using Microsoft.Win32;
 using Microsoft.UI.Xaml.Controls;
 using Plana.Core.Actions;
+using Plana.Core.Characters;
+using Plana_ControlCenter.Services;
+using Windows.Storage.Pickers;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -14,6 +17,8 @@ namespace Plana_ControlCenter.Pages;
 public sealed partial class SettingsPage : Page
 {
     private bool _loading = true;
+    private readonly string _charactersDirectory = Path.Combine(App.DataDirectory, "characters");
+    private readonly ExtensionImportService _importService = new(App.DataDirectory);
 
     public SettingsPage()
     {
@@ -32,9 +37,94 @@ public sealed partial class SettingsPage : Page
         AiModelInput.Text = App.Settings.AiModel;
         AiApiBaseUrlInput.Text = App.Settings.AiApiBaseUrl;
         AiApiKeyVariableInput.Text = App.Settings.AiApiKeyEnvironmentVariable;
+        await LoadCharactersAsync();
         await LoadInteractionOptionsAsync();
         ApplyLanguage();
         _loading = false;
+    }
+
+    private async Task LoadCharactersAsync()
+    {
+        var bundled = Path.Combine(AppContext.BaseDirectory, "CharacterPacks");
+        var catalog = await new CharacterPackLoader().LoadCatalogAsync(bundled, _charactersDirectory);
+        var options = catalog.ValidPacks
+            .Select(pack => new CharacterOption(
+                pack.Manifest.Id,
+                pack.Manifest.Name,
+                pack.BuiltIn
+                    ? (App.IsChinese ? "内置" : "Bundled")
+                    : $"{pack.Manifest.Version} · {Path.GetFileName(pack.SourceDirectory)}"))
+            .OrderByDescending(option => option.Id == CharacterPackLoader.BundledPlanaId)
+            .ThenBy(option => option.Name, StringComparer.CurrentCultureIgnoreCase)
+            .ToArray();
+        CharacterPicker.ItemsSource = options;
+        CharacterPicker.SelectedValue = options.Any(option => option.Id.Equals(App.Settings.SelectedCharacterPackId, StringComparison.OrdinalIgnoreCase))
+            ? App.Settings.SelectedCharacterPackId
+            : CharacterPackLoader.BundledPlanaId;
+        var errors = catalog.Discoveries.Where(item => !item.IsValid).Select(item => item.Error).Where(error => !string.IsNullOrWhiteSpace(error)).ToArray();
+        if (errors.Length > 0)
+        {
+            CharacterStatus.Severity = InfoBarSeverity.Warning;
+            CharacterStatus.Title = App.IsChinese ? "部分角色包无法加载" : "Some Character Packs could not load";
+            CharacterStatus.Message = string.Join(Environment.NewLine, errors);
+            CharacterStatus.IsOpen = true;
+        }
+    }
+
+    private async void CharacterPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loading || CharacterPicker.SelectedValue is not string id) return;
+        App.Settings.SelectedCharacterPackId = id;
+        await SaveWithStatusAsync();
+    }
+
+    private async void ImportCharacterButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        var path = await PickCharacterPackageAsync();
+        if (path is null) return;
+        await ShowCharacterImportResultAsync(await _importService.ImportCharacterPackageAsync(path));
+    }
+
+    private async void ImportCharacterFolderButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        var path = await PickFolderAsync();
+        if (path is null) return;
+        await ShowCharacterImportResultAsync(await _importService.ImportCharacterPackAsync(path));
+    }
+
+    private async Task ShowCharacterImportResultAsync(ExtensionImportResult result)
+    {
+        CharacterStatus.Severity = result.Succeeded ? InfoBarSeverity.Success : InfoBarSeverity.Error;
+        CharacterStatus.Title = result.Succeeded
+            ? (App.IsChinese ? "角色包已导入" : "Character Pack imported")
+            : (App.IsChinese ? "无法导入角色包" : "Could not import Character Pack");
+        CharacterStatus.Message = result.Message;
+        CharacterStatus.IsOpen = true;
+        if (result.Succeeded) await LoadCharactersAsync();
+    }
+
+    private void OpenCharactersButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        Directory.CreateDirectory(_charactersDirectory);
+        Process.Start(new ProcessStartInfo(_charactersDirectory) { UseShellExecute = true });
+    }
+
+    private async void ReloadCharactersButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) => await LoadCharactersAsync();
+
+    private static async Task<string?> PickFolderAsync()
+    {
+        var picker = new FolderPicker { SuggestedStartLocation = PickerLocationId.Downloads };
+        picker.FileTypeFilter.Add("*");
+        WinRT.Interop.InitializeWithWindow.Initialize(picker, App.MainWindowHandle);
+        return (await picker.PickSingleFolderAsync())?.Path;
+    }
+
+    private static async Task<string?> PickCharacterPackageAsync()
+    {
+        var picker = new FileOpenPicker { SuggestedStartLocation = PickerLocationId.Downloads };
+        picker.FileTypeFilter.Add(".planacharacter");
+        WinRT.Interop.InitializeWithWindow.Initialize(picker, App.MainWindowHandle);
+        return (await picker.PickSingleFileAsync())?.Path;
     }
 
     private void AiProviderPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -125,6 +215,11 @@ public sealed partial class SettingsPage : Page
         TopmostTitle.Text = "保持在其他窗口上方";
         StartupTitle.Text = "登录时启动";
         ScaleTitle.Text = "桌宠缩放";
+        CharacterHeading.Text = "角色";
+        CharacterTitle.Text = "桌宠角色";
+        ImportCharacterLabel.Text = "导入角色包";
+        ImportCharacterFolderLabel.Text = "导入文件夹";
+        OpenCharactersLabel.Text = "打开角色文件夹";
         LanguageHeading.Text = "语言";
         LanguageTitle.Text = "显示语言";
         InteractionsHeading.Text = "交互";
@@ -176,3 +271,7 @@ public sealed partial class SettingsPage : Page
 }
 
 public sealed record InteractionActionOption(string Id, string Name);
+public sealed record CharacterOption(string Id, string Name, string Detail)
+{
+    public override string ToString() => string.IsNullOrWhiteSpace(Detail) ? Name : $"{Name} · {Detail}";
+}
