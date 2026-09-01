@@ -112,6 +112,7 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Corrected the remaining inner search-text padding and Companion shortcut sizing. Runtime captures confirm left-aligned vertically centered Action Group search text, while a single pinned shortcut is capped at 120 px and centered above the unchanged chat composer; 2–3 remain compact and four share available width.
 - Replaced management-page `AutoSuggestBox` controls with directly styled `TextBox` search fields because those pages never use suggestions and the nested template ignored vertical alignment. A cropped 130% runtime capture confirms balanced top/bottom text space; Enter-to-run remains on the Actions page and the search glyph is a separate non-interactive native symbol.
 - Promoted management search into the reusable `Controls/SearchField`: a 40 px host border contains a borderless 24 px editor at geometric center, with a 2 px optical correction for Segoe UI Chinese glyph metrics and a separate search symbol. Removed the ineffective legacy search styles so future pages cannot silently fall back to the nested template behavior.
+- Simplified `SearchField` after typed-state testing disproved the nested-border design: it now uses one native 40 px TextBox with 8 px optical top padding and an overlay search symbol. A real focused `test` input capture confirms one focus border and centered text; the search symbol hides for non-empty input so it cannot overlap the native clear button.
 
 ## References
 

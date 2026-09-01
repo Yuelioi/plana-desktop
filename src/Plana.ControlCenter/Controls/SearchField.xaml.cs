@@ -21,21 +21,15 @@ public sealed partial class SearchField : UserControl
 
     public void FocusInput() => Input.Focus(FocusState.Programmatic);
 
-    private void Input_TextChanged(object sender, TextChangedEventArgs e) => SearchTextChanged?.Invoke(this, EventArgs.Empty);
+    private void Input_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (SearchGlyph is not null) SearchGlyph.Visibility = Input.Text.Length == 0 ? Visibility.Visible : Visibility.Collapsed;
+        SearchTextChanged?.Invoke(this, EventArgs.Empty);
+    }
     private void Input_KeyDown(object sender, KeyRoutedEventArgs e)
     {
         if (e.Key != Windows.System.VirtualKey.Enter) return;
         e.Handled = true;
         EnterPressed?.Invoke(this, EventArgs.Empty);
-    }
-    private void Input_GotFocus(object sender, RoutedEventArgs e)
-    {
-        Frame.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AccentTextFillColorPrimaryBrush"];
-        Frame.BorderThickness = new Thickness(1, 1, 1, 2);
-    }
-    private void Input_LostFocus(object sender, RoutedEventArgs e)
-    {
-        Frame.ClearValue(Border.BorderBrushProperty);
-        Frame.BorderThickness = new Thickness(1);
     }
 }
