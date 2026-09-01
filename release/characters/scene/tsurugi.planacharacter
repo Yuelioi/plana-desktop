@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 273,
+    "constraints": 84
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.tsurugi",
+    "name": "Tsurugi (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Tsurugi_home.skel",
+    "atlas": "Tsurugi_home.atlas",
+    "layout": {
+      "x": 320.0,
+      "y": 632.49,
+      "scale": 0.1899,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Tsurugi_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Tsurugi_home.skel",
+      "gitBlobSha1": "d06e5b05391c4797a33e8c2b5716ca60e6097343"
+    },
+    {
+      "path": "Tsurugi_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Tsurugi_home.atlas",
+      "gitBlobSha1": "dbd7272dfb5c73003a85b4ec55a2fec37836d175"
+    },
+    {
+      "path": "Tsurugi_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Tsurugi_home.png",
+      "gitBlobSha1": "93cc1d98accc26ebe7e233a28221c4b0bba3636a"
+    },
+    {
+      "path": "Tsurugi_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Tsurugi_home2.png",
+      "gitBlobSha1": "bbac8803d7a4e8f19867aa1e1c4045f48f880365"
+    },
+    {
+      "path": "Tsurugi_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Tsurugi_home3.png",
+      "gitBlobSha1": "c535ebe827402ad9e56929996db788ddd8286f24"
+    }
+  ]
+}

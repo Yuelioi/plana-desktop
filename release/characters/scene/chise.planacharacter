@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 347,
+    "constraints": 44
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.chise",
+    "name": "Chise (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Chise_home.skel",
+    "atlas": "Chise_home.atlas",
+    "layout": {
+      "x": 330.59,
+      "y": 628.06,
+      "scale": 0.1825,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Chise_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Chise_home.skel",
+      "gitBlobSha1": "cf1b9e6d718e36c279d2fa12981893357afb01f7"
+    },
+    {
+      "path": "Chise_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Chise_home.atlas",
+      "gitBlobSha1": "140ed52f4996e2051736a89d58ee468e19b989f2"
+    },
+    {
+      "path": "Chise_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Chise_home.png",
+      "gitBlobSha1": "1ff267707c942cce39a8259ce9a3f70a5b9b5a5c"
+    },
+    {
+      "path": "Chise_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Chise_home2.png",
+      "gitBlobSha1": "f50e070485a0cf84c042713bb6dc153053db61e6"
+    }
+  ]
+}

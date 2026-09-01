@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "category": "static",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "static",
+    "bones": 2,
+    "constraints": 0,
+    "idleBoneTimelines": 1
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.utahaturret",
+    "name": "Utahaturret",
+    "version": "1.0.0",
+    "skeleton": "utahaturret_spr.skel",
+    "atlas": "utahaturret_spr.atlas",
+    "layout": {
+      "x": 320,
+      "y": 835,
+      "scale": 0.3,
+      "hitPolygon": [
+        {
+          "x": 0.14,
+          "y": 0.22
+        },
+        {
+          "x": 0.82,
+          "y": 0.22
+        },
+        {
+          "x": 0.9,
+          "y": 0.64
+        },
+        {
+          "x": 0.82,
+          "y": 1.0
+        },
+        {
+          "x": 0.08,
+          "y": 1.0
+        },
+        {
+          "x": 0.04,
+          "y": 0.62
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "02",
+      "emotions": {
+        "Neutral": "00",
+        "Happy": "03",
+        "Excited": "06",
+        "Surprised": "04",
+        "Sad": "07",
+        "Worried": "05",
+        "Angry": "05",
+        "Affectionate": "04",
+        "Shy": "04",
+        "Dizzy": "08"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "utahaturret_spr.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/utahaturret_spr.skel",
+      "gitBlobSha1": "2b77bd7b3bbb5b728764c05d5997452a1a7e4cd9"
+    },
+    {
+      "path": "utahaturret_spr.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/utahaturret_spr.atlas",
+      "gitBlobSha1": "7d33dcc3ae7d974e6c637184fd7c5ca3235ca4c1"
+    },
+    {
+      "path": "utahaturret_spr.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/utahaturret_spr.png",
+      "gitBlobSha1": "6b29a4cc1310b52feca8fcf72346080ffeb81dc3"
+    }
+  ]
+}

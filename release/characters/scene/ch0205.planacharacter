@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 474,
+    "constraints": 96
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0205",
+    "name": "Koharu (Swimsuit) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0205_home.skel",
+    "atlas": "CH0205_home.atlas",
+    "layout": {
+      "x": 320.0,
+      "y": 533.69,
+      "scale": 0.1734,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0205_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0205_home.skel",
+      "gitBlobSha1": "edda0bc1fda99cc8d6aa0ee38a873aa7b237151b"
+    },
+    {
+      "path": "CH0205_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0205_home.atlas",
+      "gitBlobSha1": "e3f313e867971c450a7d6d215378191d9c147c40"
+    },
+    {
+      "path": "CH0205_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0205_home.png",
+      "gitBlobSha1": "fa0d7c036e9f910a07e243da754b96d3cf40cb4d"
+    },
+    {
+      "path": "CH0205_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0205_home2.png",
+      "gitBlobSha1": "f479233859f68368daec28bba10aae8ffb3a21ff"
+    },
+    {
+      "path": "CH0205_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0205_home3.png",
+      "gitBlobSha1": "83d1b275da1a64bb655c41be340b9b6c66125023"
+    }
+  ]
+}

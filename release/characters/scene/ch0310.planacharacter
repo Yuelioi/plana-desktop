@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 409,
+    "constraints": 107
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0310",
+    "name": "Koyuki (Pajama) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0310_home.skel",
+    "atlas": "CH0310_home.atlas",
+    "layout": {
+      "x": 294.55,
+      "y": 602.1,
+      "scale": 0.1581,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01",
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0310_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0310_home.skel",
+      "gitBlobSha1": "cc63cec4029b133bfe861d14fbd88b86cd3bac7e"
+    },
+    {
+      "path": "CH0310_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0310_home.atlas",
+      "gitBlobSha1": "4d6ba9994c9bfbd4448e91bc480e3d2d346ad0d9"
+    },
+    {
+      "path": "CH0310_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0310_home.png",
+      "gitBlobSha1": "e9f07db3f25a347441fe843efcb3a6ec8813278a"
+    },
+    {
+      "path": "CH0310_home_2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0310_home_2.png",
+      "gitBlobSha1": "7f59f1765f254abdc0d09d9c30069b6bf21f7770"
+    },
+    {
+      "path": "CH0310_home_3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0310_home_3.png",
+      "gitBlobSha1": "373c186ae358295da42fad0a6a4ba84c1ead3b4c"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "category": "static",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "static",
+    "bones": 3,
+    "constraints": 0,
+    "idleBoneTimelines": 2
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.hoshino",
+    "name": "Hoshino",
+    "version": "1.0.0",
+    "skeleton": "hoshino_spr.skel",
+    "atlas": "hoshino_spr.atlas",
+    "layout": {
+      "x": 320,
+      "y": 835,
+      "scale": 0.3,
+      "hitPolygon": [
+        {
+          "x": 0.14,
+          "y": 0.22
+        },
+        {
+          "x": 0.82,
+          "y": 0.22
+        },
+        {
+          "x": 0.9,
+          "y": 0.64
+        },
+        {
+          "x": 0.82,
+          "y": 1.0
+        },
+        {
+          "x": 0.08,
+          "y": 1.0
+        },
+        {
+          "x": 0.04,
+          "y": 0.62
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "02",
+      "emotions": {
+        "Neutral": "00",
+        "Happy": "03",
+        "Excited": "06",
+        "Surprised": "04",
+        "Sad": "07",
+        "Worried": "05",
+        "Angry": "05",
+        "Affectionate": "04",
+        "Shy": "04",
+        "Dizzy": "08"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "hoshino_spr.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/hoshino_spr.skel",
+      "gitBlobSha1": "ac8e2d0ae0dea4dc4a22ab1b67943eab45635e1d"
+    },
+    {
+      "path": "hoshino_spr.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/hoshino_spr.atlas",
+      "gitBlobSha1": "009db948b46f626ab5ec9cb55ab534ffeaeec7d1"
+    },
+    {
+      "path": "hoshino_spr.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/hoshino_spr.png",
+      "gitBlobSha1": "a7e7872ff7d4f7592e222b2b2531adbc725e90ee"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 296,
+    "constraints": 121
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.erika",
+    "name": "Erika (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "erika_home.skel",
+    "atlas": "erika_home.atlas",
+    "layout": {
+      "x": 317.55,
+      "y": 567.32,
+      "scale": 0.1483,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01",
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "erika_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/erika_home.skel",
+      "gitBlobSha1": "084ccca1beca7cf36ef3c236e262da5c6df02653"
+    },
+    {
+      "path": "erika_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/erika_home.atlas",
+      "gitBlobSha1": "2905f2b37ca8e7a06191dfb9cb096120df4142e7"
+    },
+    {
+      "path": "erika_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/erika_home.png",
+      "gitBlobSha1": "86162aaed1f9aaaebb90192d6c6a458083eec270"
+    },
+    {
+      "path": "erika_home_2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/erika_home_2.png",
+      "gitBlobSha1": "3a1cd6c453b0fd15d35c3967703b3b7d05cf8597"
+    }
+  ]
+}

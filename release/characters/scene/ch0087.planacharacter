@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 561,
+    "constraints": 89
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0087",
+    "name": "Haruka (New Year) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0087_home.skel",
+    "atlas": "CH0087_home.atlas",
+    "layout": {
+      "x": 316.77,
+      "y": 554.72,
+      "scale": 0.1373,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0087_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0087_home.skel",
+      "gitBlobSha1": "9fc106879951e6d42148ccd92e40617ea60d9953"
+    },
+    {
+      "path": "CH0087_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0087_home.atlas",
+      "gitBlobSha1": "bef6a0e99f560153da41bd64c26ed83e6e5da27b"
+    },
+    {
+      "path": "CH0087_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0087_home.png",
+      "gitBlobSha1": "2ce8ef11fe9faaaa07ef2e8a799148562c07a9ae"
+    },
+    {
+      "path": "CH0087_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0087_home2.png",
+      "gitBlobSha1": "bc2c24f4a192f1bc91ddb9e9a578c4135d7ea4e8"
+    },
+    {
+      "path": "CH0087_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0087_home3.png",
+      "gitBlobSha1": "1617f98de20b65db2bef57eb86646ecb0a7cf371"
+    }
+  ]
+}

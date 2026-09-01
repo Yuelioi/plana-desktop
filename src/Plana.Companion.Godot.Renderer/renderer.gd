@@ -9,6 +9,7 @@ var single_click_deadline := 0
 var suppress_release_click := false
 var full_window_pass_through := false
 var idle_animation := "Idle_01"
+var hidden_slots: Array[String] = []
 var hit_polygon_normalized := [
 	Vector2(0.20, 0.34), Vector2(0.62, 0.34), Vector2(0.70, 0.60),
 	Vector2(0.75, 0.78), Vector2(1.00, 0.82), Vector2(1.00, 0.90),
@@ -23,6 +24,7 @@ func _ready():
 	load_character_from_arguments()
 	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
 	get_window().size_changed.connect(apply_mouse_passthrough_polygon)
+	before_world_transforms_change.connect(apply_hidden_slots)
 	apply_mouse_passthrough_polygon()
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)
@@ -71,6 +73,12 @@ func load_character_from_arguments():
 	var character_scale = float(values.get("character_scale", "0.36"))
 	scale = Vector2(character_scale, character_scale)
 	idle_animation = values.get("character_idle", "Idle_01")
+	if values.has("character_hidden_slots"):
+		var decoded_slots = Marshalls.base64_to_utf8(values["character_hidden_slots"])
+		var parsed_slots = JSON.parse_string(decoded_slots)
+		if parsed_slots is Array:
+			for slot in parsed_slots:
+				hidden_slots.append(str(slot))
 	if values.has("character_hit_polygon"):
 		var decoded = Marshalls.base64_to_utf8(values["character_hit_polygon"])
 		var points = JSON.parse_string(decoded)
@@ -79,6 +87,12 @@ func load_character_from_arguments():
 			for point in points:
 				if point is Dictionary:
 					hit_polygon_normalized.append(Vector2(float(point.get("x", 0)), float(point.get("y", 0))))
+
+func apply_hidden_slots():
+	if hidden_slots.is_empty() or get_skeleton() == null:
+		return
+	for slot_name in hidden_slots:
+		get_skeleton().set_attachment(slot_name, "")
 
 func _process(_delta):
 	poll_controller()

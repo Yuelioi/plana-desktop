@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 252,
+    "constraints": 54
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.mimori",
+    "name": "Mimori (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Mimori_home.skel",
+    "atlas": "Mimori_home.atlas",
+    "layout": {
+      "x": 320.42,
+      "y": 617.23,
+      "scale": 0.1734,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Mimori_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Mimori_home.skel",
+      "gitBlobSha1": "43bbdba561e7d7f3f3a26a60463ac8c24836311a"
+    },
+    {
+      "path": "Mimori_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Mimori_home.atlas",
+      "gitBlobSha1": "85e31e8b25b491d7f6f61735c09011193bbd84b1"
+    },
+    {
+      "path": "Mimori_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Mimori_home.png",
+      "gitBlobSha1": "bf6ff510a1c7e34dbecaffb7f1903e950cc7864b"
+    },
+    {
+      "path": "Mimori_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Mimori_home2.png",
+      "gitBlobSha1": "82f8912c59876e34760f3477701ef2dbb7e0e38a"
+    }
+  ]
+}

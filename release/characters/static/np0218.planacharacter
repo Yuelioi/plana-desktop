@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "category": "static",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "static",
+    "bones": 3,
+    "constraints": 0,
+    "idleBoneTimelines": 2
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.np0218",
+    "name": "Ayane (Idol)",
+    "version": "1.0.0",
+    "skeleton": "NP0218_spr.skel",
+    "atlas": "NP0218_spr.atlas",
+    "layout": {
+      "x": 320,
+      "y": 835,
+      "scale": 0.3,
+      "hitPolygon": [
+        {
+          "x": 0.14,
+          "y": 0.22
+        },
+        {
+          "x": 0.82,
+          "y": 0.22
+        },
+        {
+          "x": 0.9,
+          "y": 0.64
+        },
+        {
+          "x": 0.82,
+          "y": 1.0
+        },
+        {
+          "x": 0.08,
+          "y": 1.0
+        },
+        {
+          "x": 0.04,
+          "y": 0.62
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "02",
+      "emotions": {
+        "Neutral": "00",
+        "Happy": "03",
+        "Excited": "06",
+        "Surprised": "04",
+        "Sad": "07",
+        "Worried": "05",
+        "Angry": "05",
+        "Affectionate": "04",
+        "Shy": "04",
+        "Dizzy": "08"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "NP0218_spr.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/NP0218_spr.skel",
+      "gitBlobSha1": "12b6af12c5b682524fa96f9768445989341cee43"
+    },
+    {
+      "path": "NP0218_spr.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/NP0218_spr.atlas",
+      "gitBlobSha1": "a0ad32995b55ee8c52a363e1a1442e6845140b0f"
+    },
+    {
+      "path": "NP0218_spr.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/NP0218_spr.png",
+      "gitBlobSha1": "a3e76251091e6dcb521179ccddae119e889f99fa"
+    }
+  ]
+}

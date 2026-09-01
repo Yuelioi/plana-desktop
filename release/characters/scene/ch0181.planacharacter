@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 500,
+    "constraints": 61
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0181",
+    "name": "Hibiki (Cheerleader) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0181_home.skel",
+    "atlas": "CH0181_home.atlas",
+    "layout": {
+      "x": 320.0,
+      "y": 618.11,
+      "scale": 0.1733,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0181_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0181_home.skel",
+      "gitBlobSha1": "3fc47d4ca8eed669dcd069d55ec498b900bd96ba"
+    },
+    {
+      "path": "CH0181_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0181_home.atlas",
+      "gitBlobSha1": "f018a55cfd7261c9729d102eab54715a53e34485"
+    },
+    {
+      "path": "CH0181_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0181_home.png",
+      "gitBlobSha1": "146d25d49874fb3ef7647d43b8cc6db82326c1c9"
+    },
+    {
+      "path": "CH0181_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0181_home2.png",
+      "gitBlobSha1": "f42078c4e35198e1926e8fdad0b351c280d1dfa2"
+    }
+  ]
+}

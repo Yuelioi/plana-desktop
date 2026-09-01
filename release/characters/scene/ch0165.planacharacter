@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 227,
+    "constraints": 34
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0165",
+    "name": "Nodoka (Hot Spring) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0165_home.skel",
+    "atlas": "CH0165_home.atlas",
+    "layout": {
+      "x": 352.25,
+      "y": 577.28,
+      "scale": 0.1575,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0165_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0165_home.skel",
+      "gitBlobSha1": "1098ced7f499b7466fee3286172b4c8540577322"
+    },
+    {
+      "path": "CH0165_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0165_home.atlas",
+      "gitBlobSha1": "7d55fcc95f8bde8bbdd4a94b25aa542f85fe0bd5"
+    },
+    {
+      "path": "CH0165_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0165_home.png",
+      "gitBlobSha1": "4c1d733fa84f0f8a28bc722bb7befdf588177f72"
+    },
+    {
+      "path": "CH0165_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0165_home2.png",
+      "gitBlobSha1": "56b3b910884b465dc5baa039b297fe050644251d"
+    }
+  ]
+}

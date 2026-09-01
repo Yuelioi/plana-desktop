@@ -409,7 +409,12 @@ internal sealed class NativeCompanionWindow : ICompanionController
         try
         {
             var response = await AiChatService.SendAsync(_currentSettings, prompt, CancellationToken.None);
-            await (_renderer?.ExecuteScriptAsync($"window.plana.showAiResponse({JsonSerializer.Serialize(response)}, false)") ?? Task.CompletedTask);
+            if (response.Changed && _settingsPath is not null)
+            {
+                await new DesktopSettingsStore(_settingsPath).SaveAsync(_currentSettings);
+                RefreshUserActions(_currentSettings);
+            }
+            await (_renderer?.ExecuteScriptAsync($"window.plana.showAiResponse({JsonSerializer.Serialize(response.Message)}, false)") ?? Task.CompletedTask);
         }
         catch (Exception exception)
         {

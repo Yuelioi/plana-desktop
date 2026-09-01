@@ -22,6 +22,7 @@ public sealed class CharacterLayoutManifest
     public double Y { get; set; } = 835;
     public double Scale { get; set; } = 0.36;
     public List<CharacterPointManifest> HitPolygon { get; set; } = [];
+    public List<string> HiddenSlots { get; set; } = [];
 }
 
 public sealed class CharacterPointManifest
@@ -132,6 +133,7 @@ public sealed class CharacterPackLoader
         if (string.IsNullOrWhiteSpace(manifest.Skeleton) || string.IsNullOrWhiteSpace(manifest.Atlas)) throw new InvalidDataException("Character skeleton and atlas are required.");
         if (string.IsNullOrWhiteSpace(manifest.Performance.Idle)) throw new InvalidDataException("Character idle animation is required.");
         if (manifest.Layout.Scale is < 0.05 or > 5) throw new InvalidDataException("Character layout scale must be between 0.05 and 5.");
+        if (manifest.Layout.HiddenSlots.Any(slot => string.IsNullOrWhiteSpace(slot) || slot.Length > 128)) throw new InvalidDataException("Character hidden-slot names are invalid.");
         foreach (var key in manifest.Performance.Emotions.Keys)
             if (!Enum.TryParse<CharacterEmotion>(key, true, out _)) throw new InvalidDataException($"Unknown Character Emotion: {key}");
         foreach (var key in manifest.Performance.Gestures.Keys)
@@ -147,7 +149,9 @@ public sealed class CharacterPackLoader
         for (var index = 0; index + 1 < lines.Length; index++)
         {
             var name = lines[index].Trim();
-            if (name.Length == 0 || char.IsWhiteSpace(lines[index], 0) || !lines[index + 1].TrimStart().StartsWith("size:", StringComparison.OrdinalIgnoreCase)) continue;
+            if (name.Length == 0 || char.IsWhiteSpace(lines[index], 0) ||
+                index > 0 && !string.IsNullOrWhiteSpace(lines[index - 1]) ||
+                !lines[index + 1].TrimStart().StartsWith("size:", StringComparison.OrdinalIgnoreCase)) continue;
             var texture = ResolveContained(root, name);
             if (!File.Exists(texture)) throw new FileNotFoundException("Character atlas texture was not found.", texture);
             textures.Add(texture);

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "category": "static",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "limited",
+    "bones": 4,
+    "constraints": 0,
+    "idleBoneTimelines": 3
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.marina",
+    "name": "Marina",
+    "version": "1.0.0",
+    "skeleton": "marina_spr.skel",
+    "atlas": "marina_spr.atlas",
+    "layout": {
+      "x": 320,
+      "y": 835,
+      "scale": 0.3,
+      "hitPolygon": [
+        {
+          "x": 0.14,
+          "y": 0.22
+        },
+        {
+          "x": 0.82,
+          "y": 0.22
+        },
+        {
+          "x": 0.9,
+          "y": 0.64
+        },
+        {
+          "x": 0.82,
+          "y": 1.0
+        },
+        {
+          "x": 0.08,
+          "y": 1.0
+        },
+        {
+          "x": 0.04,
+          "y": 0.62
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "02",
+      "emotions": {
+        "Neutral": "00",
+        "Happy": "03",
+        "Excited": "06",
+        "Surprised": "04",
+        "Sad": "07",
+        "Worried": "05",
+        "Angry": "05",
+        "Affectionate": "04",
+        "Shy": "04",
+        "Dizzy": "08"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "marina_spr.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/marina_spr.skel",
+      "gitBlobSha1": "b4f80387b1fadb6f249e5e0dffe947d3d82da568"
+    },
+    {
+      "path": "marina_spr.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/marina_spr.atlas",
+      "gitBlobSha1": "901f8e13ae7f6398a866c060ab7f25ace0826d65"
+    },
+    {
+      "path": "marina_spr.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/marina_spr.png",
+      "gitBlobSha1": "fb5d8cbd74453805728fe1d21bb10524b147237e"
+    }
+  ]
+}

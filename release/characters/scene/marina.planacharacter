@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 255,
+    "constraints": 53
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.marina",
+    "name": "Marina (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Marina_home.skel",
+    "atlas": "Marina_home.atlas",
+    "layout": {
+      "x": 321.29,
+      "y": 617.72,
+      "scale": 0.173,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Marina_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Marina_home.skel",
+      "gitBlobSha1": "92ce84e294b405f11aea4623c36e4f5b15a902e7"
+    },
+    {
+      "path": "Marina_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Marina_home.atlas",
+      "gitBlobSha1": "0c6744abd02649cc5882787d8acc940c3df8fe70"
+    },
+    {
+      "path": "Marina_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Marina_home.png",
+      "gitBlobSha1": "c1fe5b7327913f985efbee8db55e0a489a355e3d"
+    },
+    {
+      "path": "Marina_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Marina_home2.png",
+      "gitBlobSha1": "2777d92f025d62c2aa6216bc4d85ef661d8ddbf5"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 449,
+    "constraints": 108
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0173",
+    "name": "Kurumi (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0173_home.skel",
+    "atlas": "CH0173_home.atlas",
+    "layout": {
+      "x": 316.84,
+      "y": 589.76,
+      "scale": 0.1514,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01",
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0173_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0173_home.skel",
+      "gitBlobSha1": "4809847bb891137a782bbf1d57e145f4f12ef81c"
+    },
+    {
+      "path": "CH0173_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0173_home.atlas",
+      "gitBlobSha1": "0c4f4249af6cff82b166214254fd36848f707832"
+    },
+    {
+      "path": "CH0173_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0173_home.png",
+      "gitBlobSha1": "86abdb5ce5d7cf8622fff60099be3f2ee93b8e14"
+    },
+    {
+      "path": "CH0173_home_2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0173_home_2.png",
+      "gitBlobSha1": "8a675f9bc6eda348ca100731bd9e8b0126ff46cd"
+    },
+    {
+      "path": "CH0173_home_3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0173_home_3.png",
+      "gitBlobSha1": "c51f803fc7185b243ff82c8a140413fee1f6ccb1"
+    }
+  ]
+}

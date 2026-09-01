@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 339,
+    "constraints": 111
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0259",
+    "name": "Saori (Dress) [Ponytail] (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0259_home.skel",
+    "atlas": "CH0259_home.atlas",
+    "layout": {
+      "x": 320.71,
+      "y": 616.63,
+      "scale": 0.1733,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0259_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0259_home.skel",
+      "gitBlobSha1": "183ce6ea2cda050c06addf5e4d2a76501fdc9400"
+    },
+    {
+      "path": "CH0259_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0259_home.atlas",
+      "gitBlobSha1": "41f503e2ca58bc3ff3ef12cd7a86718adc0c9d75"
+    },
+    {
+      "path": "CH0259_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0259_home.png",
+      "gitBlobSha1": "bf8a804e59ea2fc154bb74bc37055bdcef63c2fb"
+    },
+    {
+      "path": "CH0259_home_2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0259_home_2.png",
+      "gitBlobSha1": "89334084ab68f27e6f54a49f57fe5412ce238b66"
+    },
+    {
+      "path": "CH0259_home_3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0259_home_3.png",
+      "gitBlobSha1": "a0962fede2a1e1bf5f0853092b76e7e1e0c59d28"
+    }
+  ]
+}

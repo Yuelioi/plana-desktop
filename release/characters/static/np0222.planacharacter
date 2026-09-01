@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "category": "static",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "static",
+    "bones": 3,
+    "constraints": 0,
+    "idleBoneTimelines": 2
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.np0222",
+    "name": "Ichika (Dress)",
+    "version": "1.0.0",
+    "skeleton": "NP0222_spr.skel",
+    "atlas": "NP0222_spr.atlas",
+    "layout": {
+      "x": 320,
+      "y": 835,
+      "scale": 0.3,
+      "hitPolygon": [
+        {
+          "x": 0.14,
+          "y": 0.22
+        },
+        {
+          "x": 0.82,
+          "y": 0.22
+        },
+        {
+          "x": 0.9,
+          "y": 0.64
+        },
+        {
+          "x": 0.82,
+          "y": 1.0
+        },
+        {
+          "x": 0.08,
+          "y": 1.0
+        },
+        {
+          "x": 0.04,
+          "y": 0.62
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "02",
+      "emotions": {
+        "Neutral": "00",
+        "Happy": "03",
+        "Excited": "06",
+        "Surprised": "04",
+        "Sad": "07",
+        "Worried": "05",
+        "Angry": "05",
+        "Affectionate": "04",
+        "Shy": "04",
+        "Dizzy": "08"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "NP0222_spr.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/NP0222_spr.skel",
+      "gitBlobSha1": "53bcb10262d1b80d5a0a299710c818e26d629bea"
+    },
+    {
+      "path": "NP0222_spr.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/NP0222_spr.atlas",
+      "gitBlobSha1": "d22524d1b7ebb8d1838a159646b2315746e0610b"
+    },
+    {
+      "path": "NP0222_spr.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/NP0222_spr.png",
+      "gitBlobSha1": "d948516e949c4ef4ea0fc421a5c402b8e064e90b"
+    }
+  ]
+}

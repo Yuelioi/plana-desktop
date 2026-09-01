@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 254,
+    "constraints": 32
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.mutsuki",
+    "name": "Mutsuki (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Mutsuki_home.skel",
+    "atlas": "Mutsuki_home.atlas",
+    "layout": {
+      "x": 309.64,
+      "y": 593.18,
+      "scale": 0.1791,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Mutsuki_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Mutsuki_home.skel",
+      "gitBlobSha1": "94c8808ea9def74b721723ecd60b227b7edcc251"
+    },
+    {
+      "path": "Mutsuki_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Mutsuki_home.atlas",
+      "gitBlobSha1": "832d781eef8175812f9ca5aeb6669baa73f7ef66"
+    },
+    {
+      "path": "Mutsuki_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Mutsuki_home.png",
+      "gitBlobSha1": "dd4ab3972573c1f2fae1f1402c0dfe999ef2e4cf"
+    },
+    {
+      "path": "Mutsuki_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Mutsuki_home2.png",
+      "gitBlobSha1": "5e8b58cf7415ac76cd138130de272e0820516b0d"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "category": "static",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "limited",
+    "bones": 4,
+    "constraints": 0,
+    "idleBoneTimelines": 3
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.np0065",
+    "name": "Serika (Swimsuit/Robber)",
+    "version": "1.0.0",
+    "skeleton": "NP0065_spr.skel",
+    "atlas": "NP0065_spr.atlas",
+    "layout": {
+      "x": 320,
+      "y": 835,
+      "scale": 0.3,
+      "hitPolygon": [
+        {
+          "x": 0.14,
+          "y": 0.22
+        },
+        {
+          "x": 0.82,
+          "y": 0.22
+        },
+        {
+          "x": 0.9,
+          "y": 0.64
+        },
+        {
+          "x": 0.82,
+          "y": 1.0
+        },
+        {
+          "x": 0.08,
+          "y": 1.0
+        },
+        {
+          "x": 0.04,
+          "y": 0.62
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "02",
+      "emotions": {
+        "Neutral": "00",
+        "Happy": "03",
+        "Excited": "06",
+        "Surprised": "04",
+        "Sad": "07",
+        "Worried": "05",
+        "Angry": "05",
+        "Affectionate": "04",
+        "Shy": "04",
+        "Dizzy": "08"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "NP0065_spr.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/NP0065_spr.skel",
+      "gitBlobSha1": "50e7a38788607c2a78b9dd475382f475b6f04b0c"
+    },
+    {
+      "path": "NP0065_spr.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/NP0065_spr.atlas",
+      "gitBlobSha1": "79b4ec99e0a5a33f2aa96627230acc4c5b33d20b"
+    },
+    {
+      "path": "NP0065_spr.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/NP0065_spr.png",
+      "gitBlobSha1": "16d8715f478a2a7a7812320373c8c961df8ce42f"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.arona",
+    "name": "Arona",
+    "version": "1.0.0",
+    "skeleton": "arona_spr.skel",
+    "atlas": "arona_spr.atlas",
+    "layout": {
+      "x": 320, "y": 835, "scale": 0.36,
+      "hitPolygon": [
+        { "x": 0.20, "y": 0.28 }, { "x": 0.66, "y": 0.28 }, { "x": 0.74, "y": 0.58 },
+        { "x": 0.82, "y": 0.80 }, { "x": 1.00, "y": 0.86 }, { "x": 0.68, "y": 0.92 },
+        { "x": 0.62, "y": 1.00 }, { "x": 0.04, "y": 1.00 }, { "x": 0.00, "y": 0.78 },
+        { "x": 0.16, "y": 0.62 }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01", "speaking": "02",
+      "emotions": {
+        "Neutral": "00", "Happy": "12", "Excited": "25", "Surprised": "04", "Sad": "17",
+        "Worried": "19", "Angry": "05", "Affectionate": "11", "Shy": "16", "Dizzy": "07"
+      },
+      "gestures": { "Blink": "Eye_Close_01", "HeadPat": "Pat_01_M", "LookAtPointer": "Look_01_M" }
+    }
+  },
+  "assets": [
+    {
+      "path": "arona_spr.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/main/new/assets/arona_spr.skel",
+      "sha256": "321510D79A18A77671851DA56D2DCD9A5B40D6E764610C4934CCCD6493C322F6"
+    },
+    {
+      "path": "arona_spr.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/main/new/assets/arona_spr.atlas",
+      "sha256": "EFF9DEF7024F0B60B9D302CE622B5EABE431D6DF1FF3B839A7E62448A6392836"
+    },
+    {
+      "path": "arona_spr.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/main/new/assets/arona_spr.png",
+      "sha256": "11503444AF82F381FE8945B9D6296B3100A7AC0CC614AE83392F1C306BBF16B3"
+    }
+  ]
+}

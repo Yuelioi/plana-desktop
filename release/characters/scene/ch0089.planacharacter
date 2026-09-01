@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 519,
+    "constraints": 135
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0089",
+    "name": "Kasumi (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0089_home.skel",
+    "atlas": "CH0089_home.atlas",
+    "layout": {
+      "x": 318.06,
+      "y": 585.71,
+      "scale": 0.1249,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0089_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0089_home.skel",
+      "gitBlobSha1": "4d41c15a1254bebb6020c3506d774f95bc1cda7b"
+    },
+    {
+      "path": "CH0089_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0089_home.atlas",
+      "gitBlobSha1": "80335237e3c9c0252ac03e8db675b32b4d71f40e"
+    },
+    {
+      "path": "CH0089_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0089_home.png",
+      "gitBlobSha1": "fa258c7232b5da7641ed0ff57e748bce55e56205"
+    },
+    {
+      "path": "CH0089_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0089_home2.png",
+      "gitBlobSha1": "3167ea0eb1a5df7441e4490d84654838726d97f2"
+    },
+    {
+      "path": "CH0089_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0089_home3.png",
+      "gitBlobSha1": "d3d7528adf6e865e5e10210fe9f2c0d87ea6d4fc"
+    }
+  ]
+}

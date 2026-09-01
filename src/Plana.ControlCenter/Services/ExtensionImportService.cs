@@ -3,6 +3,7 @@ using Plana.Core.Plugins;
 using Plana.Core.Characters;
 using System.Security.Cryptography;
 using System.Text.Json;
+using System.Text;
 
 namespace Plana_ControlCenter.Services;
 
@@ -49,7 +50,7 @@ internal sealed class ExtensionImportService(string dataDirectory)
             var package = await JsonSerializer.DeserializeAsync<CharacterPackageDocument>(stream, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             if (package is null || package.SchemaVersion != 1 || package.Manifest.ValueKind != JsonValueKind.Object)
                 return ExtensionImportResult.Failure("The .planacharacter package is invalid.");
-            if (package.Assets.Count is 0 or > 8) return ExtensionImportResult.Failure("A Character Package must declare between 1 and 8 assets.");
+            if (package.Assets.Count is 0 or > 12) return ExtensionImportResult.Failure("A Character Package must declare between 1 and 12 assets.");
             await File.WriteAllTextAsync(Path.Combine(temporary, CharacterPackLoader.ManifestFileName), package.Manifest.GetRawText());
             foreach (var asset in package.Assets)
             {
@@ -61,9 +62,18 @@ internal sealed class ExtensionImportService(string dataDirectory)
                 response.EnsureSuccessStatusCode();
                 if (response.Content.Headers.ContentLength is > 25_000_000) return ExtensionImportResult.Failure($"Character asset is too large: {asset.Path}");
                 await using (var output = File.Create(target)) await response.Content.CopyToAsync(output);
-                await using var input = File.OpenRead(target);
-                var hash = Convert.ToHexString(await SHA256.HashDataAsync(input));
-                if (!hash.Equals(asset.Sha256, StringComparison.OrdinalIgnoreCase)) return ExtensionImportResult.Failure($"Character asset hash did not match: {asset.Path}");
+                if (!string.IsNullOrWhiteSpace(asset.Sha256))
+                {
+                    await using var input = File.OpenRead(target);
+                    var hash = Convert.ToHexString(await SHA256.HashDataAsync(input));
+                    if (!hash.Equals(asset.Sha256, StringComparison.OrdinalIgnoreCase)) return ExtensionImportResult.Failure($"Character asset hash did not match: {asset.Path}");
+                }
+                else if (!string.IsNullOrWhiteSpace(asset.GitBlobSha1))
+                {
+                    var hash = await ComputeGitBlobSha1Async(target);
+                    if (!hash.Equals(asset.GitBlobSha1, StringComparison.OrdinalIgnoreCase)) return ExtensionImportResult.Failure($"Character asset hash did not match: {asset.Path}");
+                }
+                else return ExtensionImportResult.Failure($"Character asset has no integrity hash: {asset.Path}");
             }
             return await ImportCharacterPackAsync(temporary);
         }
@@ -72,6 +82,16 @@ internal sealed class ExtensionImportService(string dataDirectory)
             return ExtensionImportResult.Failure(exception.Message);
         }
         finally { if (Directory.Exists(temporary)) Directory.Delete(temporary, true); }
+    }
+
+    private static async Task<string> ComputeGitBlobSha1Async(string path)
+    {
+        await using var input = File.OpenRead(path);
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA1);
+        hash.AppendData(Encoding.UTF8.GetBytes($"blob {input.Length}\0"));
+        var buffer = new byte[81920];
+        for (var read = await input.ReadAsync(buffer); read > 0; read = await input.ReadAsync(buffer)) hash.AppendData(buffer.AsSpan(0, read));
+        return Convert.ToHexString(hash.GetHashAndReset());
     }
 
     private static string ResolveContained(string root, string relative)
@@ -125,6 +145,7 @@ internal sealed class CharacterPackageAsset
     public string Path { get; set; } = string.Empty;
     public string Url { get; set; } = string.Empty;
     public string Sha256 { get; set; } = string.Empty;
+    public string GitBlobSha1 { get; set; } = string.Empty;
 }
 
 internal sealed record ExtensionImportResult(bool Succeeded, string Message)

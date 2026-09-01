@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 448,
+    "constraints": 91
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.moe",
+    "name": "Moe (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Moe_home.skel",
+    "atlas": "Moe_home.atlas",
+    "layout": {
+      "x": 477.57,
+      "y": 495.91,
+      "scale": 0.0793,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Moe_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Moe_home.skel",
+      "gitBlobSha1": "b986d38fbd8058ad73d6130273be13ac9de9b1a7"
+    },
+    {
+      "path": "Moe_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Moe_home.atlas",
+      "gitBlobSha1": "ee64835e556fecc35a871a3f55d13b8cc854d75a"
+    },
+    {
+      "path": "Moe_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Moe_home.png",
+      "gitBlobSha1": "3d194d514b28fe9fe0204ac7a6966ef18d0c762f"
+    },
+    {
+      "path": "Moe_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Moe_home2.png",
+      "gitBlobSha1": "a93bea3048526ea28443e2ce0df66022fbb29b86"
+    },
+    {
+      "path": "Moe_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Moe_home3.png",
+      "gitBlobSha1": "b317a28e118672257cf0c9554d61e6299173e0df"
+    },
+    {
+      "path": "Moe_home4.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Moe_home4.png",
+      "gitBlobSha1": "9e3578f1c19df1d59dd43cdc8cf050e34355e392"
+    }
+  ]
+}

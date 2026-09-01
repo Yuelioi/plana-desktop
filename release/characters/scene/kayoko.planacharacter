@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 262,
+    "constraints": 28
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.kayoko",
+    "name": "Kayoko (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Kayoko_home.skel",
+    "atlas": "Kayoko_home.atlas",
+    "layout": {
+      "x": 346.0,
+      "y": 764.65,
+      "scale": 0.1733,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Kayoko_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Kayoko_home.skel",
+      "gitBlobSha1": "2f427045ad79ee543be3eaba8306382d29b70819"
+    },
+    {
+      "path": "Kayoko_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Kayoko_home.atlas",
+      "gitBlobSha1": "56959a87d1637567d7aa96c7f48e177e4c982fa0"
+    },
+    {
+      "path": "Kayoko_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Kayoko_home.png",
+      "gitBlobSha1": "1f065d58d565428a131aa120b1fe7fd7f1756ab4"
+    },
+    {
+      "path": "Kayoko_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Kayoko_home2.png",
+      "gitBlobSha1": "c257a2ca7fcf8afdd6cc59be485d7ed6031c5aca"
+    }
+  ]
+}

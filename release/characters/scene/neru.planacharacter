@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 269,
+    "constraints": 35
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.neru",
+    "name": "Neru (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Neru_home.skel",
+    "atlas": "Neru_home.atlas",
+    "layout": {
+      "x": 318.11,
+      "y": 572.19,
+      "scale": 0.1881,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Neru_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Neru_home.skel",
+      "gitBlobSha1": "75d8a3e9f7139f56942701529ce6bdbef7af8c2e"
+    },
+    {
+      "path": "Neru_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Neru_home.atlas",
+      "gitBlobSha1": "df8dc41389829515c0ce4cccb9b9304e3a983d96"
+    },
+    {
+      "path": "Neru_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Neru_home.png",
+      "gitBlobSha1": "31a10f9daf375247634310f9ea97703c2ca987d4"
+    },
+    {
+      "path": "Neru_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Neru_home2.png",
+      "gitBlobSha1": "84957139c53649f9fe79bbbfdbf87725f300ae36"
+    },
+    {
+      "path": "Neru_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Neru_home3.png",
+      "gitBlobSha1": "6c3645951c2d524cd993bd80fbc156685b9e4ef2"
+    }
+  ]
+}

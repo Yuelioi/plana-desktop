@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 226,
+    "constraints": 50
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.miyako",
+    "name": "Miyako (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Miyako_home.skel",
+    "atlas": "Miyako_home.atlas",
+    "layout": {
+      "x": 257.23,
+      "y": 520.29,
+      "scale": 0.0434,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Miyako_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Miyako_home.skel",
+      "gitBlobSha1": "a5c86179e23152debd084d6ffe0b6a28341b6566"
+    },
+    {
+      "path": "Miyako_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Miyako_home.atlas",
+      "gitBlobSha1": "95979575208e91eefe4ef846750d2f6365a6e2ac"
+    },
+    {
+      "path": "Miyako_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Miyako_home.png",
+      "gitBlobSha1": "bf9066b55657a8da7241714814f06d4e13818c9a"
+    },
+    {
+      "path": "Miyako_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Miyako_home2.png",
+      "gitBlobSha1": "b646815383c684a0f7c7e39520e915c20e0f84cb"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 445,
+    "constraints": 107
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0194",
+    "name": "Serina (Christmas) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0194_home.skel",
+    "atlas": "CH0194_home.atlas",
+    "layout": {
+      "x": 176.59,
+      "y": 542.2,
+      "scale": 0.0848,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0194_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0194_home.skel",
+      "gitBlobSha1": "7e743ff19a4ab92467f4151f6041906fbb18869b"
+    },
+    {
+      "path": "CH0194_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0194_home.atlas",
+      "gitBlobSha1": "b1f7333323fd35ea753a981a897e579f4ca219c0"
+    },
+    {
+      "path": "CH0194_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0194_home.png",
+      "gitBlobSha1": "3184df418e03de44491f5d2c033c9ee061e79c5d"
+    },
+    {
+      "path": "CH0194_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0194_home2.png",
+      "gitBlobSha1": "70e5ec57812fb5aa6df51a985d58b6e3ebdfca37"
+    }
+  ]
+}

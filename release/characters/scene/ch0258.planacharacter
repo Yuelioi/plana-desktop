@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 381,
+    "constraints": 102
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0258",
+    "name": "Hoshino (Armed) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0258_home.skel",
+    "atlas": "CH0258_home.atlas",
+    "layout": {
+      "x": 329.44,
+      "y": 581.11,
+      "scale": 0.1378,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0258_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0258_home.skel",
+      "gitBlobSha1": "867312fd862d51c768cfc453cb0eb92ca1058146"
+    },
+    {
+      "path": "CH0258_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0258_home.atlas",
+      "gitBlobSha1": "b64ace2969f992681d2f9836c7bfeae3924a83fe"
+    },
+    {
+      "path": "CH0258_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0258_home.png",
+      "gitBlobSha1": "acd117c7cef255a7d2859a6a8bde9c42dc5a39cf"
+    },
+    {
+      "path": "CH0258_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0258_home2.png",
+      "gitBlobSha1": "bab59fe515981f870e005c06196af319f2117c61"
+    },
+    {
+      "path": "CH0258_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0258_home3.png",
+      "gitBlobSha1": "8c4b70a27b9f18e05249ca2ce63bbfac99099f94"
+    }
+  ]
+}

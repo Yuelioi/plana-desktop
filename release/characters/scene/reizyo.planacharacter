@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 433,
+    "constraints": 87
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.reizyo",
+    "name": "Reizyo (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "reizyo_home.skel",
+    "atlas": "reizyo_home.atlas",
+    "layout": {
+      "x": 320.0,
+      "y": 616.14,
+      "scale": 0.1727,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "reizyo_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/reizyo_home.skel",
+      "gitBlobSha1": "b2151e8e0dccc1d2620529a0537a6b1e714bdf7f"
+    },
+    {
+      "path": "reizyo_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/reizyo_home.atlas",
+      "gitBlobSha1": "e8bc09bd9f10233e27d7398c734e8eded553fa79"
+    },
+    {
+      "path": "reizyo_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/reizyo_home.png",
+      "gitBlobSha1": "64163c92472c8846184fa4d2edfdcad1b06237fd"
+    },
+    {
+      "path": "reizyo_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/reizyo_home2.png",
+      "gitBlobSha1": "1e73b5a4836ba6d409224fd71f2e36a931a7478d"
+    }
+  ]
+}

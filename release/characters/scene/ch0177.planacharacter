@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 546,
+    "constraints": 85
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0177",
+    "name": "Fuuka (New Year) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0177_home.skel",
+    "atlas": "CH0177_home.atlas",
+    "layout": {
+      "x": 379.37,
+      "y": 510.71,
+      "scale": 0.063,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0177_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0177_home.skel",
+      "gitBlobSha1": "039df1b0b4e6275a0bed009d6ee6546d27a09ec8"
+    },
+    {
+      "path": "CH0177_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0177_home.atlas",
+      "gitBlobSha1": "55ddbf7c2d4b47fcf30e137206bddbb59d4bf137"
+    },
+    {
+      "path": "CH0177_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0177_home.png",
+      "gitBlobSha1": "1289c9e7840e470c5d41e2313eae15955956f299"
+    },
+    {
+      "path": "CH0177_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0177_home2.png",
+      "gitBlobSha1": "eb5f4a0e7dc56128f74fcee7e3e06a0f5a3de5e8"
+    }
+  ]
+}

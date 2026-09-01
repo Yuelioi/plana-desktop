@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 588,
+    "constraints": 130
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0191",
+    "name": "Haruna (New Year) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0191_home.skel",
+    "atlas": "CH0191_home.atlas",
+    "layout": {
+      "x": 330.62,
+      "y": 577.66,
+      "scale": 0.162,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0191_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0191_home.skel",
+      "gitBlobSha1": "aeea3b8a8b53e30a982e0ece9af590883a65db49"
+    },
+    {
+      "path": "CH0191_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0191_home.atlas",
+      "gitBlobSha1": "416064958a3a0ac98a85c62d9b902545b0d92c1e"
+    },
+    {
+      "path": "CH0191_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0191_home.png",
+      "gitBlobSha1": "5524bd581696e3ff53f6e12e413e57dd6cb636dd"
+    },
+    {
+      "path": "CH0191_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0191_home2.png",
+      "gitBlobSha1": "3ee40a2d1be76f4534c68c1228417789f65bc25a"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "category": "static",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "limited",
+    "bones": 5,
+    "constraints": 0,
+    "idleBoneTimelines": 3
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.np0221",
+    "name": "Utaha (Idol)",
+    "version": "1.0.0",
+    "skeleton": "NP0221_spr.skel",
+    "atlas": "NP0221_spr.atlas",
+    "layout": {
+      "x": 320,
+      "y": 835,
+      "scale": 0.3,
+      "hitPolygon": [
+        {
+          "x": 0.14,
+          "y": 0.22
+        },
+        {
+          "x": 0.82,
+          "y": 0.22
+        },
+        {
+          "x": 0.9,
+          "y": 0.64
+        },
+        {
+          "x": 0.82,
+          "y": 1.0
+        },
+        {
+          "x": 0.08,
+          "y": 1.0
+        },
+        {
+          "x": 0.04,
+          "y": 0.62
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "02",
+      "emotions": {
+        "Neutral": "00",
+        "Happy": "03",
+        "Excited": "06",
+        "Surprised": "04",
+        "Sad": "07",
+        "Worried": "05",
+        "Angry": "05",
+        "Affectionate": "04",
+        "Shy": "04",
+        "Dizzy": "08"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "NP0221_spr.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/NP0221_spr.skel",
+      "gitBlobSha1": "b0d5c0a6e14683325b08a8db3ea8a37dcfe615ea"
+    },
+    {
+      "path": "NP0221_spr.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/NP0221_spr.atlas",
+      "gitBlobSha1": "852bf6f66438fdd681cdf7feb5ed9fec3084f278"
+    },
+    {
+      "path": "NP0221_spr.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/NP0221_spr.png",
+      "gitBlobSha1": "1364b2e705c3579c334e3cf72026a7ba4cafedf5"
+    }
+  ]
+}

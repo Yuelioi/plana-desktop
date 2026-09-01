@@ -66,7 +66,9 @@ Invalid or missing selections fall back to the bundled Plana Character Pack. Imp
 
 Plana itself is bundled with the main application and must not be downloaded separately. Releases may attach a `.planacharacter` bootstrap package containing the manifest plus HTTPS source URLs and required SHA-256 hashes. Users download that small file, choose **Import Character Pack**, and Plana downloads, verifies, validates, and installs the assets. Folder import remains available for local authoring.
 
-Bootstrap packages allow at most eight HTTPS assets, require every declared hash to match, cap each response at 25 MB when the server reports its size, contain every target path inside the temporary package directory, and still pass the ordinary Character Pack validator before installation.
+The Control Center also ships a searchable **Get more characters** catalog. Selecting an entry downloads the same verified bootstrap assets and installs the Character Pack without requiring users to find a release file manually. The catalog has three explicit resource classes: **Character only** for transparent full-motion standing models (bundled Plana and downloadable Arona), **Animated scenes** for 273 Memorial Lobby `_home` models with their original backgrounds, and **Static illustrations** for 658 transparent story `_spr` models. Installed entries remain visible with an Installed label and immediately appear in the searchable Character picker.
+
+Bootstrap packages allow at most eight HTTPS assets, require every declared SHA-256 or pinned Git blob SHA-1 to match, cap each response at 25 MB when the server reports its size, contain every target path inside the temporary package directory, and still pass the ordinary Character Pack validator before installation.
 
 ## Safety and rights
 

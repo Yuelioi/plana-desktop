@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 332,
+    "constraints": 83
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0109",
+    "name": "Niya (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0109_home.skel",
+    "atlas": "CH0109_home.atlas",
+    "layout": {
+      "x": 320.1,
+      "y": 617.41,
+      "scale": 0.1734,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0109_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0109_home.skel",
+      "gitBlobSha1": "70f831e0e91621bfb0e505f16571ffae7b8ab153"
+    },
+    {
+      "path": "CH0109_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0109_home.atlas",
+      "gitBlobSha1": "1731b9e472144405d7a539df5728e5092ee55cdb"
+    },
+    {
+      "path": "CH0109_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0109_home.png",
+      "gitBlobSha1": "77085408075612e36d920f2ebe6e20b78a7101f4"
+    },
+    {
+      "path": "CH0109_home_2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0109_home_2.png",
+      "gitBlobSha1": "8d947df8c3880b074799b7da817739c277e21c02"
+    }
+  ]
+}

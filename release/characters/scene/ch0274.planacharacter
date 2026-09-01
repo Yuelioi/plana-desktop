@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 565,
+    "constraints": 122
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0274",
+    "name": "Sakurako (Idol) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0274_home.skel",
+    "atlas": "CH0274_home.atlas",
+    "layout": {
+      "x": 320.0,
+      "y": 616.57,
+      "scale": 0.1727,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0274_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0274_home.skel",
+      "gitBlobSha1": "554c9b4fb3bb47152df041e43093efbc5f66161c"
+    },
+    {
+      "path": "CH0274_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0274_home.atlas",
+      "gitBlobSha1": "fc1154ace9df65b2caa8d544da90e73c4c9f3a62"
+    },
+    {
+      "path": "CH0274_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0274_home.png",
+      "gitBlobSha1": "af6fd225e31d9ac0e828fcaeaba4ae5874cbdee7"
+    },
+    {
+      "path": "CH0274_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0274_home2.png",
+      "gitBlobSha1": "8eedd89402cd5facb868ec53c0506360370f02ca"
+    },
+    {
+      "path": "CH0274_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0274_home3.png",
+      "gitBlobSha1": "45e9d3378442163fddfdd61cd7aa2d096e784a65"
+    }
+  ]
+}

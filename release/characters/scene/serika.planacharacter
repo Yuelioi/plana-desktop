@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 298,
+    "constraints": 44
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.serika",
+    "name": "Serika (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Serika_home.skel",
+    "atlas": "Serika_home.atlas",
+    "layout": {
+      "x": 338.57,
+      "y": 520.98,
+      "scale": 0.1206,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Serika_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Serika_home.skel",
+      "gitBlobSha1": "7ce2da8f841de83c9e5db429bfe4e62ab40854a4"
+    },
+    {
+      "path": "Serika_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Serika_home.atlas",
+      "gitBlobSha1": "72c198ec3d662819ff13fe726a7a16f14c4c25b4"
+    },
+    {
+      "path": "Serika_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Serika_home.png",
+      "gitBlobSha1": "99e54ad48e91e450ed13409dcdd0ab1260841320"
+    },
+    {
+      "path": "Serika_home_2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Serika_home_2.png",
+      "gitBlobSha1": "d297fef7c33e4a222ef73adba2cc7b93ff8da87d"
+    },
+    {
+      "path": "Serika_home_3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Serika_home_3.png",
+      "gitBlobSha1": "ea46f5348731c8782c43971e12be8c25a725d5d3"
+    }
+  ]
+}

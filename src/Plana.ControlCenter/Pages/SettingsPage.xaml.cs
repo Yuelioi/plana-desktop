@@ -8,6 +8,7 @@ using Plana.Core.Actions;
 using Plana.Core.Characters;
 using Plana_ControlCenter.Services;
 using Windows.Storage.Pickers;
+using System.Text.Json;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -17,6 +18,7 @@ namespace Plana_ControlCenter.Pages;
 public sealed partial class SettingsPage : Page
 {
     private bool _loading = true;
+    private CharacterOption[] _characterOptions = [];
     private readonly string _charactersDirectory = Path.Combine(App.DataDirectory, "characters");
     private readonly ExtensionImportService _importService = new(App.DataDirectory);
 
@@ -47,7 +49,8 @@ public sealed partial class SettingsPage : Page
     {
         var bundled = Path.Combine(AppContext.BaseDirectory, "CharacterPacks");
         var catalog = await new CharacterPackLoader().LoadCatalogAsync(bundled, _charactersDirectory);
-        var options = catalog.ValidPacks
+        _characterOptions = catalog.ValidPacks
+            .Where(pack => pack.Manifest.Id is CharacterPackLoader.BundledPlanaId or "community.arona")
             .Select(pack => new CharacterOption(
                 pack.Manifest.Id,
                 pack.Manifest.Name,
@@ -57,10 +60,10 @@ public sealed partial class SettingsPage : Page
             .OrderByDescending(option => option.Id == CharacterPackLoader.BundledPlanaId)
             .ThenBy(option => option.Name, StringComparer.CurrentCultureIgnoreCase)
             .ToArray();
-        CharacterPicker.ItemsSource = options;
-        CharacterPicker.SelectedValue = options.Any(option => option.Id.Equals(App.Settings.SelectedCharacterPackId, StringComparison.OrdinalIgnoreCase))
+        CharacterPicker.ItemsSource = _characterOptions;
+        CharacterPicker.SelectedValue = _characterOptions.Any(option => option.Id.Equals(App.Settings.SelectedCharacterPackId, StringComparison.OrdinalIgnoreCase))
             ? App.Settings.SelectedCharacterPackId
-            : CharacterPackLoader.BundledPlanaId;
+            : null;
         var errors = catalog.Discoveries.Where(item => !item.IsValid).Select(item => item.Error).Where(error => !string.IsNullOrWhiteSpace(error)).ToArray();
         if (errors.Length > 0)
         {
@@ -73,7 +76,7 @@ public sealed partial class SettingsPage : Page
 
     private async void CharacterPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (_loading || CharacterPicker.SelectedValue is not string id) return;
+        if (_loading || CharacterPicker.SelectedValue is not string id || App.Settings.SelectedCharacterPackId.Equals(id, StringComparison.OrdinalIgnoreCase)) return;
         App.Settings.SelectedCharacterPackId = id;
         await SaveWithStatusAsync();
     }
@@ -83,6 +86,104 @@ public sealed partial class SettingsPage : Page
         var path = await PickCharacterPackageAsync();
         if (path is null) return;
         await ShowCharacterImportResultAsync(await _importService.ImportCharacterPackageAsync(path));
+    }
+
+    private async void MoreCharactersButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        var directory = Path.Combine(AppContext.BaseDirectory, "CharacterPackages");
+        if (!Directory.Exists(directory)) directory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "CharacterPackages"));
+        var packages = Directory.Exists(directory)
+            ? Directory.EnumerateFiles(directory, "*.planacharacter", SearchOption.AllDirectories)
+                .Select(ReadCatalogCharacter)
+                .Where(item => item is not null)
+                .Cast<CatalogCharacter>()
+                .OrderBy(item => item.Name, StringComparer.CurrentCultureIgnoreCase)
+                .ToArray()
+            : [];
+        if (packages.Length == 0)
+        {
+            CharacterStatus.Severity = InfoBarSeverity.Warning;
+            CharacterStatus.Title = App.IsChinese ? "没有可用角色" : "No characters available";
+            CharacterStatus.Message = App.IsChinese ? "当前安装包没有附带角色目录。" : "This installation does not include the character catalog.";
+            CharacterStatus.IsOpen = true;
+            return;
+        }
+
+        var search = new TextBox { PlaceholderText = App.IsChinese ? "搜索角色" : "Search characters" };
+        var categories = new[]
+        {
+            new CatalogCategoryOption("pure", App.IsChinese ? "纯人物模型" : "Character only"),
+            new CatalogCategoryOption("scene", App.IsChinese ? "有背景的动态场景" : "Animated scenes"),
+            new CatalogCategoryOption("static", App.IsChinese ? "静态人物立绘" : "Static illustrations"),
+        };
+        var category = new ComboBox { ItemsSource = categories, DisplayMemberPath = nameof(CatalogCategoryOption.Name), SelectedValuePath = nameof(CatalogCategoryOption.Id), SelectedIndex = 1, HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch };
+        var count = new TextBlock { Opacity = 0.72 };
+        var list = new ListView { DisplayMemberPath = nameof(CatalogCharacter.DisplayName), SelectionMode = ListViewSelectionMode.Single, Height = 350 };
+        var content = new StackPanel { Spacing = 10, MinWidth = 420 };
+        content.Children.Add(search);
+        content.Children.Add(category);
+        content.Children.Add(count);
+        content.Children.Add(list);
+        var dialog = new ContentDialog
+        {
+            Title = App.IsChinese ? "更多角色" : "More characters",
+            Content = content,
+            PrimaryButtonText = App.IsChinese ? "下载并安装" : "Download and install",
+            CloseButtonText = App.IsChinese ? "取消" : "Cancel",
+            DefaultButton = ContentDialogButton.Primary,
+            XamlRoot = XamlRoot,
+        };
+        void ApplyCatalogFilter()
+        {
+            var query = search.Text.Trim();
+            var selectedCategory = category.SelectedValue as string ?? "scene";
+            var filtered = packages.Where(item => item.Category == selectedCategory &&
+                (query.Length == 0 || item.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase) || item.Id.Contains(query, StringComparison.OrdinalIgnoreCase))).ToArray();
+            list.ItemsSource = filtered;
+            count.Text = App.IsChinese ? $"{filtered.Length} 个可安装角色" : $"{filtered.Length} characters available";
+        }
+        search.TextChanged += (_, _) => ApplyCatalogFilter();
+        category.SelectionChanged += (_, _) => ApplyCatalogFilter();
+        ApplyCatalogFilter();
+        list.SelectionChanged += (_, _) =>
+        {
+            dialog.IsPrimaryButtonEnabled = list.SelectedItem is CatalogCharacter;
+            dialog.PrimaryButtonText = list.SelectedItem is CatalogCharacter { Installed: true }
+                ? (App.IsChinese ? "使用角色" : "Use character")
+                : (App.IsChinese ? "下载并使用" : "Download and use");
+        };
+        dialog.IsPrimaryButtonEnabled = false;
+        if (await dialog.ShowAsync() != ContentDialogResult.Primary || list.SelectedItem is not CatalogCharacter selected) return;
+        MoreCharactersButton.IsEnabled = false;
+        try
+        {
+            if (!selected.Installed)
+            {
+                var result = await _importService.ImportCharacterPackageAsync(selected.PackagePath);
+                await ShowCharacterImportResultAsync(result);
+                if (!result.Succeeded) return;
+            }
+            App.Settings.SelectedCharacterPackId = selected.Id;
+            await SaveWithStatusAsync();
+            await LoadCharactersAsync();
+        }
+        finally { MoreCharactersButton.IsEnabled = true; }
+    }
+
+    private static CatalogCharacter? ReadCatalogCharacter(string packagePath)
+    {
+        try
+        {
+            using var document = JsonDocument.Parse(File.ReadAllText(packagePath));
+            var manifest = document.RootElement.GetProperty("manifest");
+            var id = manifest.GetProperty("id").GetString()!;
+            var category = document.RootElement.TryGetProperty("category", out var categoryElement)
+                ? categoryElement.GetString() ?? "static"
+                : Path.GetFileName(Path.GetDirectoryName(packagePath)) ?? "static";
+            return new CatalogCharacter(id, manifest.GetProperty("name").GetString()!, packagePath, category,
+                Directory.Exists(Path.Combine(App.DataDirectory, "characters", id)));
+        }
+        catch (Exception exception) when (exception is IOException or JsonException or InvalidOperationException) { return null; }
     }
 
     private async void ImportCharacterFolderButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -217,7 +318,9 @@ public sealed partial class SettingsPage : Page
         ScaleTitle.Text = "桌宠缩放";
         CharacterHeading.Text = "角色";
         CharacterTitle.Text = "桌宠角色";
+        CharacterPicker.PlaceholderText = "搜索角色";
         ImportCharacterLabel.Text = "导入角色包";
+        MoreCharactersLabel.Text = "更多角色";
         ImportCharacterFolderLabel.Text = "导入文件夹";
         OpenCharactersLabel.Text = "打开角色文件夹";
         LanguageHeading.Text = "语言";
@@ -269,6 +372,13 @@ public sealed partial class SettingsPage : Page
         }
     }
 }
+
+internal sealed record CatalogCharacter(string Id, string Name, string PackagePath, string Category, bool Installed)
+{
+    public string DisplayName => Installed ? $"{Name} · {(App.IsChinese ? "已安装" : "Installed")}" : Name;
+}
+
+internal sealed record CatalogCategoryOption(string Id, string Name);
 
 public sealed record InteractionActionOption(string Id, string Name);
 public sealed record CharacterOption(string Id, string Name, string Detail)

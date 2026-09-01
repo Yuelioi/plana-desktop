@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 352,
+    "constraints": 60
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.shigure",
+    "name": "Shigure (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Shigure_home.skel",
+    "atlas": "Shigure_home.atlas",
+    "layout": {
+      "x": 210.7,
+      "y": 532.76,
+      "scale": 0.0914,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Shigure_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Shigure_home.skel",
+      "gitBlobSha1": "2fe2fd41508b79de870885908463e6520668b7ca"
+    },
+    {
+      "path": "Shigure_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Shigure_home.atlas",
+      "gitBlobSha1": "1a4b003a5b59ba6234949787a79a33748e9c4b45"
+    },
+    {
+      "path": "Shigure_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Shigure_home.png",
+      "gitBlobSha1": "6017e526c213953c9791ee6e15e5aa58a17f5cef"
+    },
+    {
+      "path": "Shigure_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Shigure_home2.png",
+      "gitBlobSha1": "2394f091f845197de6457e3cfefe1a0765b77d12"
+    }
+  ]
+}

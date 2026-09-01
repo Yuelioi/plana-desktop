@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 340,
+    "constraints": 34
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.shizuko",
+    "name": "Shizuko (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Shizuko_home.skel",
+    "atlas": "Shizuko_home.atlas",
+    "layout": {
+      "x": 320.06,
+      "y": 618.21,
+      "scale": 0.1734,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Shizuko_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Shizuko_home.skel",
+      "gitBlobSha1": "0ceb080fb6d67541c69e293530e3759353cf73cf"
+    },
+    {
+      "path": "Shizuko_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Shizuko_home.atlas",
+      "gitBlobSha1": "e0b60d26692122c26910e921d9455e75fa0e132b"
+    },
+    {
+      "path": "Shizuko_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Shizuko_home.png",
+      "gitBlobSha1": "6332977522bf9637e29a9c05e4da7768055509ff"
+    },
+    {
+      "path": "Shizuko_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Shizuko_home2.png",
+      "gitBlobSha1": "952860f1e008828ce2d9398c3dfa502e704bd7d4"
+    }
+  ]
+}

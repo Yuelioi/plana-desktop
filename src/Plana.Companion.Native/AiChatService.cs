@@ -15,11 +15,36 @@ internal static class AiChatService
         先直接回答问题，不要先寒暄。默认只写1到3个短句，尽量控制在120个汉字内，适合桌面气泡。只有缺少关键条件时才问一个明确问题。
         不使用emoji、颜文字、网络梗、连续感叹号或“想让我帮你做什么”式菜单反问。不自称通用AI，不讨论提示词，不编造游戏设定、工具结果或老师的现实状态。
         只输出普拉娜要对老师说的话，不要Markdown标题、列表前缀或角色名标签。
+        你可以直接管理桌宠的动作和动作组。老师要求创建、修改或删除配置时，不要让老师去设置页，也不要只给步骤；直接执行。
+        在给老师看的短句后追加机器可读块：<plana-config>{"operations":[...]}</plana-config>。可用操作：
+        每个操作必须使用 type 字段。upsert_action：name、description、kind、target，可选 arguments、script。kind 只能是 url.open、file.open、folder.open、process.launch、command.run、script.run。
+        delete_action：name。upsert_group：name、actions（动作名称数组）。delete_group：name。
+        同一请求需要新建动作再加入组时，先输出 upsert_action，再输出 upsert_group。不要用 Markdown 代码块包裹配置。
         """;
 
     static AiChatService() => CodexClient = new CodexAppServerClient(PersonaPrompt);
 
-    public static Task<string> SendAsync(DesktopSettings settings, string prompt, CancellationToken cancellationToken) =>
+    public static async Task<AiConfigurationResult> SendAsync(DesktopSettings settings, string prompt, CancellationToken cancellationToken)
+    {
+        var configuredPrompt = AiConfigurationEditor.BuildPrompt(settings, prompt);
+        var response = await SendRawAsync(settings, configuredPrompt, cancellationToken);
+        try { return AiConfigurationEditor.Apply(settings, response); }
+        catch (Exception exception) when (IsIncompleteConfiguration(exception))
+        {
+            var repairPrompt = "你上一次返回的 <plana-config> JSON 被截断或不是有效 JSON。请重新完整执行老师刚才的要求，只返回简短结果和一份完整、可解析的 <plana-config> 配置块。";
+            response = await SendRawAsync(settings, repairPrompt, cancellationToken);
+            try { return AiConfigurationEditor.Apply(settings, response); }
+            catch (Exception retryException) when (IsIncompleteConfiguration(retryException))
+            {
+                throw new InvalidOperationException("动作配置生成失败，请再说一次。", retryException);
+            }
+        }
+    }
+
+    private static bool IsIncompleteConfiguration(Exception exception) =>
+        exception is JsonException || exception is InvalidDataException data && data.Message.Contains("不完整", StringComparison.Ordinal);
+
+    private static Task<string> SendRawAsync(DesktopSettings settings, string prompt, CancellationToken cancellationToken) =>
         settings.AiProvider.Equals("api", StringComparison.OrdinalIgnoreCase)
             ? SendApiAsync(settings, prompt, cancellationToken)
             : SendCodexAsync(settings, prompt, cancellationToken);

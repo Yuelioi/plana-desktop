@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 448,
+    "constraints": 76
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0215",
+    "name": "Miyako (Swimsuit) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0215_home.skel",
+    "atlas": "CH0215_home.atlas",
+    "layout": {
+      "x": 320.0,
+      "y": 489.98,
+      "scale": 0.1727,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0215_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0215_home.skel",
+      "gitBlobSha1": "b49daf0320134f98bb7c99eafdcefc8dbdca7156"
+    },
+    {
+      "path": "CH0215_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0215_home.atlas",
+      "gitBlobSha1": "5e2ae81fd9b7f056fb24fec2aa5875bb67590680"
+    },
+    {
+      "path": "CH0215_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0215_home.png",
+      "gitBlobSha1": "39686e9c5692a4b52d842683e541c6fbc6ec41c1"
+    },
+    {
+      "path": "CH0215_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0215_home2.png",
+      "gitBlobSha1": "f1acbd87d95f5e867ac30f4a5f3c01d71065c1f3"
+    },
+    {
+      "path": "CH0215_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0215_home3.png",
+      "gitBlobSha1": "5ef4674a12640fd314eb6aad171ed08d7a4c516b"
+    }
+  ]
+}

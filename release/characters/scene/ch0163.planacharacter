@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 305,
+    "constraints": 46
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0163",
+    "name": "Chinatsu (Hot Spring) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0163_home.skel",
+    "atlas": "CH0163_home.atlas",
+    "layout": {
+      "x": 328.73,
+      "y": 595.92,
+      "scale": 0.1597,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0163_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0163_home.skel",
+      "gitBlobSha1": "fee995ddc65140b7dd39ee90cf0b4054e43bfc04"
+    },
+    {
+      "path": "CH0163_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0163_home.atlas",
+      "gitBlobSha1": "c6f08479cde2748e5e3043b6971be8b557e16486"
+    },
+    {
+      "path": "CH0163_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0163_home.png",
+      "gitBlobSha1": "47ede3e420ab9a19e05dffb7fe4ef5f7deaa95bc"
+    },
+    {
+      "path": "CH0163_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0163_home2.png",
+      "gitBlobSha1": "60442e1f04aa7028d4391ef8e3a2a02c78a1612e"
+    }
+  ]
+}

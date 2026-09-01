@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 365,
+    "constraints": 127
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0247",
+    "name": "Haruka (Dress) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0247_home.skel",
+    "atlas": "CH0247_home.atlas",
+    "layout": {
+      "x": 305.83,
+      "y": 565.73,
+      "scale": 0.1536,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01",
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0247_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0247_home.skel",
+      "gitBlobSha1": "1d6dc752e04383b4da4d279744a0202b6f72c7de"
+    },
+    {
+      "path": "CH0247_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0247_home.atlas",
+      "gitBlobSha1": "3d44e386ca4ee2d15a2734e487e2194f072f7fa8"
+    },
+    {
+      "path": "CH0247_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0247_home.png",
+      "gitBlobSha1": "c8508de4e3bce3aa82300f8ac8afc35f4ace36d5"
+    },
+    {
+      "path": "CH0247_home_2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0247_home_2.png",
+      "gitBlobSha1": "1a8929ca646e3749d84591003117b08ad2fa0b17"
+    },
+    {
+      "path": "CH0247_home_3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0247_home_3.png",
+      "gitBlobSha1": "b3c57b20a13a25f1e06f638ab1d52d40bd32e1d9"
+    }
+  ]
+}

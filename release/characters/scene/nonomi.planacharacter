@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 166,
+    "constraints": 30
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.nonomi",
+    "name": "Nonomi (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Nonomi_home.skel",
+    "atlas": "Nonomi_home.atlas",
+    "layout": {
+      "x": 320.0,
+      "y": 632.37,
+      "scale": 0.1898,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Nonomi_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Nonomi_home.skel",
+      "gitBlobSha1": "76fa25b36218a8926ac69be5f63069b0847275ec"
+    },
+    {
+      "path": "Nonomi_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Nonomi_home.atlas",
+      "gitBlobSha1": "d1916940e4db8c216c9c0f2712e62922b50f4a20"
+    },
+    {
+      "path": "Nonomi_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Nonomi_home.png",
+      "gitBlobSha1": "c889938134e047b044e98cd32d6aac9cfaa20ae8"
+    },
+    {
+      "path": "Nonomi_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Nonomi_home2.png",
+      "gitBlobSha1": "a9a97af5fc391c600af16847b05dc4b90634498e"
+    }
+  ]
+}

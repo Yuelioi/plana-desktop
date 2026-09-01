@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 210,
+    "constraints": 39
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.yuuka",
+    "name": "Yuuka (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Yuuka_home.skel",
+    "atlas": "Yuuka_home.atlas",
+    "layout": {
+      "x": 320.0,
+      "y": 584.37,
+      "scale": 0.1895,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Yuuka_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Yuuka_home.skel",
+      "gitBlobSha1": "2dce34483dfc8e61be01fa97b1bd932ea0cb3213"
+    },
+    {
+      "path": "Yuuka_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Yuuka_home.atlas",
+      "gitBlobSha1": "a88237e05ff5e004e5d0f029ade05ad94f75cb0c"
+    },
+    {
+      "path": "Yuuka_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Yuuka_home.png",
+      "gitBlobSha1": "0f934b93679b2cd665b86f74f54203f90326c653"
+    },
+    {
+      "path": "Yuuka_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Yuuka_home2.png",
+      "gitBlobSha1": "d568fc7ff838664767f274ea41e3a3fa38dedc61"
+    }
+  ]
+}

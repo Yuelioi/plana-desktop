@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 345,
+    "constraints": 35
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.fuuka",
+    "name": "Fuuka (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Fuuka_home.skel",
+    "atlas": "Fuuka_home.atlas",
+    "layout": {
+      "x": 232.74,
+      "y": 662.61,
+      "scale": 0.1347,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Fuuka_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Fuuka_home.skel",
+      "gitBlobSha1": "5a0f116d0602902837e31212748c475dafff4928"
+    },
+    {
+      "path": "Fuuka_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Fuuka_home.atlas",
+      "gitBlobSha1": "9ee144aba98f318a2162d4784979df156fbdae8e"
+    },
+    {
+      "path": "Fuuka_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Fuuka_home.png",
+      "gitBlobSha1": "b515c6cfbb0518b35197cf33865cacbd802df0f9"
+    },
+    {
+      "path": "Fuuka_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Fuuka_home2.png",
+      "gitBlobSha1": "4783128137c1dc5a018a46f8304024ce69984eff"
+    }
+  ]
+}

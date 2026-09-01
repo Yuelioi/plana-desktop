@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 343,
+    "constraints": 33
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.aru-newyear",
+    "name": "Aru Newyear (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Aru_newyear_home.skel",
+    "atlas": "Aru_newyear_home.atlas",
+    "layout": {
+      "x": 480.8,
+      "y": 527.55,
+      "scale": 0.0804,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Aru_newyear_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aru_newyear_home.skel",
+      "gitBlobSha1": "68416b5da6cd17ae8ad5c3cca17273a69afc55b9"
+    },
+    {
+      "path": "Aru_newyear_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aru_newyear_home.atlas",
+      "gitBlobSha1": "c773272b8f5732d76a28989b38a092f5c8410112"
+    },
+    {
+      "path": "Aru_newyear_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aru_newyear_home.png",
+      "gitBlobSha1": "d5297d4a2e474a332a2f6925566ac9500e7dc43b"
+    },
+    {
+      "path": "Aru_newyear_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aru_newyear_home2.png",
+      "gitBlobSha1": "7559313dbe2b0f0d7150812815057a0ba5f38f17"
+    },
+    {
+      "path": "Aru_newyear_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aru_newyear_home3.png",
+      "gitBlobSha1": "88919dde5deed3feeaf0a894031b9a64eaae1514"
+    }
+  ]
+}

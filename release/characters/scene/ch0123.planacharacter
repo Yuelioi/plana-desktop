@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 357,
+    "constraints": 147
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0123",
+    "name": "Shigure (Hot Spring) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0123_home.skel",
+    "atlas": "CH0123_home.atlas",
+    "layout": {
+      "x": 320.09,
+      "y": 600.51,
+      "scale": 0.1553,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0123_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0123_home.skel",
+      "gitBlobSha1": "13fda751a4d681c839e20e0eddbb17290fe3a831"
+    },
+    {
+      "path": "CH0123_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0123_home.atlas",
+      "gitBlobSha1": "848cd47d7137d4257e6b3db2c3e059f90431947e"
+    },
+    {
+      "path": "CH0123_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0123_home.png",
+      "gitBlobSha1": "b4ca6f3ab052e0f9396b82b454b53b74131cd8a0"
+    },
+    {
+      "path": "CH0123_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0123_home2.png",
+      "gitBlobSha1": "720a1dac27cd549b9d537e6d3ecab530fdfb5571"
+    },
+    {
+      "path": "CH0123_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0123_home3.png",
+      "gitBlobSha1": "cf06eb798ddca01298f3cbc25f805b96c2f0f9da"
+    }
+  ]
+}

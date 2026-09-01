@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 304,
+    "constraints": 52
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.kirino",
+    "name": "Kirino (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "kirino_home.skel",
+    "atlas": "kirino_home.atlas",
+    "layout": {
+      "x": 307.42,
+      "y": 546.7,
+      "scale": 0.1482,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "kirino_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/kirino_home.skel",
+      "gitBlobSha1": "d929e2bc2ab777b8770fd3d393bced2b865693ab"
+    },
+    {
+      "path": "kirino_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/kirino_home.atlas",
+      "gitBlobSha1": "7e2ee004f893b9ed9bb5701a35b3704fc4706bc0"
+    },
+    {
+      "path": "kirino_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/kirino_home.png",
+      "gitBlobSha1": "c74654bf080b0b832c76f82cb7d6c5af365e522a"
+    },
+    {
+      "path": "kirino_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/kirino_home2.png",
+      "gitBlobSha1": "c1bbc32c29c44cee3b34fb41d54f841c9553abb6"
+    }
+  ]
+}

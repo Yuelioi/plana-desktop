@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 140,
+    "constraints": 42
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.aris",
+    "name": "Aris (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Aris_home.skel",
+    "atlas": "Aris_home.atlas",
+    "layout": {
+      "x": 314.87,
+      "y": 600.86,
+      "scale": 0.1864,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Aris_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aris_home.skel",
+      "gitBlobSha1": "7eae5249cf9973cd320d58ca5e96eca4b7d569f9"
+    },
+    {
+      "path": "Aris_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aris_home.atlas",
+      "gitBlobSha1": "d6a0e12bad3b21e2ffbe1cb1efc39048940b5bc9"
+    },
+    {
+      "path": "Aris_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aris_home.png",
+      "gitBlobSha1": "ea3cdf62e5a8c333645e3b29aa6362fb82aa200d"
+    },
+    {
+      "path": "Aris_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aris_home2.png",
+      "gitBlobSha1": "3ce073a7949d9e62ab7ca0e0ec6c41bf2384a58d"
+    }
+  ]
+}

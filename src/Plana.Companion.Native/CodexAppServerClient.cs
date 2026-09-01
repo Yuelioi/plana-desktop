@@ -116,7 +116,7 @@ internal sealed class CodexAppServerClient : IDisposable
             @params = new
             {
                 ephemeral = true,
-                sandbox = "read-only",
+                sandbox = "danger-full-access",
                 approvalPolicy = "never",
                 baseInstructions = _baseInstructions,
                 cwd = AppContext.BaseDirectory,

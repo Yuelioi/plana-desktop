@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 521,
+    "constraints": 149
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0333",
+    "name": "Ch0333 (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0333_home.skel",
+    "atlas": "CH0333_home.atlas",
+    "layout": {
+      "x": 334.22,
+      "y": 583.31,
+      "scale": 0.1617,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01",
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0333_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0333_home.skel",
+      "gitBlobSha1": "0ad966515c674ca23e1505a17c8fadf60a4f208e"
+    },
+    {
+      "path": "CH0333_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0333_home.atlas",
+      "gitBlobSha1": "d27569d4e12e939a266c66dae31acce835d11a43"
+    },
+    {
+      "path": "CH0333_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0333_home.png",
+      "gitBlobSha1": "3f7530b862a7312af234bdcdd226e8c6784bc2ad"
+    },
+    {
+      "path": "CH0333_home_2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0333_home_2.png",
+      "gitBlobSha1": "94fb6a3fac499876750002a113a163d9c497d00b"
+    },
+    {
+      "path": "CH0333_home_3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0333_home_3.png",
+      "gitBlobSha1": "66ccb79017359760e9b54dc2129ec40b5cba77a4"
+    }
+  ]
+}

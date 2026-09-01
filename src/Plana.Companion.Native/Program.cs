@@ -62,9 +62,10 @@ internal static class Program
         companion.Show();
         companion.RunMessageLoop();
         var finalState = companion.Snapshot();
-        settings.Left = finalState.Left;
-        settings.Top = finalState.Top;
-        new DesktopSettingsStore(settingsPath).SaveAsync(settings).GetAwaiter().GetResult();
+        var finalSettings = new DesktopSettingsStore(settingsPath).LoadAsync().GetAwaiter().GetResult();
+        finalSettings.Left = finalState.Left;
+        finalSettings.Top = finalState.Top;
+        new DesktopSettingsStore(settingsPath).SaveAsync(finalSettings).GetAwaiter().GetResult();
         pluginRuntime.TerminateAll();
         Environment.Exit(0);
     }
@@ -79,6 +80,28 @@ internal static class Program
             var watch = System.Diagnostics.Stopwatch.StartNew();
             client.WarmUpAsync(model, CancellationToken.None).GetAwaiter().GetResult();
             var warmUpMilliseconds = watch.ElapsedMilliseconds;
+            if (Environment.GetEnvironmentVariable("PLANA_CHAT_PROBE_CONFIGURATION") == "1")
+            {
+                var settings = new DesktopSettings { UiCulture = "zh-CN" };
+                watch.Restart();
+                var raw = client.SendAsync(model, AiConfigurationEditor.BuildPrompt(settings,
+                    "创建一个名为‘打开哔哩哔哩’的动作，网址是 https://www.bilibili.com/，并放入‘娱乐’动作组。"), CancellationToken.None).GetAwaiter().GetResult();
+                File.WriteAllText(outputPath + ".raw", raw);
+                File.WriteAllText(outputPath, System.Text.Json.JsonSerializer.Serialize(new { succeeded = false, raw }));
+                var result = AiConfigurationEditor.Apply(settings, raw);
+                File.WriteAllText(outputPath, System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    succeeded = result.Changed && settings.UserActions.Count == 1 && settings.ToolGroups.Count == 1,
+                    warmUpMilliseconds,
+                    configurationMilliseconds = watch.ElapsedMilliseconds,
+                    result.Message,
+                    result.Changes,
+                    settings.UserActions,
+                    settings.ToolGroups,
+                    raw,
+                }));
+                return;
+            }
             watch.Restart();
             var first = client.SendAsync(model, "只回复：老师好。", CancellationToken.None).GetAwaiter().GetResult();
             var firstMilliseconds = watch.ElapsedMilliseconds;

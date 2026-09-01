@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 310,
+    "constraints": 74
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.serika-newyear",
+    "name": "Serika Newyear (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Serika_Newyear_home.skel",
+    "atlas": "Serika_Newyear_home.atlas",
+    "layout": {
+      "x": 320.0,
+      "y": 616.52,
+      "scale": 0.1727,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Serika_Newyear_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Serika_Newyear_home.skel",
+      "gitBlobSha1": "8aae953f3b1d85f4dc9c129ef1c51998be7f279d"
+    },
+    {
+      "path": "Serika_Newyear_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Serika_Newyear_home.atlas",
+      "gitBlobSha1": "392bf7ad1e522b93d81896afd8f9591c0f6b2d49"
+    },
+    {
+      "path": "Serika_Newyear_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Serika_Newyear_home.png",
+      "gitBlobSha1": "1ea3fc160343f7e0271311f3c13b5866b40351c4"
+    },
+    {
+      "path": "Serika_Newyear_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Serika_Newyear_home2.png",
+      "gitBlobSha1": "c27b60439ed2a19800922c8271baf67a2991f202"
+    }
+  ]
+}

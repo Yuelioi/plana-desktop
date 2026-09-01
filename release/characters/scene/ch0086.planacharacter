@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 820,
+    "constraints": 56
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0086",
+    "name": "Kayoko (New Year) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0086_home.skel",
+    "atlas": "CH0086_home.atlas",
+    "layout": {
+      "x": 432.83,
+      "y": 562.35,
+      "scale": 0.0613,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0086_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0086_home.skel",
+      "gitBlobSha1": "5c89fb177c7e8d4f16bee90052ef5475073aad4d"
+    },
+    {
+      "path": "CH0086_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0086_home.atlas",
+      "gitBlobSha1": "49dc0d6bf243bc0e09fe807a1c85c0a3b638698d"
+    },
+    {
+      "path": "CH0086_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0086_home.png",
+      "gitBlobSha1": "c85c354eed9ddaa64fbc1e36f48e61b69cacd183"
+    },
+    {
+      "path": "CH0086_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0086_home2.png",
+      "gitBlobSha1": "2b76939ac212367ea205a13da11c13b605cd5cae"
+    },
+    {
+      "path": "CH0086_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0086_home3.png",
+      "gitBlobSha1": "2423a40fc338ffd9ab97aa0737e080281398d9c7"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 265,
+    "constraints": 46
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.mashiro",
+    "name": "Mashiro (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Mashiro_home.skel",
+    "atlas": "Mashiro_home.atlas",
+    "layout": {
+      "x": 308.72,
+      "y": 625.38,
+      "scale": 0.1825,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Mashiro_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Mashiro_home.skel",
+      "gitBlobSha1": "0523047c7c5998cee3648ace5243864a960e6280"
+    },
+    {
+      "path": "Mashiro_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Mashiro_home.atlas",
+      "gitBlobSha1": "8f90082ed53cab10b333087cb4304164576599b4"
+    },
+    {
+      "path": "Mashiro_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Mashiro_home.png",
+      "gitBlobSha1": "b5f4aa14f9cd8b6c434ba29b56aee688284f8c82"
+    },
+    {
+      "path": "Mashiro_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Mashiro_home2.png",
+      "gitBlobSha1": "9d6a4de7da31a9dbfb0af2f0786ac8b8e49c9da0"
+    }
+  ]
+}

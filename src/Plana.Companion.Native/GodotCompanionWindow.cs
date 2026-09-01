@@ -201,7 +201,14 @@ internal sealed class GodotCompanionWindow : ICompanionController
         try
         {
             var response = await AiChatService.SendAsync(_currentSettings, prompt, CancellationToken.None);
-            ShowBubble(response);
+            if (response.Changed && _settingsPath is not null)
+            {
+                await new DesktopSettingsStore(_settingsPath).SaveAsync(_currentSettings);
+                RefreshUserActions(_currentSettings);
+                ConfigurePinnedActions(_currentSettings);
+                ConfigureQuickLaunch();
+            }
+            ShowBubble(response.Message);
             Perform(new CharacterPerformanceIntent(CharacterEmotion.Happy, CharacterGesture.Blink));
         }
         catch (Exception exception)
@@ -286,6 +293,36 @@ internal sealed class GodotCompanionWindow : ICompanionController
             _currentSettings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase), ExecuteQuickActionAsync);
     }
 
+    private void RefreshUserActions(DesktopSettings settings)
+    {
+        var actions = _actions.Values.Where(action => !action.Id.StartsWith("user.action.", StringComparison.OrdinalIgnoreCase)
+            && !action.Id.StartsWith("user.launcher.", StringComparison.OrdinalIgnoreCase)).ToList();
+        var chinese = settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
+        actions.AddRange(settings.UserActions.Select(action => new NativeActionEntry(
+            $"user.action.{action.Id}", action.Name,
+            new ActionDefinition($"user.action.{action.Id}", action.Name, action.Kind, action.Parameters, Capability(action.Kind)), null,
+            action.Description, chinese ? "我的动作" : "My actions")));
+        actions.AddRange(settings.ProjectLaunchers.Select(project =>
+        {
+            var parameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { ["executable"] = project.Executable };
+            for (var index = 0; index < project.Arguments.Count; index++) parameters[$"arg.{index}"] = project.Arguments[index].Replace("{folder}", project.Folder, StringComparison.OrdinalIgnoreCase);
+            return new NativeActionEntry($"user.launcher.{project.Id}", project.Name,
+                new ActionDefinition($"user.launcher.{project.Id}", project.Name, ActionKinds.LaunchProcess, parameters, Capability(ActionKinds.LaunchProcess)), project.Folder,
+                project.Folder, chinese ? "项目" : "Projects");
+        }));
+        _actions = actions.ToDictionary(action => action.Id, StringComparer.OrdinalIgnoreCase);
+    }
+
+    private static HashSet<string> Capability(string kind) => [kind switch
+    {
+        ActionKinds.OpenUrl => Capabilities.OpenUrl,
+        ActionKinds.OpenFile => Capabilities.OpenFile,
+        ActionKinds.OpenFolder => Capabilities.OpenFolder,
+        ActionKinds.RunCommand => Capabilities.RunCommand,
+        ActionKinds.RunScript => Capabilities.RunScript,
+        _ => Capabilities.LaunchProcess,
+    }];
+
     private string DescribeAction(NativeActionEntry entry)
     {
         if (!string.IsNullOrWhiteSpace(entry.Description)) return entry.Description;
@@ -352,10 +389,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
     public void RunMessageLoop()
     {
         _healthTimer = new Forms.Timer { Interval = 1000 };
-        _healthTimer.Tick += (_, _) =>
-        {
-            if (!_closing && _renderer is { HasExited: true }) RestartRenderer();
-        };
+        _healthTimer.Tick += (_, _) => EnsureRendererHealthy();
         _healthTimer.Start();
         _chatPlacementTimer = new Forms.Timer { Interval = 100 };
         _chatPlacementTimer.Tick += (_, _) => { UpdateHoverSurfaces(); PositionSpeechBubble(); };
@@ -393,6 +427,11 @@ internal sealed class GodotCompanionWindow : ICompanionController
         startInfo.ArgumentList.Add($"character_y={_characterPack.Manifest.Layout.Y.ToString(System.Globalization.CultureInfo.InvariantCulture)}");
         startInfo.ArgumentList.Add($"character_scale={_characterPack.Manifest.Layout.Scale.ToString(System.Globalization.CultureInfo.InvariantCulture)}");
         startInfo.ArgumentList.Add($"character_idle={_characterPack.Manifest.Performance.Idle}");
+        if (_characterPack.Manifest.Layout.HiddenSlots.Count > 0)
+        {
+            var hiddenSlotsJson = JsonSerializer.Serialize(_characterPack.Manifest.Layout.HiddenSlots);
+            startInfo.ArgumentList.Add($"character_hidden_slots={Convert.ToBase64String(Encoding.UTF8.GetBytes(hiddenSlotsJson))}");
+        }
         var polygonJson = JsonSerializer.Serialize(_characterPack.Manifest.Layout.HitPolygon.Select(point => new { x = point.X, y = point.Y }));
         startInfo.ArgumentList.Add($"character_hit_polygon={Convert.ToBase64String(Encoding.UTF8.GetBytes(polygonJson))}");
         _renderer = new Process
@@ -479,6 +518,28 @@ internal sealed class GodotCompanionWindow : ICompanionController
         }
     }
 
+    private void EnsureRendererHealthy()
+    {
+        if (_closing) return;
+        try
+        {
+            lock (_rendererLifecycle)
+            {
+                if (_closing) return;
+                if (_renderer is null || _renderer.HasExited)
+                {
+                    StopRenderer();
+                    StartRenderer();
+                }
+            }
+        }
+        catch (Exception exception) when (exception is InvalidOperationException or Win32Exception or TimeoutException)
+        {
+            if (_settingsPath is not null)
+                File.WriteAllText(Path.Combine(Path.GetDirectoryName(_settingsPath)!, "renderer-error.log"), $"Renderer health recovery failed: {exception}");
+        }
+    }
+
     private void StopRenderer()
     {
         lock (_sync)
@@ -490,15 +551,20 @@ internal sealed class GodotCompanionWindow : ICompanionController
             _listener?.Stop();
             _listener = null;
         }
-        if (_renderer is not null)
+        var renderer = _renderer;
+        _renderer = null;
+        if (renderer is not null)
         {
-            if (!_renderer.HasExited)
+            try
             {
-                _renderer.Kill(entireProcessTree: true);
-                _renderer.WaitForExit(5000);
+                if (!renderer.HasExited)
+                {
+                    renderer.Kill(entireProcessTree: true);
+                    renderer.WaitForExit(5000);
+                }
             }
-            _renderer.Dispose();
-            _renderer = null;
+            catch (InvalidOperationException) { /* Process never started or was already detached. */ }
+            finally { renderer.Dispose(); }
         }
         WindowHandle = 0;
     }
@@ -541,6 +607,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
             }
             _currentSettings = settings;
             _interactionBindings = new Dictionary<string, string>(settings.InteractionBindings, StringComparer.OrdinalIgnoreCase);
+            RefreshUserActions(settings);
             ConfigurePinnedActions(settings);
             Apply(new CompanionSurfaceState(settings.Left, settings.Top, settings.Width, settings.Height, settings.Scale, settings.AlwaysOnTop));
         }

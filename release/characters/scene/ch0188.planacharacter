@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 526,
+    "constraints": 91
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0188",
+    "name": "Shiroko (Swimsuit) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0188_home.skel",
+    "atlas": "CH0188_home.atlas",
+    "layout": {
+      "x": 319.96,
+      "y": 616.5,
+      "scale": 0.1732,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0188_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0188_home.skel",
+      "gitBlobSha1": "5f24fc0acf0c879e5e714758dae4237e6c32e6ba"
+    },
+    {
+      "path": "CH0188_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0188_home.atlas",
+      "gitBlobSha1": "0c6087fcc30d755f23c301f4fafb3bc28633317a"
+    },
+    {
+      "path": "CH0188_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0188_home.png",
+      "gitBlobSha1": "6061c5bc4cfa0e42f738ce41e2385eeb97a3dfe3"
+    },
+    {
+      "path": "CH0188_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0188_home2.png",
+      "gitBlobSha1": "40351ca433ca2a7d3a5b0b67bc6f506b1ebc8e63"
+    },
+    {
+      "path": "CH0188_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0188_home3.png",
+      "gitBlobSha1": "fb366734841ffe659cca45629847da618daf70b3"
+    },
+    {
+      "path": "CH0188_home4.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0188_home4.png",
+      "gitBlobSha1": "047a93ed70f150be146f138b77671c097277f64e"
+    }
+  ]
+}

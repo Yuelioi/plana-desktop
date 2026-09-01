@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 497,
+    "constraints": 79
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0273",
+    "name": "Mari (Idol) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0273_home.skel",
+    "atlas": "CH0273_home.atlas",
+    "layout": {
+      "x": 326.33,
+      "y": 670.78,
+      "scale": 0.1689,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0273_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0273_home.skel",
+      "gitBlobSha1": "2d304646c6f7b4576a377f96a7ffb47b8c335f72"
+    },
+    {
+      "path": "CH0273_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0273_home.atlas",
+      "gitBlobSha1": "b3cfa49c42b11d29e00f3434fdba8c98aa3f9068"
+    },
+    {
+      "path": "CH0273_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0273_home.png",
+      "gitBlobSha1": "649d0c43390bbfc68f026c151c67ea87dcfde9f4"
+    },
+    {
+      "path": "CH0273_home_2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0273_home_2.png",
+      "gitBlobSha1": "dc9a83915b25dc837575753195438bddadab8e4a"
+    }
+  ]
+}

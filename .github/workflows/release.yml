@@ -44,6 +44,7 @@ jobs:
           if (-not $testPackage) { throw 'Control Center test package was not produced.' }
           Compress-Archive -Path (Join-Path $testPackage.FullName '*') -DestinationPath release-output\Plana-ControlCenter-x64-Test.zip -Force
           Copy-Item release\Arona.planacharacter release-output\Arona.planacharacter
+          Compress-Archive -Path release\characters\* -DestinationPath release-output\Character-Packs.zip -Force
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
@@ -53,3 +54,4 @@ jobs:
             release-output/Plana-Desktop-win-x64.zip
             release-output/Plana-ControlCenter-x64-Test.zip
             release-output/Arona.planacharacter
+            release-output/Character-Packs.zip

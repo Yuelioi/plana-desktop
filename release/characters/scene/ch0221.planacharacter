@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 254,
+    "constraints": 126
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0221",
+    "name": "Natsu (Band) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0221_home.skel",
+    "atlas": "CH0221_home.atlas",
+    "layout": {
+      "x": 297.36,
+      "y": 606.72,
+      "scale": 0.1596,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0221_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0221_home.skel",
+      "gitBlobSha1": "5b2c5abeb99ac4e740cc15e99c13b0e3c5dbff6f"
+    },
+    {
+      "path": "CH0221_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0221_home.atlas",
+      "gitBlobSha1": "55c50b5c1fa5920725e9006227d0011187e38303"
+    },
+    {
+      "path": "CH0221_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0221_home.png",
+      "gitBlobSha1": "686676e98978e52dd36e3b3c9665d71b7a2eba9c"
+    },
+    {
+      "path": "CH0221_home_2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0221_home_2.png",
+      "gitBlobSha1": "2d3661e12b981bf49994d33686a74030577284f1"
+    }
+  ]
+}

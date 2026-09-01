@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 468,
+    "constraints": 139
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0261",
+    "name": "Fubuki (Swimsuit) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0261_home.skel",
+    "atlas": "CH0261_home.atlas",
+    "layout": {
+      "x": 321.16,
+      "y": 648.51,
+      "scale": 0.172,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0261_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0261_home.skel",
+      "gitBlobSha1": "0fbf4245d020d5812f10b67c92dab2549455a217"
+    },
+    {
+      "path": "CH0261_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0261_home.atlas",
+      "gitBlobSha1": "de60ef4f4960a7ca027266c581cfe9312322aec1"
+    },
+    {
+      "path": "CH0261_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0261_home.png",
+      "gitBlobSha1": "0769a630bf7b890a4194d852b142126dccd35542"
+    },
+    {
+      "path": "CH0261_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0261_home2.png",
+      "gitBlobSha1": "56a9a05782a818e1b1c58f7ee045f17ddf3f6cea"
+    },
+    {
+      "path": "CH0261_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0261_home3.png",
+      "gitBlobSha1": "6d3a586662985bb24580033779ea3943dd227596"
+    }
+  ]
+}

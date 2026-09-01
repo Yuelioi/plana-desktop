@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 152,
+    "constraints": 24
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.hina",
+    "name": "Hina (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Hina_home.skel",
+    "atlas": "Hina_home.atlas",
+    "layout": {
+      "x": 303.12,
+      "y": 584.58,
+      "scale": 0.1606,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Hina_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Hina_home.skel",
+      "gitBlobSha1": "8a74aac962b23edaef8e3ec3e4c91aabea669e9a"
+    },
+    {
+      "path": "Hina_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Hina_home.atlas",
+      "gitBlobSha1": "e766a080c4885407aeef0911b686df4027101a46"
+    },
+    {
+      "path": "Hina_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Hina_home.png",
+      "gitBlobSha1": "490863ebed639799864ba989bc70f0b6d4a40c81"
+    },
+    {
+      "path": "Hina_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Hina_home2.png",
+      "gitBlobSha1": "d417deecce2debb601661b6bd16597b417f7bf76"
+    },
+    {
+      "path": "Hina_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Hina_home3.png",
+      "gitBlobSha1": "c7872202780ecc2c68406bdd1dca7be46253ce92"
+    }
+  ]
+}

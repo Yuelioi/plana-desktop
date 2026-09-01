@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 184,
+    "constraints": 36
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.aru",
+    "name": "Aru (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Aru_home.skel",
+    "atlas": "Aru_home.atlas",
+    "layout": {
+      "x": 320.0,
+      "y": 632.4,
+      "scale": 0.1896,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Aru_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aru_home.skel",
+      "gitBlobSha1": "f944f83329c2cc7020be62752745c2d4cc9f7fe7"
+    },
+    {
+      "path": "Aru_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aru_home.atlas",
+      "gitBlobSha1": "1c072d44a70317ad76bfdad8aca067a85614fc1d"
+    },
+    {
+      "path": "Aru_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aru_home.png",
+      "gitBlobSha1": "f93233fb71b2462034bd7a7a1300466709f72428"
+    },
+    {
+      "path": "Aru_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aru_home2.png",
+      "gitBlobSha1": "6cb5efc7cacf192ec74b8553c784e728cf8a5a52"
+    },
+    {
+      "path": "Aru_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Aru_home3.png",
+      "gitBlobSha1": "37e0c0e86e4e8de34956ced3cbe05848f27dfcbb"
+    }
+  ]
+}

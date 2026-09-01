@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 349,
+    "constraints": 78
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0195",
+    "name": "Hanae (Christmas) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0195_home.skel",
+    "atlas": "CH0195_home.atlas",
+    "layout": {
+      "x": 290.89,
+      "y": 652.19,
+      "scale": 0.1559,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0195_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0195_home.skel",
+      "gitBlobSha1": "f96573142c500f6845719fab8349e52e4e5078ad"
+    },
+    {
+      "path": "CH0195_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0195_home.atlas",
+      "gitBlobSha1": "584dc6da255bd0d94951a096da47b921e60e0a8d"
+    },
+    {
+      "path": "CH0195_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0195_home.png",
+      "gitBlobSha1": "e709ad1b479f6f3821e19c949ee6cf38d83f95a5"
+    },
+    {
+      "path": "CH0195_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0195_home2.png",
+      "gitBlobSha1": "6d109ec3c4b4d8a92a508b07214614048ce483d5"
+    }
+  ]
+}

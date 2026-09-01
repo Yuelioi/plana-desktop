@@ -67,6 +67,9 @@ const report = {
   animations: data.animations.map((animation) => ({
     name: animation.name,
     duration: animation.duration,
+    boneTimelines: animation.timelines.filter((timeline) => Number.isInteger(timeline.boneIndex)).length,
+    constraintTimelines: animation.timelines.filter((timeline) => Number.isInteger(timeline.ikConstraintIndex) || Number.isInteger(timeline.transformConstraintIndex) || Number.isInteger(timeline.pathConstraintIndex)).length,
+    timelineTypes: [...new Set(animation.timelines.map((timeline) => timeline.constructor?.name || 'unknown'))],
     attachmentChanges: animation.timelines
       .filter((timeline) => Array.isArray(timeline.attachmentNames))
       .map((timeline) => ({
@@ -75,7 +78,8 @@ const report = {
       })),
   })),
   skins: data.skins.map((skin) => ({ name: skin.name, attachments: attachmentNames(skin) })),
-  slots: data.slots.map((slot) => ({ name: slot.name, attachment: slot.attachmentName })),
+  bones: data.bones.map((bone) => ({ name: bone.name, parent: bone.parent?.name || null })),
+  slots: data.slots.map((slot) => ({ name: slot.name, bone: slot.boneData?.name || slot.bone?.name || null, attachment: slot.attachmentName })),
   events: data.events.map((event) => ({
     name: event.name,
     intValue: event.intValue,

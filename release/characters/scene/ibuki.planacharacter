@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 355,
+    "constraints": 110
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ibuki",
+    "name": "Ibuki (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Ibuki_home.skel",
+    "atlas": "Ibuki_home.atlas",
+    "layout": {
+      "x": 332.91,
+      "y": 595.29,
+      "scale": 0.1501,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Ibuki_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Ibuki_home.skel",
+      "gitBlobSha1": "7ac2905eac500ebeb72a0785f8429f97ea16be55"
+    },
+    {
+      "path": "Ibuki_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Ibuki_home.atlas",
+      "gitBlobSha1": "977907bfce3e847aadd501200a5c4e647d3e2840"
+    },
+    {
+      "path": "Ibuki_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Ibuki_home.png",
+      "gitBlobSha1": "e4d30518dd969fcd37d02375e1905e0f5f93e0c9"
+    },
+    {
+      "path": "Ibuki_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Ibuki_home2.png",
+      "gitBlobSha1": "9cddcd4b2362bc01a70ebc8a1b6cc04ce1dc80e2"
+    },
+    {
+      "path": "Ibuki_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Ibuki_home3.png",
+      "gitBlobSha1": "4048e11670851d03294d68b8d489c73ed3350fff"
+    }
+  ]
+}

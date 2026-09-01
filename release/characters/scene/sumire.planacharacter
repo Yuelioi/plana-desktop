@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 224,
+    "constraints": 34
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.sumire",
+    "name": "Sumire (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Sumire_home.skel",
+    "atlas": "Sumire_home.atlas",
+    "layout": {
+      "x": 320.0,
+      "y": 632.37,
+      "scale": 0.1899,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Sumire_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Sumire_home.skel",
+      "gitBlobSha1": "b06eae0463b5274040b601fb9993e48260329d13"
+    },
+    {
+      "path": "Sumire_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Sumire_home.atlas",
+      "gitBlobSha1": "dce514fd412d0ab4bb14a102a5069991e4142049"
+    },
+    {
+      "path": "Sumire_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Sumire_home.png",
+      "gitBlobSha1": "aa484a91f142ec3e705f87cf8876b94fc60f5ee5"
+    }
+  ]
+}

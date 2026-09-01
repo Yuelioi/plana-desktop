@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 443,
+    "constraints": 77
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0209",
+    "name": "Hanako (Swimsuit) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0209_home.skel",
+    "atlas": "CH0209_home.atlas",
+    "layout": {
+      "x": 320.24,
+      "y": 616.71,
+      "scale": 0.1732,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0209_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0209_home.skel",
+      "gitBlobSha1": "f0820e072c153bd170ad5da4c35b764c4bad1fd2"
+    },
+    {
+      "path": "CH0209_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0209_home.atlas",
+      "gitBlobSha1": "7b33a65ebbd851ffa8b9f56bbd3db8cdf0840785"
+    },
+    {
+      "path": "CH0209_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0209_home.png",
+      "gitBlobSha1": "7e1b030a09b443b20a4b5c9946d28eaade6a18e9"
+    },
+    {
+      "path": "CH0209_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0209_home2.png",
+      "gitBlobSha1": "7577bd382b41a3a6f8143e8c9230b1094849891a"
+    },
+    {
+      "path": "CH0209_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0209_home3.png",
+      "gitBlobSha1": "165b06ea77be8132b7d58d1ab4c8a9409c6e5657"
+    }
+  ]
+}

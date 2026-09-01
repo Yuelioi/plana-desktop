@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 256,
+    "constraints": 43
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ayane",
+    "name": "Ayane (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Ayane_home.skel",
+    "atlas": "Ayane_home.atlas",
+    "layout": {
+      "x": 147.89,
+      "y": 297.56,
+      "scale": 0.0773,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Ayane_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Ayane_home.skel",
+      "gitBlobSha1": "4f8f5f42f14780ba0025b6ac2e5adf809f9e01ff"
+    },
+    {
+      "path": "Ayane_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Ayane_home.atlas",
+      "gitBlobSha1": "3b8e90444f19b6158171b5b7313901f1cba307d5"
+    },
+    {
+      "path": "Ayane_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Ayane_home.png",
+      "gitBlobSha1": "31bc534498bffa9beea235774969429f61fdc5f1"
+    },
+    {
+      "path": "Ayane_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Ayane_home2.png",
+      "gitBlobSha1": "0a3649bf407e28ca4ed8cce200d8685375ab80e7"
+    },
+    {
+      "path": "Ayane_home3.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Ayane_home3.png",
+      "gitBlobSha1": "f3131aedbbef06732740b1710ceeaff949bc3946"
+    }
+  ]
+}

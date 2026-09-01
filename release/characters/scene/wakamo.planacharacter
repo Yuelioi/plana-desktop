@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 522,
+    "constraints": 44
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.wakamo",
+    "name": "Wakamo (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Wakamo_home.skel",
+    "atlas": "Wakamo_home.atlas",
+    "layout": {
+      "x": 332.08,
+      "y": 578.87,
+      "scale": 0.1501,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Wakamo_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Wakamo_home.skel",
+      "gitBlobSha1": "7a83e9598e3412d44bfd0c85649b0ff27e22e217"
+    },
+    {
+      "path": "Wakamo_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Wakamo_home.atlas",
+      "gitBlobSha1": "f72185fd85f0d75b472f0cd79cde7665d8e43fae"
+    },
+    {
+      "path": "Wakamo_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Wakamo_home.png",
+      "gitBlobSha1": "bef1fd074e4170e53b6178d4a06ec5d89bb958d9"
+    },
+    {
+      "path": "Wakamo_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Wakamo_home2.png",
+      "gitBlobSha1": "4018a7012f7a890331f923608a91fa208409069a"
+    }
+  ]
+}

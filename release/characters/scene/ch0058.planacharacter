@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 545,
+    "constraints": 60
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.ch0058",
+    "name": "Hifumi (Swimsuit) (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "CH0058_home.skel",
+    "atlas": "CH0058_home.atlas",
+    "layout": {
+      "x": 351.62,
+      "y": 523.32,
+      "scale": 0.1339,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "CH0058_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0058_home.skel",
+      "gitBlobSha1": "ec8c7e28c3d61f60f001dfd29216bd758b62af77"
+    },
+    {
+      "path": "CH0058_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0058_home.atlas",
+      "gitBlobSha1": "ec2fb5a0913a39d439f4e4e71344298dcd61e6bb"
+    },
+    {
+      "path": "CH0058_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0058_home.png",
+      "gitBlobSha1": "34b936d4b4233ea43e6cd6ae9dc09f2a2f009141"
+    },
+    {
+      "path": "CH0058_home2.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/CH0058_home2.png",
+      "gitBlobSha1": "001bac499af5e2988f88768bd3e94b9acc0bec7d"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "category": "static",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "limited",
+    "bones": 3,
+    "constraints": 0,
+    "idleBoneTimelines": 5
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.serika-shibaseki",
+    "name": "Serika Shibaseki",
+    "version": "1.0.0",
+    "skeleton": "serika_shibaseki_spr.skel",
+    "atlas": "serika_shibaseki_spr.atlas",
+    "layout": {
+      "x": 320,
+      "y": 835,
+      "scale": 0.3,
+      "hitPolygon": [
+        {
+          "x": 0.14,
+          "y": 0.22
+        },
+        {
+          "x": 0.82,
+          "y": 0.22
+        },
+        {
+          "x": 0.9,
+          "y": 0.64
+        },
+        {
+          "x": 0.82,
+          "y": 1.0
+        },
+        {
+          "x": 0.08,
+          "y": 1.0
+        },
+        {
+          "x": 0.04,
+          "y": 0.62
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "02",
+      "emotions": {
+        "Neutral": "00",
+        "Happy": "03",
+        "Excited": "06",
+        "Surprised": "04",
+        "Sad": "07",
+        "Worried": "05",
+        "Angry": "05",
+        "Affectionate": "04",
+        "Shy": "04",
+        "Dizzy": "08"
+      },
+      "gestures": {
+        "Blink": "Eye_Close_01"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "serika_shibaseki_spr.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/serika_shibaseki_spr.skel",
+      "gitBlobSha1": "0c9d36966fd2701a63dd0a68df7377703c125855"
+    },
+    {
+      "path": "serika_shibaseki_spr.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/serika_shibaseki_spr.atlas",
+      "gitBlobSha1": "fc8e3ad9f8a8ea9e9cc01c0345bc7514c93b3da7"
+    },
+    {
+      "path": "serika_shibaseki_spr.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/new/assets/serika_shibaseki_spr.png",
+      "gitBlobSha1": "af5d68c997773e4f89ef3c665c38901fefe26431"
+    }
+  ]
+}

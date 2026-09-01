@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "category": "scene",
+  "sourceRevision": "cb28dffb144a6dc86258afab18ecb660047991ee",
+  "sourceTree": "8795eaea517f6909f8431d1b0847a6031236eb67",
+  "motion": {
+    "profile": "full",
+    "bones": 294,
+    "constraints": 39
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "community.ba.memorial.yuzu",
+    "name": "Yuzu (Memorial)",
+    "version": "1.0.0",
+    "skeleton": "Yuzu_home.skel",
+    "atlas": "Yuzu_home.atlas",
+    "layout": {
+      "x": 319.81,
+      "y": 632.01,
+      "scale": 0.1894,
+      "hitPolygon": [
+        {
+          "x": 0.02,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.02
+        },
+        {
+          "x": 0.98,
+          "y": 0.98
+        },
+        {
+          "x": 0.02,
+          "y": 0.98
+        }
+      ]
+    },
+    "performance": {
+      "idle": "Idle_01",
+      "speaking": "Talk_01_M",
+      "emotions": {
+        "Neutral": "Idle_01",
+        "Happy": "Idle_01",
+        "Worried": "Idle_01"
+      },
+      "gestures": {
+        "HeadPat": "Pat_01_M",
+        "LookAtPointer": "Look_01_M"
+      }
+    }
+  },
+  "assets": [
+    {
+      "path": "Yuzu_home.skel",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Yuzu_home.skel",
+      "gitBlobSha1": "72285c35bb82361cb17f8afb5db7861fb56b798f"
+    },
+    {
+      "path": "Yuzu_home.atlas",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Yuzu_home.atlas",
+      "gitBlobSha1": "3168d60e6a8bbf5042a69c8f3de88f8add195833"
+    },
+    {
+      "path": "Yuzu_home.png",
+      "url": "https://raw.githubusercontent.com/asdfdsa12/BA-Spine-Viewer-Asset/cb28dffb144a6dc86258afab18ecb660047991ee/memorial/assets/Yuzu_home.png",
+      "gitBlobSha1": "6556b5590ff50363eb4581a7286def2bcfb7c0d6"
+    }
+  ]
+}
