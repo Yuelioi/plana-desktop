@@ -165,10 +165,20 @@ internal sealed class GodotCompanionWindow : ICompanionController
         PositionSpeechBubble();
     }
 
+    public void ShowThinkingBubble()
+    {
+        if (_speechBubble.InvokeRequired)
+        {
+            _speechBubble.BeginInvoke(ShowThinkingBubble);
+            return;
+        }
+        _speechBubble.ShowThinking(_currentSettings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase));
+        PositionSpeechBubble();
+    }
+
     private async Task SendChatAsync(string prompt)
     {
-        var chinese = _currentSettings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
-        ShowBubble(chinese ? "正在思考…" : "Thinking…");
+        ShowThinkingBubble();
         Perform(new CharacterPerformanceIntent(IsSpeaking: true));
         try
         {
@@ -200,7 +210,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         var workingArea = Forms.Screen.FromHandle(WindowHandle).WorkingArea;
         var width = Math.Max(260, rect.Width - 20);
         var left = Math.Clamp(rect.Left + 10, workingArea.Left, Math.Max(workingArea.Left, workingArea.Right - width));
-        var top = Math.Clamp(rect.Top + 12, workingArea.Top, Math.Max(workingArea.Top, workingArea.Bottom - _speechBubble.Height));
+        var top = Math.Clamp(rect.Top + (int)(rect.Height * 0.22), workingArea.Top, Math.Max(workingArea.Top, workingArea.Bottom - _speechBubble.Height));
         SetWindowPos(_speechBubble.Handle, new nint(-1), left, top, width, _speechBubble.Height, SwpNoActivate);
     }
 

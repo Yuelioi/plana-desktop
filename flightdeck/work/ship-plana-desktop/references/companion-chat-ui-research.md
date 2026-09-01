@@ -29,3 +29,7 @@ Research date: 2026-09-01. Target: the always-on-desktop Plana conversation surf
 ## Next step
 
 If conversation history becomes necessary, expose it as an explicit full Control Center history surface opened from the bubble/input context—not as the default prompt flow and not inside the transparent Renderer.
+
+## Latency finding
+
+The configured provider is the local Codex subscription path. Replaying the app's minimal `codex exec --ephemeral` request took more than 30 seconds; forcing low reasoning took about 43 seconds, and `codex-mini-latest` was unavailable for the current subscription login. The latency is therefore dominated by CLI/model request startup rather than bubble/input rendering. Official OpenAI documentation describes [`codex-mini-latest`](https://developers.openai.com/api/docs/models/codex-mini-latest) as a fast Codex CLI model, but availability cannot be assumed for this user's subscription. The UI shows a persistent elapsed thinking state; true lower latency requires a provider/model available to the user, such as a configured OpenAI-compatible API model.

@@ -28,11 +28,11 @@ internal sealed class CompanionChatInput : Forms.Form
         _input = new Forms.TextBox
         {
             BorderStyle = Forms.BorderStyle.None,
-            Dock = Forms.DockStyle.Fill,
+            Location = new Point(14, 15),
+            Size = new Size(220, 24),
             Font = new Font("Segoe UI", 10.5f),
             BackColor = BackColor,
             ForeColor = Color.FromArgb(246, 248, 255),
-            Margin = new Padding(0, 7, 8, 0),
         };
         SetCueBanner(_input.Handle, _cueText);
         _input.HandleCreated += (_, _) => SetCueBanner(_input.Handle, _cueText);
@@ -45,8 +45,7 @@ internal sealed class CompanionChatInput : Forms.Form
 
         _send = new Forms.Button
         {
-            Dock = Forms.DockStyle.Right,
-            Width = 40,
+            Size = new Size(36, 36),
             FlatStyle = Forms.FlatStyle.Flat,
             BackColor = Color.FromArgb(78, 111, 216),
             ForeColor = Color.White,
@@ -73,8 +72,8 @@ internal sealed class CompanionChatInput : Forms.Form
         _input.TextChanged += (_, _) => _placeholder.Visible = _input.TextLength == 0;
         Controls.Add(_placeholder);
         Controls.Add(_send);
-        Shown += (_, _) => { ApplyWindowShape(); SetCueBanner(_input.Handle, _cueText); };
-        Resize += (_, _) => ApplyWindowShape();
+        Shown += (_, _) => { LayoutControls(); ApplyWindowShape(); SetCueBanner(_input.Handle, _cueText); };
+        Resize += (_, _) => { LayoutControls(); ApplyWindowShape(); };
     }
 
     protected override CreateParams CreateParams
@@ -110,8 +109,16 @@ internal sealed class CompanionChatInput : Forms.Form
     protected override void OnPaint(Forms.PaintEventArgs e)
     {
         base.OnPaint(e);
+        e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
         using var pen = new Pen(Color.FromArgb(92, 119, 198));
-        e.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
+        using var path = RoundedPath(new Rectangle(0, 0, Width - 1, Height - 1), 12);
+        e.Graphics.DrawPath(pen, path);
+    }
+
+    private void LayoutControls()
+    {
+        _send.Location = new Point(Math.Max(8, ClientSize.Width - 44), 8);
+        _input.Size = new Size(Math.Max(120, ClientSize.Width - 74), 24);
     }
 
     private void ApplyWindowShape()

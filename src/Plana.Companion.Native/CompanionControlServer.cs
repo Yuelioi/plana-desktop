@@ -42,6 +42,12 @@ internal sealed class CompanionControlServer : IDisposable
                     await writer.WriteLineAsync("{\"ok\":true}");
                     continue;
                 }
+                if (request?.Type?.Equals("thinking", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    _companion.ShowThinkingBubble();
+                    await writer.WriteLineAsync("{\"ok\":true}");
+                    continue;
+                }
                 if (request is null || !Enum.TryParse<CharacterEmotion>(request.Emotion ?? string.Empty, true, out var emotion) ||
                     !Enum.TryParse<CharacterGesture>(request.Gesture ?? string.Empty, true, out var gesture))
                 {
