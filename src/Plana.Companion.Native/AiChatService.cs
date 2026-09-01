@@ -25,14 +25,27 @@ internal static class AiChatService
             ? SendApiAsync(settings, prompt, cancellationToken)
             : SendCodexAsync(settings, prompt, cancellationToken);
 
+    public static async Task WarmUpAsync(DesktopSettings settings)
+    {
+        if (!settings.AiProvider.Equals("codex", StringComparison.OrdinalIgnoreCase)) return;
+        try { await CodexClient.WarmUpAsync(EffectiveCodexModel(settings), CancellationToken.None); }
+        catch { /* A real request will retry and retain the CLI fallback. */ }
+    }
+
     private static async Task<string> SendCodexAsync(DesktopSettings settings, string prompt, CancellationToken cancellationToken)
     {
-        try { return await CodexClient.SendAsync(settings.AiModel, prompt, cancellationToken); }
-        catch (Exception) when (!cancellationToken.IsCancellationRequested)
+        try { return await CodexClient.SendAsync(EffectiveCodexModel(settings), prompt, cancellationToken); }
+        catch (Exception exception) when (!cancellationToken.IsCancellationRequested)
         {
+            var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PlanaDesktop", "ai-chat-fallback.log");
+            Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
+            await File.WriteAllTextAsync(logPath, $"{DateTimeOffset.Now:O}{Environment.NewLine}{exception}", cancellationToken);
             return await SendCodexExecAsync(settings, prompt, cancellationToken);
         }
     }
+
+    private static string EffectiveCodexModel(DesktopSettings settings) =>
+        string.IsNullOrWhiteSpace(settings.AiModel) ? "gpt-5.6-luna" : settings.AiModel.Trim();
 
     private static async Task<string> SendCodexExecAsync(DesktopSettings settings, string prompt, CancellationToken cancellationToken)
     {
@@ -56,11 +69,8 @@ internal static class AiChatService
             info.ArgumentList.Add("read-only");
             info.ArgumentList.Add("--output-last-message");
             info.ArgumentList.Add(outputPath);
-            if (!string.IsNullOrWhiteSpace(settings.AiModel))
-            {
-                info.ArgumentList.Add("--model");
-                info.ArgumentList.Add(settings.AiModel);
-            }
+            info.ArgumentList.Add("--model");
+            info.ArgumentList.Add(EffectiveCodexModel(settings));
             info.ArgumentList.Add($"{PersonaPrompt}\n\n老师的消息：{prompt}");
             using var process = Process.Start(info) ?? throw new InvalidOperationException("Codex CLI could not be started.");
             var errorTask = process.StandardError.ReadToEndAsync(cancellationToken);

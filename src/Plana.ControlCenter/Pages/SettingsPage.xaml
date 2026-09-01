@@ -67,7 +67,7 @@
                     <ComboBoxItem Tag="api" Content="OpenAI-compatible API" />
                 </ComboBox>
             </Grid>
-            <TextBox x:Name="AiModelInput" Header="Model (optional for Codex)" PlaceholderText="Use provider default" />
+            <TextBox x:Name="AiModelInput" Header="Model (optional for Codex)" PlaceholderText="gpt-5.6-luna (fast default)" />
             <StackPanel x:Name="AiApiPanel" Spacing="12" Visibility="Collapsed">
                 <TextBox x:Name="AiApiBaseUrlInput" Header="API base URL" PlaceholderText="https://api.openai.com/v1" />
                 <TextBox x:Name="AiApiKeyVariableInput" Header="API key environment variable" PlaceholderText="OPENAI_API_KEY" />

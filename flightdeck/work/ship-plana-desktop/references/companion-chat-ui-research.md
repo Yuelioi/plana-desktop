@@ -45,3 +45,11 @@ seconds for cold initialization plus the first answer and 3.75 seconds for the s
 production Host now owns one app-server client for its lifetime, keeps the Plana conversation in a
 single thread, and falls back to one-shot `codex exec` only when app-server startup or protocol
 handling fails.
+
+The first production attempt silently fell back because redirected app-server streams were not
+explicitly UTF-8; Chinese JSON notifications became invalid after system-codepage decoding. A
+published-binary probe reproduced the exception and verified the UTF-8 correction. On the same
+probe, the default coding model took 22.95 seconds cold / 3.87 seconds warm, while
+`gpt-5.6-luna` took 5.42 seconds cold / 2.71 seconds warm. Blank Codex model settings therefore
+resolve to Luna for short Companion chat; explicit user model choices remain unchanged. Fallback
+exceptions are written to `%LOCALAPPDATA%\PlanaDesktop\ai-chat-fallback.log`.

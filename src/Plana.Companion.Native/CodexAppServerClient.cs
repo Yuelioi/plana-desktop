@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 
 namespace Plana.Companion.Native;
@@ -67,6 +68,14 @@ internal sealed class CodexAppServerClient : IDisposable
         finally { _gate.Release(); }
     }
 
+    public async Task WarmUpAsync(string? model, CancellationToken cancellationToken)
+    {
+        await _gate.WaitAsync(cancellationToken);
+        try { await EnsureStartedAsync(model, cancellationToken); }
+        catch { Stop(); throw; }
+        finally { _gate.Release(); }
+    }
+
     private async Task EnsureStartedAsync(string? model, CancellationToken cancellationToken)
     {
         model = string.IsNullOrWhiteSpace(model) ? null : model.Trim();
@@ -81,6 +90,9 @@ internal sealed class CodexAppServerClient : IDisposable
             RedirectStandardInput = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
+            StandardInputEncoding = new UTF8Encoding(false),
+            StandardOutputEncoding = new UTF8Encoding(false),
+            StandardErrorEncoding = new UTF8Encoding(false),
         };
         if (File.Exists(npmCodex)) info.ArgumentList.Add(npmCodex);
         info.ArgumentList.Add("app-server");
@@ -144,8 +156,15 @@ internal sealed class CodexAppServerClient : IDisposable
         while (await _output.ReadLineAsync(cancellationToken) is { } line)
         {
             if (string.IsNullOrWhiteSpace(line)) continue;
-            using var document = JsonDocument.Parse(line);
-            return document.RootElement.Clone();
+            try
+            {
+                using var document = JsonDocument.Parse(line);
+                return document.RootElement.Clone();
+            }
+            catch (JsonException exception)
+            {
+                throw new InvalidDataException($"Codex app-server returned an invalid frame: {line}", exception);
+            }
         }
         return null;
     }

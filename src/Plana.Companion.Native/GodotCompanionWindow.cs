@@ -85,6 +85,7 @@ internal sealed class GodotCompanionWindow : ICompanionController
         _ = _speechBubble.Handle;
         _ = _chatInput.Handle;
         _quickLaunchHotkey = new GlobalHotkey(_chatInput.Handle, OpenQuickLaunch);
+        _ = AiChatService.WarmUpAsync(settings);
         _rendererJob = CreateKillOnCloseJob();
         StartRenderer();
     }

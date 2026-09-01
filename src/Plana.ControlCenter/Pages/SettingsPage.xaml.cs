@@ -135,7 +135,7 @@ public sealed partial class SettingsPage : Page
         if (AiProviderPicker.Items[0] is ComboBoxItem codex) codex.Content = "Codex CLI（订阅）";
         if (AiProviderPicker.Items[1] is ComboBoxItem api) api.Content = "OpenAI 兼容 API";
         AiModelInput.Header = "模型（Codex 可留空）";
-        AiModelInput.PlaceholderText = "使用服务默认模型";
+        AiModelInput.PlaceholderText = "gpt-5.6-luna（快速默认）";
         AiApiBaseUrlInput.Header = "API Base URL";
         AiApiKeyVariableInput.Header = "API Key 环境变量";
         AiHelpText.Text = "Codex 使用本机已有登录；API 模式从指定环境变量读取 Key，不写入配置文件。";

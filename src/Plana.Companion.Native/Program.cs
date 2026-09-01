@@ -8,8 +8,13 @@ namespace Plana.Companion.Native;
 internal static class Program
 {
     [STAThread]
-    private static void Main()
+    private static void Main(string[] args)
     {
+        if (Environment.GetCommandLineArgs().Contains("--chat-probe", StringComparer.OrdinalIgnoreCase))
+        {
+            RunChatProbe();
+            return;
+        }
         using var singleInstance = new Mutex(true, @"Local\PlanaDesktop.Native", out var ownsInstance);
         if (!ownsInstance) return;
 
@@ -56,6 +61,29 @@ internal static class Program
         new DesktopSettingsStore(settingsPath).SaveAsync(settings).GetAwaiter().GetResult();
         pluginRuntime.TerminateAll();
         Environment.Exit(0);
+    }
+
+    private static void RunChatProbe()
+    {
+        var outputPath = Path.Combine(Path.GetTempPath(), "plana-chat-probe.json");
+        try
+        {
+            using var client = new CodexAppServerClient(AiChatService.PersonaPrompt);
+            var model = Environment.GetEnvironmentVariable("PLANA_CHAT_PROBE_MODEL") ?? "gpt-5.6-luna";
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            client.WarmUpAsync(model, CancellationToken.None).GetAwaiter().GetResult();
+            var warmUpMilliseconds = watch.ElapsedMilliseconds;
+            watch.Restart();
+            var first = client.SendAsync(model, "只回复：老师好。", CancellationToken.None).GetAwaiter().GetResult();
+            var firstMilliseconds = watch.ElapsedMilliseconds;
+            watch.Restart();
+            var second = client.SendAsync(model, "一加一等于几？只回复答案。", CancellationToken.None).GetAwaiter().GetResult();
+            File.WriteAllText(outputPath, System.Text.Json.JsonSerializer.Serialize(new { succeeded = true, warmUpMilliseconds, firstMilliseconds, first, secondMilliseconds = watch.ElapsedMilliseconds, second }));
+        }
+        catch (Exception exception)
+        {
+            File.WriteAllText(outputPath, System.Text.Json.JsonSerializer.Serialize(new { succeeded = false, error = exception.ToString() }));
+        }
     }
 
     private static ICompanionController CreateCompanion(PluginRuntimeManager pluginRuntime, DesktopSettings settings, IReadOnlyList<NativeActionEntry> actions)
