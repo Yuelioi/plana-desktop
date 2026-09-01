@@ -44,7 +44,7 @@ public sealed partial class ToolGroupsPage : Page
         return names.Length == 0 ? (App.IsChinese ? "空动作组" : "Empty group") : string.Join("、", names!);
     }
 
-    private void SearchBox_TextChanged(object sender, TextChangedEventArgs args) => Filter(SearchBox.Text);
+    private void SearchBox_TextChanged(object? sender, EventArgs args) => Filter(SearchBox.Text);
 
     private void Filter(string? query)
     {
