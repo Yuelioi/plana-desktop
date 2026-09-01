@@ -44,6 +44,8 @@ Character Pack switching is now implemented. Core discovers bundled and installe
 
 Conversation entry copy is Character-neutral: the Dock says `说些什么吧…` / `Say something…` in both production WPF and legacy Renderer fallback. Plana remains the bundled Character Pack. Releases can attach `.planacharacter` bootstrap files whose HTTPS assets are downloaded on import and verified by required SHA-256 before ordinary Character Pack validation; local folder import remains available for authors.
 
+The private GitHub repository is `Yuelioi/plana-desktop`. Tagged Windows Actions install pinned Godot/spine-godot, run tests and full publish, then attach the Host ZIP, Control Center test package, and Character bootstrap files. Release `v0.1.1` is published with `Arona.planacharacter`; its first Actions run completed successfully in 4m06s.
+
 Valid enabled Plugins launch one-per-Host, complete a bounded identity/API handshake, contribute declared Actions, and execute them through serialized requests. Typed broker requests for URL, file, folder, process, command, and script capabilities reuse existing adapters. Failure/cancellation tears down the session and removes contributions. The published sample passes lifecycle, contribution, invocation, and broker flow end to end.
 
 ## Next
@@ -145,6 +147,7 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Implemented declarative Character Packs end to end: Core loader/diagnostics/fallback/performance planner, bundled Plana pack, runtime spine-godot loading, serialized/recoverable Renderer switching, persisted selection, and compact bilingual Settings import/select/folder/reload UI. Installed a local Arona fixture without adding its copyrighted assets to Git. Plana→Arona switching, one-child cleanup, Arona rendering, Happy+HeadPat, UI selection persistence, layout detector, 50 Core tests, the STA UI test, committed text input, scale refresh, and the zero-warning build are green.
 - Made Companion conversation entry copy neutral across characters (`说些什么吧…` / `Say something…`). Plana ships bundled, and screenshot verification confirms the production Dock copy.
 - Added Release-ready `.planacharacter` bootstrap import with HTTPS-only assets, fixed hashes, contained target paths, bounded asset count/size, ordinary manifest validation, and a secondary folder-authoring path. Added a verified Arona bootstrap file containing source links rather than model binaries. Added a private-repository Windows GitHub Actions workflow that installs pinned Godot/spine-godot, runs tests/publish, and uploads Host ZIP, Control Center test package, and Arona bootstrap to tagged Releases.
+- Created and pushed the private `Yuelioi/plana-desktop` repository. Fixed clean-runner `$LASTEXITCODE` handling after the initial v0.1.0 workflow exposed it, then published v0.1.1 successfully through Actions with three verified assets: 112.8 MB Host ZIP, 172.5 MB Control Center test ZIP, and 1.7 KB Arona bootstrap.
 
 ## References
 
