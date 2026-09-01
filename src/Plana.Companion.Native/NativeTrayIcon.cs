@@ -13,6 +13,7 @@ internal sealed class NativeTrayIcon : IDisposable
     private readonly GodotCompanionWindow? _godot;
     private readonly SynchronizationContext _uiContext;
     private readonly Forms.Timer _menuDismissTimer;
+    private readonly System.Drawing.Icon _appIcon;
     private bool _leftButtonWasDown;
 
     public NativeTrayIcon(ICompanionController companion, DesktopSettings settings)
@@ -23,10 +24,14 @@ internal sealed class NativeTrayIcon : IDisposable
         _menuDismissTimer = new Forms.Timer { Interval = 25 };
         _menuDismissTimer.Tick += (_, _) => DismissMenuOnOutsideLeftClick();
         _menu.Closed += (_, _) => { _menuDismissTimer.Stop(); _leftButtonWasDown = false; };
+        var iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico");
+        _appIcon = File.Exists(iconPath)
+            ? new System.Drawing.Icon(iconPath)
+            : (System.Drawing.Icon)System.Drawing.SystemIcons.Application.Clone();
         _icon = new Forms.NotifyIcon
         {
             Text = "Plana Desktop",
-            Icon = System.Drawing.SystemIcons.Application,
+            Icon = _appIcon,
             ContextMenuStrip = _menu,
         };
         _menu.Items.Add(chinese ? "显示桌宠" : "Show companion", null, (_, _) => companion.Show());
@@ -89,6 +94,7 @@ internal sealed class NativeTrayIcon : IDisposable
         if (_godot is not null) _godot.ContextRequested -= OnContextRequested;
         _menu.Dispose();
         _icon.Dispose();
+        _appIcon.Dispose();
     }
 
     [DllImport("user32.dll")]

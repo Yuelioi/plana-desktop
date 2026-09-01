@@ -21,6 +21,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>..\Plana.Brand\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="..\Plana.Brand\AppIcon.ico" Link="Assets\AppIcon.ico" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
 </Project>

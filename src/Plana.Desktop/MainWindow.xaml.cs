@@ -218,10 +218,11 @@ public partial class MainWindow : Window, IRendererBridge
 
     private Forms.NotifyIcon CreateTrayIcon()
     {
+        var iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico");
         var icon = new Forms.NotifyIcon
         {
             Text = "Plana Desktop",
-            Icon = Drawing.SystemIcons.Application,
+            Icon = File.Exists(iconPath) ? new Drawing.Icon(iconPath) : Drawing.SystemIcons.Application,
             Visible = true,
         };
         icon.DoubleClick += (_, _) => ShowFromTray();

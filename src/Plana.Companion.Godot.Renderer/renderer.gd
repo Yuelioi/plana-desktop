@@ -17,6 +17,9 @@ var hit_polygon_normalized := [
 ]
 
 func _ready():
+	var app_icon := Image.load_from_file("res://AppIcon.png")
+	if not app_icon.is_empty():
+		DisplayServer.set_icon(app_icon)
 	load_character_from_arguments()
 	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
 	get_window().size_changed.connect(apply_mouse_passthrough_polygon)

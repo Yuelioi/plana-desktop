@@ -42,6 +42,7 @@ if ($Publish) {
     Copy-Item -LiteralPath (Join-Path $godotExtension 'windows') -Destination (Join-Path $rendererOutput 'bin') -Recurse -Force
     $rendererSource = Join-Path $PSScriptRoot 'src\Plana.Companion.Godot.Renderer'
     Copy-Item -LiteralPath (Join-Path $rendererSource 'project.godot'),(Join-Path $rendererSource 'main.tscn'),(Join-Path $rendererSource 'plana-data.tres'),(Join-Path $rendererSource 'renderer.gd'),(Join-Path $rendererSource 'renderer.gd.uid') -Destination $rendererOutput -Force
+    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'src\Plana.Brand\AppIcon.png') -Destination $rendererOutput -Force
     $modelSource = Join-Path $PSScriptRoot 'src\Plana.Desktop\Renderer\spine\plana'
     Copy-Item -LiteralPath (Join-Path $modelSource 'NP0035_spr.skel'),(Join-Path $modelSource 'NP0035_spr.atlas'),(Join-Path $modelSource 'NP0035_spr.png') -Destination (Join-Path $rendererOutput 'runtime-assets') -Force
     & (Join-Path $godotOutput 'Godot.console.exe') --headless --editor --path $rendererOutput --quit-after 30
