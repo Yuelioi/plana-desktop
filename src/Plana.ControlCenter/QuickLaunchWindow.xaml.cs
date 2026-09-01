@@ -70,7 +70,7 @@ public sealed partial class QuickLaunchWindow : Window
             _groupActions[group.Id] = group.ActionIds;
             var content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6 };
             content.Children.Add(new TextBlock { Text = group.Name, VerticalAlignment = VerticalAlignment.Center });
-            content.Children.Add(new FontIcon { Glyph = "\uE70D", FontSize = 9, VerticalAlignment = VerticalAlignment.Center });
+            content.Children.Add(new SymbolIcon { Symbol = Symbol.More, VerticalAlignment = VerticalAlignment.Center });
             var button = new Button { Tag = group.Id, Content = content, MinHeight = 30, Padding = new Thickness(13, 4, 11, 4), CornerRadius = new CornerRadius(15) };
             button.Click += Group_Click;
             GroupBar.Children.Add(button);
@@ -97,7 +97,7 @@ public sealed partial class QuickLaunchWindow : Window
         }
         foreach (var row in rows)
         {
-            var item = new MenuFlyoutItem { Text = row.Title, Icon = new FontIcon { Glyph = row.Glyph } };
+            var item = new MenuFlyoutItem { Text = row.Title, Icon = new SymbolIcon { Symbol = row.Icon } };
             item.Click += async (_, _) => await ExecuteAsync(row);
             menu.Items.Add(item);
         }
@@ -157,5 +157,12 @@ public sealed class QuickLaunchRow(CommandDescriptor descriptor)
     public string Title => Descriptor.Title;
     public string Subtitle => Descriptor.Subtitle;
     public string Source => Descriptor.Source.Contains('|') ? Descriptor.Source[(Descriptor.Source.IndexOf('|') + 1)..] : Descriptor.Source;
-    public string Glyph => Descriptor.IconGlyph;
+    public Symbol Icon => Descriptor.IconGlyph switch
+    {
+        "\uE8B7" => Symbol.Folder,
+        "\uE774" => Symbol.Link,
+        "\uEA3A" => Symbol.Library,
+        "\uE756" => Symbol.Play,
+        _ => Symbol.Document,
+    };
 }

@@ -5,6 +5,9 @@ param(
 $ErrorActionPreference = 'Stop'
 Remove-Item Env:TargetPath -ErrorAction SilentlyContinue
 
+& "$PSScriptRoot\tools\check-control-center-ui.ps1"
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
 dotnet test "$PSScriptRoot\tests\Plana.Core.Tests\Plana.Core.Tests.csproj" -c Release
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

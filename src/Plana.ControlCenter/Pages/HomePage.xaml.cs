@@ -376,7 +376,7 @@ public sealed class ActionListItem(string id, string name, string detail, string
     public UserActionSettings? UserAction { get; set; }
     public bool CanManage => UserAction is not null;
     public bool IsPinned { get; set; }
-    public string PinGlyph => IsPinned ? "\uE735" : "\uE734";
+    public Symbol PinSymbol => IsPinned ? Symbol.SolidStar : Symbol.OutlineStar;
     public string PinLabel => IsPinned ? (App.IsChinese ? "从桌宠快捷位移除" : "Remove from Companion") : (App.IsChinese ? "固定到桌宠（最多 4 个）" : "Pin to Companion (up to 4)");
 
     public ActionListItem(string id, string name, string detail, string glyph, string kind, ActionDefinition definition, string? workingDirectory)

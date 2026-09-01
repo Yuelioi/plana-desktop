@@ -22,10 +22,10 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <AutoSuggestBox x:Name="SearchBox" QueryIcon="Find" PlaceholderText="Search actions" TextChanged="SearchBox_TextChanged" QuerySubmitted="SearchBox_QuerySubmitted" />
-            <Button x:Name="AddActionButton" Grid.Column="1" MinWidth="132" Click="AddActionButton_Click">
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <FontIcon FontSize="14" Glyph="&#xE710;" />
-                    <TextBlock x:Name="AddActionLabel" Text="New action" />
+            <Button x:Name="AddActionButton" Grid.Column="1" MinWidth="132" Style="{StaticResource CommandButtonStyle}" Click="AddActionButton_Click">
+                <StackPanel Style="{StaticResource CommandButtonContentStyle}">
+                    <SymbolIcon Style="{StaticResource CommandIconStyle}" Symbol="Add" />
+                    <TextBlock x:Name="AddActionLabel" Style="{StaticResource CommandLabelStyle}" Text="New action" />
                 </StackPanel>
             </Button>
         </Grid>
@@ -61,18 +61,18 @@
                             <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{x:Bind Name}" TextTrimming="CharacterEllipsis" />
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" Foreground="{StaticResource PlanaSubtleBrush}" Text="{x:Bind Description}" TextTrimming="CharacterEllipsis" />
                             <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind TypeLabel}" />
-                            <Button Grid.Column="3" Style="{StaticResource IconButtonStyle}" Tag="{x:Bind}" Click="PinActionButton_Click" AutomationProperties.Name="Pin to Companion" ToolTipService.ToolTip="{x:Bind PinLabel}"><FontIcon FontSize="14" Glyph="{x:Bind PinGlyph}" /></Button>
-                            <Button Grid.Column="4" Style="{StaticResource IconButtonStyle}" IsEnabled="{x:Bind CanManage}" Tag="{x:Bind}" Click="EditActionButton_Click" AutomationProperties.Name="Edit action"><FontIcon FontSize="14" Glyph="&#xE70F;" /></Button>
-                            <Button Grid.Column="5" Style="{StaticResource IconButtonStyle}" IsEnabled="{x:Bind CanManage}" Tag="{x:Bind}" Click="DeleteActionButton_Click" AutomationProperties.Name="Delete action"><FontIcon FontSize="14" Glyph="&#xE74D;" /></Button>
+                            <Button Grid.Column="3" Style="{StaticResource IconButtonStyle}" Tag="{x:Bind}" Click="PinActionButton_Click" AutomationProperties.Name="Pin to Companion" ToolTipService.ToolTip="{x:Bind PinLabel}"><SymbolIcon Symbol="{x:Bind PinSymbol}" /></Button>
+                            <Button Grid.Column="4" Style="{StaticResource IconButtonStyle}" IsEnabled="{x:Bind CanManage}" Tag="{x:Bind}" Click="EditActionButton_Click" AutomationProperties.Name="Edit action"><SymbolIcon Symbol="Edit" /></Button>
+                            <Button Grid.Column="5" Style="{StaticResource IconButtonStyle}" IsEnabled="{x:Bind CanManage}" Tag="{x:Bind}" Click="DeleteActionButton_Click" AutomationProperties.Name="Delete action"><SymbolIcon Symbol="Delete" /></Button>
                             <Button Grid.Column="6" Style="{StaticResource IconButtonStyle}" Tag="{x:Bind}" Click="RunActionButton_Click" AutomationProperties.Name="Run action">
-                                <FontIcon FontSize="14" Glyph="&#xE768;" />
+                                <SymbolIcon Symbol="Play" />
                             </Button>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.Footer>
                     <StackPanel x:Name="EmptyState" Margin="0,56,0,0" HorizontalAlignment="Center" Spacing="8" Visibility="Collapsed">
-                        <FontIcon FontSize="28" Glyph="&#xE721;" />
+                        <SymbolIcon Symbol="Find" />
                         <TextBlock x:Name="EmptyTitle" HorizontalAlignment="Center" FontWeight="SemiBold" Text="No matching actions" />
                         <TextBlock x:Name="EmptyDescription" Foreground="{StaticResource PlanaSubtleBrush}" Text="Try another search or create an action." />
                     </StackPanel>

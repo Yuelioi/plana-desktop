@@ -16,17 +16,17 @@
             <TextBlock x:Name="BehaviorHeading" Style="{StaticResource SectionTitleStyle}" Text="Companion" />
             <Grid Padding="4,8" ColumnSpacing="24">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                <TextBlock x:Name="TopmostTitle" VerticalAlignment="Center" FontWeight="SemiBold" Text="Keep above other windows" />
+                <TextBlock x:Name="TopmostTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Keep above other windows" />
                 <ToggleSwitch x:Name="TopmostToggle" Grid.Column="1" OnContent="" OffContent="" Toggled="TopmostToggle_Toggled" />
             </Grid>
             <Grid Padding="4,8" ColumnSpacing="24">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                <TextBlock x:Name="StartupTitle" VerticalAlignment="Center" FontWeight="SemiBold" Text="Start with Windows" />
+                <TextBlock x:Name="StartupTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Start with Windows" />
                 <ToggleSwitch x:Name="StartupToggle" Grid.Column="1" OnContent="" OffContent="" Toggled="StartupToggle_Toggled" />
             </Grid>
             <Grid Padding="4,8" ColumnSpacing="24">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="240" /></Grid.ColumnDefinitions>
-                <TextBlock x:Name="ScaleTitle" VerticalAlignment="Center" FontWeight="SemiBold" Text="Companion scale" />
+                <TextBlock x:Name="ScaleTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Companion scale" />
                 <Slider x:Name="ScaleSlider" Grid.Column="1" Minimum="0.5" Maximum="2" StepFrequency="0.1" ValueChanged="ScaleSlider_ValueChanged" Header="100%" />
             </Grid>
         </StackPanel>
@@ -35,7 +35,7 @@
             <TextBlock x:Name="LanguageHeading" Style="{StaticResource SectionTitleStyle}" Text="Language" />
             <Grid Padding="4,8" ColumnSpacing="24">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="220" /></Grid.ColumnDefinitions>
-                <TextBlock x:Name="LanguageTitle" VerticalAlignment="Center" FontWeight="SemiBold" Text="Display language" />
+                <TextBlock x:Name="LanguageTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Display language" />
                 <ComboBox x:Name="LanguagePicker" Grid.Column="1" HorizontalAlignment="Stretch" SelectionChanged="LanguagePicker_SelectionChanged">
                     <ComboBoxItem Tag="en" Content="English" />
                     <ComboBoxItem Tag="zh-CN" Content="简体中文" />
@@ -47,12 +47,12 @@
             <TextBlock x:Name="InteractionsHeading" Style="{StaticResource SectionTitleStyle}" Text="Interactions" />
             <Grid Padding="4,8" ColumnSpacing="24">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
-                <TextBlock x:Name="ClickTitle" VerticalAlignment="Center" FontWeight="SemiBold" Text="Single click" />
+                <TextBlock x:Name="ClickTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Single click" />
                 <ComboBox x:Name="ClickActionPicker" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="InteractionPicker_SelectionChanged" Tag="click" />
             </Grid>
             <Grid Padding="4,8" ColumnSpacing="24">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
-                <TextBlock x:Name="DoubleClickTitle" VerticalAlignment="Center" FontWeight="SemiBold" Text="Double click" />
+                <TextBlock x:Name="DoubleClickTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Double click" />
                 <ComboBox x:Name="DoubleClickActionPicker" Grid.Column="1" HorizontalAlignment="Stretch" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="InteractionPicker_SelectionChanged" Tag="doubleClick" />
             </Grid>
         </StackPanel>
@@ -61,7 +61,7 @@
             <TextBlock x:Name="AiHeading" Style="{StaticResource SectionTitleStyle}" Text="AI conversation" />
             <Grid Padding="4,8" ColumnSpacing="24">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="260" /></Grid.ColumnDefinitions>
-                <TextBlock x:Name="AiProviderTitle" VerticalAlignment="Center" FontWeight="SemiBold" Text="Provider" />
+                <TextBlock x:Name="AiProviderTitle" Style="{StaticResource SettingsRowTitleStyle}" Text="Provider" />
                 <ComboBox x:Name="AiProviderPicker" Grid.Column="1" HorizontalAlignment="Stretch" SelectionChanged="AiProviderPicker_SelectionChanged">
                     <ComboBoxItem Tag="codex" Content="Codex CLI subscription" />
                     <ComboBoxItem Tag="api" Content="OpenAI-compatible API" />
@@ -73,7 +73,7 @@
                 <TextBox x:Name="AiApiKeyVariableInput" Header="API key environment variable" PlaceholderText="OPENAI_API_KEY" />
             </StackPanel>
             <TextBlock x:Name="AiHelpText" Foreground="{StaticResource PlanaSubtleBrush}" Text="Codex uses your existing local CLI login. API mode reads the key from the named environment variable." TextWrapping="Wrap" />
-            <Button x:Name="SaveAiButton" HorizontalAlignment="Left" Click="SaveAiButton_Click"><TextBlock x:Name="SaveAiLabel" Text="Save AI settings" /></Button>
+            <Button x:Name="SaveAiButton" HorizontalAlignment="Left" Style="{StaticResource AccentCommandButtonStyle}" Click="SaveAiButton_Click"><TextBlock x:Name="SaveAiLabel" Text="Save AI settings" /></Button>
         </StackPanel>
 
         <InfoBar x:Name="SaveStatus" IsOpen="False" IsClosable="True" Severity="Success" Title="Saved" Message="Changes are active." />

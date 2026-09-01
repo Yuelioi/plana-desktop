@@ -147,10 +147,7 @@ public sealed partial class SettingsPage : Page
         try
         {
             await App.SettingsStore.SaveAsync(App.Settings);
-            SaveStatus.Severity = InfoBarSeverity.Success;
-            SaveStatus.Title = App.IsChinese ? "已保存" : "Saved";
-            SaveStatus.Message = App.IsChinese ? "更改已应用。" : "Changes are active.";
-            SaveStatus.IsOpen = true;
+            SaveStatus.IsOpen = false;
             return true;
         }
         catch (Exception exception)

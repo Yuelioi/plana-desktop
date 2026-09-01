@@ -25,6 +25,7 @@ Plana Desktop pairs an expressive transparent character with quiet Windows-nativ
 - Page titles are 28 px semibold; section titles are 18 px semibold; body text follows native defaults.
 - Control-center page padding is 32 px with 24–28 px between major sections and 6–12 px inside related groups.
 - Toolbar controls are 24–26 px tall with 3–5 px gaps; labels stay concise enough for the narrow companion width.
+- Control Center command buttons are 36 px tall, icon-only buttons are 32×32 px, and all UI icons use native `SymbolIcon` at 16 px. Pages do not use raw PUA glyphs or locally sized icon variants.
 
 ## Interaction rules
 
@@ -46,4 +47,5 @@ Plana Desktop pairs an expressive transparent character with quiet Windows-nativ
 - Preserve native keyboard navigation, visible focus, semantic labels, and theme contrast.
 - Never encode state by color alone; toggles, labels, and diagnostics carry explicit state.
 - Avoid nested cards, decorative gradients, oversized headers, and duplicate page/window titles.
+- Control Center pages consume shared styles from `Themes/PlanaControls.xaml`; successful immediate saves stay silent and only failures or non-obvious safety consequences produce status copy.
 - Every release must verify the WinUI window, the transparent Companion, toolbar clipping, hit-through corners, model input, single-instance behavior, and both languages.

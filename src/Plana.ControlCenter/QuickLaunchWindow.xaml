@@ -28,7 +28,7 @@
                     <DataTemplate x:DataType="local:QuickLaunchRow">
                         <Grid MinWidth="594" Padding="6,7" ColumnSpacing="12">
                             <Grid.ColumnDefinitions><ColumnDefinition Width="32" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                            <FontIcon VerticalAlignment="Center" FontSize="15" Glyph="{x:Bind Glyph}" />
+                            <SymbolIcon VerticalAlignment="Center" Symbol="{x:Bind Icon}" />
                             <StackPanel Grid.Column="1" Spacing="1">
                                 <TextBlock FontWeight="SemiBold" Text="{x:Bind Title}" TextTrimming="CharacterEllipsis" />
                                 <TextBlock FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="{x:Bind Subtitle}" TextTrimming="CharacterEllipsis" />
