@@ -16,7 +16,9 @@ using System;
 using System.Runtime.InteropServices;
 public static class CompanionCapture {
   [StructLayout(LayoutKind.Sequential)] public struct Rect { public int Left, Top, Right, Bottom; }
+  [StructLayout(LayoutKind.Sequential)] public struct Point { public int X, Y; }
   [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr window, out Rect rect);
+  [DllImport("user32.dll")] public static extern IntPtr WindowFromPoint(Point point);
 }
 '@
 
@@ -52,14 +54,27 @@ finally {
 
 $rendererSource = Get-Content -LiteralPath (Join-Path $repoRoot 'src\Plana.Companion.Godot.Renderer\renderer.gd') -Raw
 $hostSource = Get-Content -LiteralPath (Join-Path $repoRoot 'src\Plana.Companion.Native\GodotCompanionWindow.cs') -Raw
+$traySource = Get-Content -LiteralPath (Join-Path $repoRoot 'src\Plana.Companion.Native\NativeTrayIcon.cs') -Raw
+$topPoint = [CompanionCapture+Point]::new()
+$topPoint.X = $rect.Left + [int]($width * 0.5)
+$topPoint.Y = $rect.Top + [int]($height * 0.18)
+$characterPoint = [CompanionCapture+Point]::new()
+$characterPoint.X = $rect.Left + [int]($width * 0.5)
+$characterPoint.Y = $rect.Top + [int]($height * 0.78)
+$topWindow = [CompanionCapture]::WindowFromPoint($topPoint)
+$characterWindow = [CompanionCapture]::WindowFromPoint($characterPoint)
 $checks = [ordered]@{
     NoTopBlackBar = $topRatio -lt 0.25
     NoBottomBlackBar = $bottomRatio -lt 0.25
     DoubleClickDispatchedOnPress = $rendererSource -match 'event\.pressed[\s\S]{0,200}event\.double_click'
     ClickUsesConfiguredInteraction = $hostSource -match 'InteractionBindings' -and $hostSource -notmatch 'type == "interaction"[\s\S]{0,500}CharacterGesture\.HeadPat'
     ContextEventHandled = $rendererSource -match 'send_event\("context"' -and $hostSource -match 'type == "context"'
+    TransparentTopPassesThrough = $topWindow -ne $rendererProcess.MainWindowHandle
+    CharacterRemainsInteractive = $characterWindow -eq $rendererProcess.MainWindowHandle
+    WholeWindowPassThroughExplained = $traySource -match '全窗口' -and $traySource -match 'ShowBalloonTip'
 }
 
 $checks.GetEnumerator() | ForEach-Object { [pscustomobject]@{ Check=$_.Key; Passed=$_.Value } }
 Write-Output ("TopBlackRatio={0:N3} BottomBlackRatio={1:N3}" -f $topRatio,$bottomRatio)
+Write-Output ("TopWindow=0x{0:X} CharacterWindow=0x{1:X} RendererWindow=0x{2:X}" -f $topWindow.ToInt64(),$characterWindow.ToInt64(),$rendererProcess.MainWindowHandle.ToInt64())
 if ($checks.Values -contains $false) { exit 1 }

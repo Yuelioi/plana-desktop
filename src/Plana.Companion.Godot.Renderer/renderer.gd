@@ -10,6 +10,8 @@ var suppress_release_click := false
 
 func _ready():
 	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_IGNORE
+	get_window().size_changed.connect(apply_mouse_passthrough_polygon)
+	apply_mouse_passthrough_polygon()
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)
 	for argument in OS.get_cmdline_user_args():
@@ -17,6 +19,19 @@ func _ready():
 			controller.connect_to_host("127.0.0.1", int(argument.trim_prefix("controller_port=")))
 	get_animation_state().set_animation("Idle_01", true, 0)
 	print("RENDERER_READY")
+
+func apply_mouse_passthrough_polygon():
+	var size = Vector2(get_window().size)
+	var normalized = [
+		Vector2(0.20, 0.34), Vector2(0.62, 0.34), Vector2(0.70, 0.60),
+		Vector2(0.75, 0.78), Vector2(1.00, 0.82), Vector2(1.00, 0.90),
+		Vector2(0.70, 0.90), Vector2(0.65, 1.00), Vector2(0.00, 1.00),
+		Vector2(0.00, 0.80), Vector2(0.20, 0.76), Vector2(0.15, 0.55)
+	]
+	var polygon = PackedVector2Array()
+	for point in normalized:
+		polygon.append(point * size)
+	get_window().mouse_passthrough_polygon = polygon
 
 func _process(_delta):
 	poll_controller()
