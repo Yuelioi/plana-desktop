@@ -15,15 +15,15 @@ Plana Desktop 是一个运行在 Windows 桌面上的动态角色助手。角色
 
 ## 开始使用
 
-运行发布目录中的：
+Release 页面只提供三种附件：
 
-```text
-artifacts/native-win-x64/Plana.Desktop.exe
-```
+- `Plana-Desktop-x64-Installer.zip`：完整安装包，包含桌宠、Renderer 和 Control Center。
+- `plugin-plana-random-images-win-x64.zip`：随机图片插件，可按需安装。
+- `Character-Packs.zip`：可选角色包。
+
+首次安装时，解压 `Plana-Desktop-x64-Installer.zip`，右键 `Install.ps1` 并选择“使用 PowerShell 运行”。安装脚本会安装 Control Center、把完整桌宠复制到当前用户的程序目录、创建开始菜单快捷方式并启动 Plana Desktop。
 
 启动后会在桌面显示角色，并在系统托盘保留 Plana 图标。通过托盘菜单可以打开设置、显示或隐藏角色以及退出程序。
-
-如果只打开了设置页面而没有看到角色，请确认启动的是上面的完整发布版本，而不是 `src` 下的单独构建文件。
 
 ## 常用操作
 
@@ -48,6 +48,8 @@ AI 也可以创建或修改动作。完成后在“动作”或“动作组”�
 ### 使用扩展
 
 打开“扩展”页面，可以导入 Action Pack 或插件，并用开关启用、停用。插件启用后会立即刷新其提供的动作，不需要重启程序。
+
+随机图片功能不内置在安装包中。请下载并解压 `plugin-plana-random-images-win-x64.zip`，然后在“扩展 → 导入插件”中选择解压后的文件夹。
 
 插件是可执行程序，只应导入你信任的来源。普通个人自动化优先使用“动作”或不含可执行代码的 Action Pack。
 

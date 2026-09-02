@@ -40,7 +40,8 @@
                 <TextBox x:Name="GroupNameInput" Header="Name" PlaceholderText="Codex projects" />
                 <TextBlock x:Name="OptionalActionsLabel" FontWeight="SemiBold" Text="Actions (optional)" />
                 <TextBlock x:Name="OptionalActionsHelp" Foreground="{StaticResource PlanaSubtleBrush}" Text="An empty Tool Group is allowed. Add Actions now or edit it later." TextWrapping="Wrap" />
-                <ListView x:Name="GroupActionsList" Height="280" SelectionMode="Multiple">
+                <controls:SearchField x:Name="ActionSearchBox" PlaceholderText="Search actions" SearchTextChanged="ActionSearchBox_TextChanged" />
+                <ListView x:Name="GroupActionsList" Height="240" ItemsSource="{x:Bind VisibleGroupActions}" SelectionMode="Multiple">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="local:ToolGroupActionOption">
                             <StackPanel Padding="4,6"><TextBlock FontWeight="SemiBold" Text="{x:Bind Name}" /><TextBlock FontSize="12" Foreground="{StaticResource PlanaSubtleBrush}" Text="{x:Bind Detail}" /></StackPanel>

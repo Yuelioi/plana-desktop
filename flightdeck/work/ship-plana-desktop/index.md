@@ -184,6 +184,10 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 - Removed the hard-coded 8 px vertical gap between the Companion Renderer window and Dock after user review. Dock placement now uses `rect.Bottom` exactly, and the above-window fallback uses `rect.Top - DockPixelHeight`, so image/model content meets the chat surface edge-to-edge in either placement. The exact below/above zero-gap assertion is green; clean build and 62+1 tests pass, and the republished cached image call succeeds with the result left visible.
 - Prepared the Plugin v2/Godot-only release as `v0.3.0`, but its tag-triggered GitHub run failed only because the WPF STA test's five-second thread-start timeout was shorter than the runner's six-second cold startup. Product tests and Core passed. Raised only the test harness startup/join allowance to 20 seconds while preserving the marshal assertion; five consecutive local runs pass. Publishing continues under patch tag `v0.3.1` without moving the public `v0.3.0` tag.
 
+- Fixed full-path application Actions to launch from the executable directory in both Control Center and Companion execution, and added selection-preserving Action search to the Action Group editor. Core tests pass 64/64 and the full Release solution builds cleanly.
+
+- Simplified GitHub Release output to exactly three assets: one complete installer ZIP, one separately installable random-images Plugin ZIP, and one Character Packs ZIP. The installer combines Companion and Control Center installation resources; README documents installation and Plugin import. A release-layout check enforces names, count, required contents, and Plugin separation.
+
 ## References
 
 - [Product and delivery context](context.md)

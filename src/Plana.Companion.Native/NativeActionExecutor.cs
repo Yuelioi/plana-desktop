@@ -42,7 +42,7 @@ internal static class NativeActionExecutor
 
     private static ActionResult Launch(ActionDefinition action, string? workingDirectory)
     {
-        var info = CreateProcess(action.Parameters["executable"], action, workingDirectory);
+        var info = ActionProcessStartInfoFactory.CreateForLaunch(action.Parameters["executable"], action, workingDirectory);
         Process.Start(info);
         return ActionResult.Success("Launched.");
     }
@@ -58,22 +58,13 @@ internal static class NativeActionExecutor
 
     private static ActionResult RunScript(ActionDefinition action, string? workingDirectory)
     {
-        var info = CreateProcess(action.Parameters["interpreter"], action, workingDirectory);
+        var info = ActionProcessStartInfoFactory.Create(action.Parameters["interpreter"], action, workingDirectory);
         info.ArgumentList.Insert(0, Resolve(action.Parameters["script"], workingDirectory));
         Process.Start(info);
         return ActionResult.Success("Script started.");
     }
 
-    private static ProcessStartInfo CreateProcess(string executable, ActionDefinition action, string? workingDirectory)
-    {
-        var info = new ProcessStartInfo(executable) { UseShellExecute = false, WorkingDirectory = workingDirectory ?? Environment.CurrentDirectory };
-        foreach (var argument in action.Parameters.Where(pair => pair.Key.StartsWith("arg.", StringComparison.OrdinalIgnoreCase)).OrderBy(pair => ParseIndex(pair.Key)))
-            info.ArgumentList.Add(argument.Value);
-        return info;
-    }
-
     private static string Resolve(string path, string? workingDirectory) =>
         Path.IsPathFullyQualified(path) || workingDirectory is null ? path : Path.GetFullPath(path, workingDirectory);
 
-    private static int ParseIndex(string key) => int.TryParse(key.AsSpan(4), out var index) ? index : int.MaxValue;
 }

@@ -38,7 +38,7 @@ internal static class ActionExecutionService
 
     private static ActionResult Launch(ActionDefinition action, string? workingDirectory)
     {
-        var startInfo = CreateStartInfo(Required(action, "executable"), action, workingDirectory);
+        var startInfo = ActionProcessStartInfoFactory.CreateForLaunch(Required(action, "executable"), action, workingDirectory);
         Process.Start(startInfo);
         return ActionResult.Success(App.IsChinese ? "已启动。" : "Launched.");
     }
@@ -63,30 +63,11 @@ internal static class ActionExecutionService
 
     private static ActionResult RunScript(ActionDefinition action, string? workingDirectory)
     {
-        var startInfo = CreateStartInfo(Required(action, "interpreter"), action, workingDirectory);
+        var startInfo = ActionProcessStartInfoFactory.Create(Required(action, "interpreter"), action, workingDirectory);
         startInfo.ArgumentList.Insert(0, Required(action, "script"));
         Process.Start(startInfo);
         return ActionResult.Success(App.IsChinese ? "脚本已启动。" : "Script started.");
     }
-
-    private static ProcessStartInfo CreateStartInfo(string executable, ActionDefinition action, string? workingDirectory)
-    {
-        var startInfo = new ProcessStartInfo(executable)
-        {
-            UseShellExecute = false,
-            WorkingDirectory = workingDirectory ?? Environment.CurrentDirectory,
-        };
-        foreach (var argument in action.Parameters
-                     .Where(pair => pair.Key.StartsWith("arg.", StringComparison.OrdinalIgnoreCase))
-                     .OrderBy(pair => ParseArgumentIndex(pair.Key)))
-        {
-            startInfo.ArgumentList.Add(argument.Value);
-        }
-        return startInfo;
-    }
-
-    private static int ParseArgumentIndex(string key) =>
-        int.TryParse(key.AsSpan(4), out var index) ? index : int.MaxValue;
 
     private static string Required(ActionDefinition action, string key) =>
         action.Parameters.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value)

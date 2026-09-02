@@ -2,6 +2,7 @@
 **/obj/
 .vs/
 artifacts/
+release-output/
 archive/generated-legacy-outputs/
 *.user
 .tmp-animation-preview/

@@ -11,8 +11,10 @@ public sealed partial class ToolGroupsPage : Page
 {
     private readonly List<ToolGroupRow> _allGroups = [];
     private readonly List<ToolGroupActionOption> _actions = [];
+    private readonly HashSet<string> _selectedActionIds = new(StringComparer.OrdinalIgnoreCase);
     private ToolGroupSettings? _editingGroup;
     public ObservableCollection<ToolGroupRow> VisibleGroups { get; } = [];
+    public ObservableCollection<ToolGroupActionOption> VisibleGroupActions { get; } = [];
 
     public ToolGroupsPage()
     {
@@ -46,6 +48,12 @@ public sealed partial class ToolGroupsPage : Page
     }
 
     private void SearchBox_TextChanged(object? sender, EventArgs args) => Filter(SearchBox.Text);
+
+    private void ActionSearchBox_TextChanged(object? sender, EventArgs args)
+    {
+        CaptureVisibleActionSelection();
+        FilterEditorActions(ActionSearchBox.Text);
+    }
 
     private async void RefreshButton_Click(object sender, RoutedEventArgs e)
     {
@@ -82,10 +90,10 @@ public sealed partial class ToolGroupsPage : Page
     private async Task ShowEditorAsync(ToolGroupSettings? group)
     {
         GroupNameInput.Text = group?.Name ?? string.Empty;
-        GroupActionsList.ItemsSource = _actions;
-        GroupActionsList.SelectedItems.Clear();
-        if (group is not null)
-            foreach (var action in _actions.Where(action => group.ActionIds.Contains(action.Id, StringComparer.OrdinalIgnoreCase))) GroupActionsList.SelectedItems.Add(action);
+        ActionSearchBox.Text = string.Empty;
+        _selectedActionIds.Clear();
+        if (group is not null) _selectedActionIds.UnionWith(group.ActionIds);
+        FilterEditorActions(string.Empty);
         EditorError.Text = string.Empty;
         GroupDialog.Title = group is null ? (App.IsChinese ? "新建动作组" : "New Action Group") : (App.IsChinese ? "编辑动作组" : "Edit Action Group");
         GroupDialog.PrimaryButtonText = App.IsChinese ? "保存" : "Save";
@@ -121,7 +129,8 @@ public sealed partial class ToolGroupsPage : Page
                 App.Settings.ToolGroups.Add(_editingGroup);
             }
             _editingGroup.Name = name;
-            _editingGroup.ActionIds = GroupActionsList.SelectedItems.Cast<ToolGroupActionOption>().Select(action => action.Id).ToList();
+            CaptureVisibleActionSelection();
+            _editingGroup.ActionIds = _actions.Where(action => _selectedActionIds.Contains(action.Id)).Select(action => action.Id).ToList();
             App.Settings.SelectedToolGroupId ??= _editingGroup.Id;
             await App.SettingsStore.SaveAsync(App.Settings);
             await ReloadAsync();
@@ -143,10 +152,37 @@ public sealed partial class ToolGroupsPage : Page
         GroupNameInput.PlaceholderText = "例如：Codex 项目";
         OptionalActionsLabel.Text = "动作（可选）";
         OptionalActionsHelp.Text = "允许创建空动作组；可以现在关联动作，也可以以后再编辑。";
+        ActionSearchBox.PlaceholderText = "搜索动作";
+    }
+
+    private void CaptureVisibleActionSelection()
+    {
+        foreach (var action in VisibleGroupActions) _selectedActionIds.Remove(action.Id);
+        foreach (var action in GroupActionsList.SelectedItems.Cast<ToolGroupActionOption>()) _selectedActionIds.Add(action.Id);
+    }
+
+    private void FilterEditorActions(string? query)
+    {
+        var needle = query?.Trim() ?? string.Empty;
+        VisibleGroupActions.Clear();
+        foreach (var action in _actions.Where(action => needle.Length == 0 ||
+                     action.Name.Contains(needle, StringComparison.CurrentCultureIgnoreCase) ||
+                     action.Detail.Contains(needle, StringComparison.CurrentCultureIgnoreCase)))
+        {
+            VisibleGroupActions.Add(action);
+        }
+        GroupActionsList.SelectedItems.Clear();
+        foreach (var action in VisibleGroupActions.Where(action => _selectedActionIds.Contains(action.Id)))
+            GroupActionsList.SelectedItems.Add(action);
     }
 }
 
-public sealed record ToolGroupActionOption(string Id, string Name, string Detail);
+public sealed class ToolGroupActionOption(string id, string name, string detail)
+{
+    public string Id { get; set; } = id;
+    public string Name { get; set; } = name;
+    public string Detail { get; set; } = detail;
+}
 public sealed class ToolGroupRow(ToolGroupSettings settings, string summary)
 {
     public ToolGroupSettings Settings { get; set; } = settings;

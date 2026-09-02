@@ -15,9 +15,13 @@ dotnet test "$PSScriptRoot\tests\Plana.TransientUI.Tests\Plana.TransientUI.Tests
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 if ($Publish) {
+    $nativeOutput = Join-Path $PSScriptRoot 'artifacts\native-win-x64'
+    $pluginOutput = Join-Path $PSScriptRoot 'artifacts\plugin-plana-random-images-win-x64'
+    Remove-Item -LiteralPath $nativeOutput,$pluginOutput -Recurse -Force -ErrorAction SilentlyContinue
+
     dotnet publish "$PSScriptRoot\src\Plana.Companion.Native\Plana.Companion.Native.csproj" `
         -c Release -r win-x64 --self-contained false `
-        -o "$PSScriptRoot\artifacts\native-win-x64"
+        -o $nativeOutput
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
     $godotToolRoot = Join-Path $PSScriptRoot 'artifacts\proof-toolchain'
@@ -55,7 +59,7 @@ if ($Publish) {
 
     dotnet publish "$PSScriptRoot\examples\Plana.ExamplePlugin\Plana.ExamplePlugin.csproj" `
         -c Release -r win-x64 --self-contained false `
-        -o "$PSScriptRoot\artifacts\native-win-x64\SamplePlugins\hello"
+        -o $pluginOutput
     exit $LASTEXITCODE
 }
 
