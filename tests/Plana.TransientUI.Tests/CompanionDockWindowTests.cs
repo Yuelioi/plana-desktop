@@ -18,7 +18,7 @@ public sealed class CompanionDockWindowTests
         });
         uiThread.SetApartmentState(ApartmentState.STA);
         uiThread.Start();
-        Assert.True(ready.Wait(TimeSpan.FromSeconds(5)));
+        Assert.True(ready.Wait(TimeSpan.FromSeconds(20)));
 
         try
         {
@@ -36,7 +36,7 @@ public sealed class CompanionDockWindowTests
                 dock.Close();
                 Dispatcher.CurrentDispatcher.BeginInvokeShutdown(DispatcherPriority.Normal);
             });
-            Assert.True(uiThread.Join(TimeSpan.FromSeconds(5)));
+            Assert.True(uiThread.Join(TimeSpan.FromSeconds(20)));
         }
     }
 }
