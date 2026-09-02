@@ -15,11 +15,6 @@ dotnet test "$PSScriptRoot\tests\Plana.TransientUI.Tests\Plana.TransientUI.Tests
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 if ($Publish) {
-    dotnet publish "$PSScriptRoot\src\Plana.Desktop\Plana.Desktop.csproj" `
-        -c Release -r win-x64 --self-contained false `
-        -o "$PSScriptRoot\artifacts\legacy-win-x64"
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
     dotnet publish "$PSScriptRoot\src\Plana.Companion.Native\Plana.Companion.Native.csproj" `
         -c Release -r win-x64 --self-contained false `
         -o "$PSScriptRoot\artifacts\native-win-x64"
@@ -43,7 +38,7 @@ if ($Publish) {
     $rendererSource = Join-Path $PSScriptRoot 'src\Plana.Companion.Godot.Renderer'
     Copy-Item -LiteralPath (Join-Path $rendererSource 'project.godot'),(Join-Path $rendererSource 'main.tscn'),(Join-Path $rendererSource 'plana-data.tres'),(Join-Path $rendererSource 'renderer.gd'),(Join-Path $rendererSource 'renderer.gd.uid') -Destination $rendererOutput -Force
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'src\Plana.Brand\AppIcon.png') -Destination $rendererOutput -Force
-    $modelSource = Join-Path $PSScriptRoot 'src\Plana.Desktop\Renderer\spine\plana'
+    $modelSource = Join-Path $PSScriptRoot 'src\Plana.Companion.Godot.Renderer\character-packs\plana'
     Copy-Item -LiteralPath (Join-Path $modelSource 'NP0035_spr.skel'),(Join-Path $modelSource 'NP0035_spr.atlas'),(Join-Path $modelSource 'NP0035_spr.png') -Destination (Join-Path $rendererOutput 'runtime-assets') -Force
     & (Join-Path $godotOutput 'Godot.console.exe') --headless --editor --path $rendererOutput --quit-after 30
     if ($LASTEXITCODE -ne 0) { throw "Godot renderer import failed with exit code $LASTEXITCODE." }

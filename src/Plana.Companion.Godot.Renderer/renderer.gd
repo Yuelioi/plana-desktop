@@ -8,8 +8,10 @@ var press_position := Vector2.ZERO
 var single_click_deadline := 0
 var suppress_release_click := false
 var full_window_pass_through := false
+var content_mode := false
 var idle_animation := "Idle_01"
 var hidden_slots: Array[String] = []
+var plugin_content: Sprite2D
 var hit_polygon_normalized := [
 	Vector2(0.20, 0.34), Vector2(0.62, 0.34), Vector2(0.70, 0.60),
 	Vector2(0.75, 0.78), Vector2(1.00, 0.82), Vector2(1.00, 0.90),
@@ -35,10 +37,17 @@ func _ready():
 	print("RENDERER_READY")
 
 func apply_mouse_passthrough_polygon():
+	if plugin_content != null:
+		fit_plugin_content()
 	if full_window_pass_through:
 		get_window().mouse_passthrough_polygon = PackedVector2Array()
 		return
 	var size = Vector2(get_window().size)
+	if content_mode:
+		get_window().mouse_passthrough_polygon = PackedVector2Array([
+			Vector2(0, 0), Vector2(size.x, 0), Vector2(size.x, size.y), Vector2(0, size.y)
+		])
+		return
 	var polygon = PackedVector2Array()
 	for point in hit_polygon_normalized:
 		polygon.append(point * size)
@@ -141,6 +150,43 @@ func poll_controller():
 			full_window_pass_through = command.get("passThrough", false)
 			apply_mouse_passthrough_polygon()
 			send_event("input_mode", {"passThrough": full_window_pass_through})
+		if command is Dictionary and command.get("type") == "show_image":
+			show_plugin_image(str(command.get("path", "")))
+		if command is Dictionary and command.get("type") == "restore_content":
+			restore_character_content()
+
+func show_plugin_image(path: String):
+	var image := Image.load_from_file(path)
+	if image.is_empty():
+		return
+	if plugin_content != null:
+		plugin_content.queue_free()
+	plugin_content = Sprite2D.new()
+	plugin_content.texture = ImageTexture.create_from_image(image)
+	get_parent().add_child(plugin_content)
+	plugin_content.z_index = 100
+	fit_plugin_content()
+	visible = false
+	content_mode = true
+	apply_mouse_passthrough_polygon()
+
+func fit_plugin_content():
+	if plugin_content == null or plugin_content.texture == null:
+		return
+	var canvas_size := get_viewport_rect().size
+	var texture_size := plugin_content.texture.get_size()
+	var fit_scale: float = min(canvas_size.x / texture_size.x, canvas_size.y / texture_size.y)
+	var scaled_height: float = texture_size.y * fit_scale
+	plugin_content.position = Vector2(canvas_size.x / 2.0, canvas_size.y - scaled_height / 2.0)
+	plugin_content.scale = Vector2(fit_scale, fit_scale)
+
+func restore_character_content():
+	if plugin_content != null:
+		plugin_content.queue_free()
+		plugin_content = null
+	visible = true
+	content_mode = false
+	apply_mouse_passthrough_polygon()
 
 func perform_cues(cues: Array):
 	if cues.is_empty():

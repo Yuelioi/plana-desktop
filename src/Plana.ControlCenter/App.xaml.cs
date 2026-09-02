@@ -23,6 +23,8 @@ public partial class App : Application
     public static bool IsChinese => Settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
     public static nint MainWindowHandle { get; private set; }
 
+    public static async Task ReloadSettingsAsync() => Settings = await SettingsStore.LoadAsync();
+
     public App()
     {
         InitializeComponent();
@@ -58,7 +60,7 @@ public partial class App : Application
 
     private async Task ActivateAsync(Uri? uri)
     {
-        Settings = await SettingsStore.LoadAsync();
+        await ReloadSettingsAsync();
         if (uri?.Host.Equals("commands", StringComparison.OrdinalIgnoreCase) == true)
         {
             var query = ParseQuery(uri.Query, "query");

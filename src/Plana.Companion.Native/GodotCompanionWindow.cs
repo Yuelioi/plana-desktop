@@ -224,8 +224,8 @@ internal sealed class GodotCompanionWindow : ICompanionController
         var workingArea = Forms.Screen.FromHandle(WindowHandle).WorkingArea;
         var width = Math.Max(280, rect.Width);
         var left = Math.Clamp(rect.Left, workingArea.Left, Math.Max(workingArea.Left, workingArea.Right - width));
-        var top = rect.Bottom + 8;
-        if (top + _transientUi.DockPixelHeight > workingArea.Bottom) top = Math.Max(workingArea.Top, rect.Top - _transientUi.DockPixelHeight - 8);
+        var top = rect.Bottom;
+        if (top + _transientUi.DockPixelHeight > workingArea.Bottom) top = Math.Max(workingArea.Top, rect.Top - _transientUi.DockPixelHeight);
         _transientUi.PositionDockPixels(left, top, width);
     }
 
@@ -267,6 +267,9 @@ internal sealed class GodotCompanionWindow : ICompanionController
             .Select(id => _actions.GetValueOrDefault(id))
             .Where(entry => entry is not null)
             .Select(entry => (entry!.Id, entry.Name))
+            .Concat(_pluginRuntime.SnapshotContributions().SelectMany(pair => (pair.Value.Tools ?? [])
+                .Select(tool => ($"{pair.Key}.{tool.ActionId}", tool.Label))))
+            .DistinctBy(entry => entry.Item1, StringComparer.OrdinalIgnoreCase)
             .ToArray();
         _transientUi.ConfigureDock(
             settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase),
@@ -274,6 +277,24 @@ internal sealed class GodotCompanionWindow : ICompanionController
             SendChatAsync,
             id => _ = Task.Run(() => ExecuteActionByIdAsync(id)));
     }
+
+    public IReadOnlyList<(string Id, string Label)> GetPluginContextCommands() =>
+        _pluginRuntime.SnapshotContributions()
+            .SelectMany(pair => (pair.Value.ContextCommands ?? [])
+                .Where(command => command.Context.Equals("companion", StringComparison.OrdinalIgnoreCase))
+                .Select(command => ($"{pair.Key}.{command.ActionId}", command.Label)))
+            .ToArray();
+
+    public void ExecutePluginCommand(string actionId) => _ = Task.Run(() => ExecuteActionByIdAsync(actionId));
+    public Task<ActionResult> ExecuteControlActionAsync(string actionId) => ExecuteActionByIdAsync(actionId);
+    public IReadOnlyList<object> GetActionCatalog() => _actions.Values.Select(entry => (object)new
+    {
+        id = entry.Id,
+        name = entry.Name,
+        description = DescribeAction(entry),
+        kind = entry.Definition.Kind,
+        source = entry.Source,
+    }).ToArray();
 
     private void ConfigureQuickLaunch()
     {
@@ -502,11 +523,111 @@ internal sealed class GodotCompanionWindow : ICompanionController
         {
             return NativeActionExecutor.Execute(action);
         }
-        return await _pluginRuntime.InvokeAsync(
+        var pluginResult = await _pluginRuntime.InvokeAsync(
             action.Definition.Parameters["pluginId"],
             action.Definition.Parameters["actionId"],
             action.Definition.Capabilities,
-            (request, token) => NativePluginBroker.ExecuteAsync(request, action.WorkingDirectory, token));
+            (request, token) => HandlePluginRequestAsync(request, action.WorkingDirectory, token));
+        if (!pluginResult.Succeeded) ShowBubble(pluginResult.Message, isError: true);
+        return pluginResult;
+    }
+
+    private async Task<PluginHostResponsePayload> HandlePluginRequestAsync(PluginHostRequestPayload request, string? workingDirectory, CancellationToken token)
+    {
+        if (request.Kind == "character.activate")
+        {
+            if (!request.Parameters.TryGetValue("id", out var id) || string.IsNullOrWhiteSpace(id))
+                return new PluginHostResponsePayload(false, "Character id is required.");
+            var catalog = await new CharacterPackLoader().LoadCatalogAsync(_bundledCharacters, _installedCharacters);
+            var selected = catalog.ValidPacks.FirstOrDefault(pack => pack.Manifest.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
+            if (selected is null) return new PluginHostResponsePayload(false, $"Character '{id}' is not installed.");
+            _characterPack = selected;
+            _planner = new CharacterPerformancePlanner(selected);
+            RestartRenderer();
+            _currentSettings.SelectedCharacterPackId = selected.Manifest.Id;
+            if (_settingsPath is not null) await new DesktopSettingsStore(_settingsPath).SaveAsync(_currentSettings);
+            return new PluginHostResponsePayload(true, $"Activated {selected.Manifest.Name}.");
+        }
+        if (request.Kind == "companion.content.restore")
+        {
+            SendRendererCommand(new { type = "restore_content" });
+            return new PluginHostResponsePayload(true, "Restored character content.");
+        }
+        if (request.Kind == "companion.content.showFile")
+        {
+            if (!request.Parameters.TryGetValue("path", out var configuredPath)) return new PluginHostResponsePayload(false, "Image path is required.");
+            var cacheRoot = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PlanaDesktop", "plugin-cache"));
+            var path = Path.GetFullPath(configuredPath);
+            if (!path.StartsWith(cacheRoot + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) || !File.Exists(path))
+                return new PluginHostResponsePayload(false, "Plugin image must exist inside the managed Plugin cache.");
+            if (new FileInfo(path).Length > 15 * 1024 * 1024 || Path.GetExtension(path).ToLowerInvariant() is not (".webp" or ".png" or ".jpg" or ".jpeg"))
+                return new PluginHostResponsePayload(false, "Plugin image has an unsupported type or size.");
+            SendRendererCommand(new { type = "show_image", path });
+            return new PluginHostResponsePayload(true, "Displayed pre-cached Plugin image content.");
+        }
+        if (request.Kind is "companion.content.showImage" or "companion.content.preloadImage")
+        {
+            try
+            {
+                var display = request.Kind == "companion.content.showImage";
+                if (!request.Parameters.TryGetValue("url", out var value) || !Uri.TryCreate(value, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttps)
+                    return new PluginHostResponsePayload(false, "An HTTPS image URL is required.");
+                var cache = Path.Combine(Path.GetDirectoryName(_settingsPath!)!, "plugin-content");
+                Directory.CreateDirectory(cache);
+                var cacheKey = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(uri.AbsoluteUri)));
+                var cachedPath = Directory.EnumerateFiles(cache, $"{cacheKey}.*").FirstOrDefault();
+                if (cachedPath is not null)
+                {
+                    File.SetLastWriteTimeUtc(cachedPath, DateTime.UtcNow);
+                    if (display) SendRendererCommand(new { type = "show_image", path = cachedPath });
+                    if (display) SchedulePluginImagePreload(request, workingDirectory);
+                    return new PluginHostResponsePayload(true, display ? "Displayed cached Plugin image content." : "Plugin image is already cached.");
+                }
+                using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(20) };
+                using var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, token);
+                response.EnsureSuccessStatusCode();
+                var mediaType = response.Content.Headers.ContentType?.MediaType ?? string.Empty;
+                if (!mediaType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                    return new PluginHostResponsePayload(false, "The URL did not return an image. Plugins must resolve web pages to a direct image URL.");
+                var bytes = await response.Content.ReadAsByteArrayAsync(token);
+                if (bytes.Length > 15 * 1024 * 1024) return new PluginHostResponsePayload(false, "The image exceeds 15 MiB.");
+                var extension = mediaType.ToLowerInvariant() switch { "image/png" => ".png", "image/jpeg" => ".jpg", "image/webp" => ".webp", _ => ".image" };
+                if (extension == ".image") return new PluginHostResponsePayload(false, $"Unsupported image type '{mediaType}'.");
+                var path = Path.Combine(cache, $"{cacheKey}{extension}");
+                await File.WriteAllBytesAsync(path, bytes, token);
+                TrimPluginImageCache(cache);
+                if (display) SendRendererCommand(new { type = "show_image", path });
+                if (display) SchedulePluginImagePreload(request, workingDirectory);
+                return new PluginHostResponsePayload(true, display ? "Displayed Plugin image content." : "Preloaded Plugin image content.");
+            }
+            catch (Exception exception) when (exception is HttpRequestException or IOException or TaskCanceledException)
+            {
+                return new PluginHostResponsePayload(false, $"Could not load Plugin image: {exception.Message}");
+            }
+        }
+        return await NativePluginBroker.ExecuteAsync(request, workingDirectory, token);
+    }
+
+    private static void TrimPluginImageCache(string directory)
+    {
+        foreach (var file in new DirectoryInfo(directory).EnumerateFiles().OrderByDescending(file => file.LastWriteTimeUtc).Skip(64))
+        {
+            try { file.Delete(); } catch (IOException) { }
+        }
+    }
+
+    private void SchedulePluginImagePreload(PluginHostRequestPayload request, string? workingDirectory)
+    {
+        if (!request.Parameters.TryGetValue("preloadUrl", out var preloadUrl) || string.IsNullOrWhiteSpace(preloadUrl)) return;
+        _ = Task.Run(() => HandlePluginRequestAsync(
+            new PluginHostRequestPayload("companion.content.preloadImage", new Dictionary<string, string> { ["url"] = preloadUrl }),
+            workingDirectory,
+            CancellationToken.None));
+    }
+
+    private void SendRendererCommand(object command)
+    {
+        lock (_sync) _writer?.WriteLine(JsonSerializer.Serialize(command));
     }
 
     private void RestartRenderer()
@@ -607,8 +728,16 @@ internal sealed class GodotCompanionWindow : ICompanionController
             }
             _currentSettings = settings;
             _interactionBindings = new Dictionary<string, string>(settings.InteractionBindings, StringComparer.OrdinalIgnoreCase);
-            RefreshUserActions(settings);
+            var dataDirectory = Path.GetDirectoryName(_settingsPath)!;
+            var previousPluginIds = _pluginRuntime.SnapshotContributions().Keys.ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var pluginDiagnostics = new PluginManifestLoader().LoadDirectoryAsync(Path.Combine(dataDirectory, "plugins")).GetAwaiter().GetResult();
+            _pluginRuntime.ReconcileAsync(pluginDiagnostics, settings, settings.UiCulture).GetAwaiter().GetResult();
+            if (previousPluginIds.Except(_pluginRuntime.SnapshotContributions().Keys, StringComparer.OrdinalIgnoreCase).Any())
+                SendRendererCommand(new { type = "restore_content" });
+            _actions = NativeActionCatalog.Load(settings, dataDirectory, _pluginRuntime.SnapshotActionPacks())
+                .ToDictionary(action => action.Id, StringComparer.OrdinalIgnoreCase);
             ConfigurePinnedActions(settings);
+            ConfigureQuickLaunch();
             Apply(new CompanionSurfaceState(settings.Left, settings.Top, settings.Width, settings.Height, settings.Scale, settings.AlwaysOnTop));
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or JsonException) { }

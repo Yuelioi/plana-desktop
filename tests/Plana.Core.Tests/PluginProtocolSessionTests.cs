@@ -54,7 +54,7 @@ public sealed class PluginProtocolSessionTests
             new HashSet<string> { "folder.open" },
             (request, _) => Task.FromResult(new PluginHostResponsePayload(true, $"Opened {request.Parameters["path"]}")),
             TimeSpan.FromSeconds(1));
-        Assert.Equal("hello", Assert.Single(contributions).Id);
+        Assert.Equal("hello", Assert.Single(contributions.Actions).Id);
         Assert.True(result.Succeeded);
         await serverTask;
     }
@@ -69,7 +69,7 @@ public sealed class PluginProtocolSessionTests
             await server.WaitForConnectionAsync();
             using var writer = new StreamWriter(server) { AutoFlush = true };
             await writer.WriteLineAsync(JsonSerializer.Serialize(
-                PluginProtocol.Envelope("hello-1", "hello", new PluginHelloPayload("wrong.plugin", "1")),
+                PluginProtocol.Envelope("hello-1", "hello", new PluginHelloPayload("wrong.plugin", "2")),
                 PluginProtocol.JsonOptions));
         });
 
@@ -82,6 +82,6 @@ public sealed class PluginProtocolSessionTests
     }
 
     private static PluginManifest Manifest() => new(
-        1, "example.plugin", "1.0.0", "Tests", "1", "plugin.exe", "en",
+        1, "example.plugin", "1.0.0", "Tests", "2", "plugin.exe", "en",
         new Dictionary<string, string>(), new HashSet<string> { "folder.open" }, "C:\\plugins\\example");
 }

@@ -17,13 +17,15 @@
         </Grid.RowDefinitions>
         <TextBlock x:Name="PageTitle" Style="{StaticResource PageTitleStyle}" Text="Actions" />
 
-        <Grid Grid.Row="1" ColumnSpacing="10">
+        <Grid Grid.Row="1" ColumnSpacing="8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <controls:SearchField x:Name="SearchBox" PlaceholderText="Search actions" SearchTextChanged="SearchBox_TextChanged" EnterPressed="SearchBox_EnterPressed" />
-            <Button x:Name="AddActionButton" Grid.Column="1" MinWidth="132" Style="{StaticResource CommandButtonStyle}" Click="AddActionButton_Click">
+            <Button x:Name="RefreshButton" Grid.Column="1" Style="{StaticResource IconButtonStyle}" Click="RefreshButton_Click" AutomationProperties.Name="Refresh actions" ToolTipService.ToolTip="Refresh actions"><Viewbox Style="{StaticResource IconButtonGlyphStyle}"><SymbolIcon Symbol="Refresh" /></Viewbox></Button>
+            <Button x:Name="AddActionButton" Grid.Column="2" MinWidth="132" Style="{StaticResource CommandButtonStyle}" Click="AddActionButton_Click">
                 <StackPanel Style="{StaticResource CommandButtonContentStyle}">
                     <Viewbox Style="{StaticResource CommandIconStyle}"><SymbolIcon Symbol="Add" /></Viewbox>
                     <TextBlock x:Name="AddActionLabel" Style="{StaticResource CommandLabelStyle}" Text="New action" />
@@ -34,11 +36,12 @@
         <Grid Grid.Row="2" RowSpacing="12">
             <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
             <InfoBar x:Name="ActionStatus" IsOpen="False" IsClosable="True" />
-            <Grid Grid.Row="1" Padding="8,10" ColumnSpacing="16">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="3*" /><ColumnDefinition Width="140" /><ColumnDefinition Width="40" /><ColumnDefinition Width="40" /><ColumnDefinition Width="40" /><ColumnDefinition Width="40" /></Grid.ColumnDefinitions>
+            <Grid Grid.Row="1" Padding="8,10" ColumnSpacing="8">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="3*" /><ColumnDefinition Width="140" /><ColumnDefinition Width="152" /></Grid.ColumnDefinitions>
                 <TextBlock x:Name="NameColumnHeader" FontWeight="SemiBold" Text="Name" />
                 <TextBlock x:Name="DescriptionColumnHeader" Grid.Column="1" FontWeight="SemiBold" Text="Description" />
                 <TextBlock x:Name="TypeColumnHeader" Grid.Column="2" FontWeight="SemiBold" Text="Type" />
+                <TextBlock x:Name="OperationsColumnHeader" Grid.Column="3" FontWeight="SemiBold" Text="Actions" />
             </Grid>
             <ListView x:Name="ActionList" Grid.Row="2" ItemsSource="{x:Bind VisibleActions}" IsItemClickEnabled="True" ItemClick="ActionList_ItemClick" SelectionMode="None">
                 <ListView.Resources>
@@ -49,15 +52,15 @@
                 </ListView.Resources>
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="local:ActionListItem">
-                        <Grid Padding="8,10" ColumnSpacing="16">
+                        <Grid Padding="8,10" ColumnSpacing="8">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="3*" />
                                 <ColumnDefinition Width="140" />
-                                <ColumnDefinition Width="40" />
-                                <ColumnDefinition Width="40" />
-                                <ColumnDefinition Width="40" />
-                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition Width="32" />
+                                <ColumnDefinition Width="32" />
+                                <ColumnDefinition Width="32" />
+                                <ColumnDefinition Width="32" />
                             </Grid.ColumnDefinitions>
                             <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{x:Bind Name}" TextTrimming="CharacterEllipsis" />
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" Foreground="{StaticResource PlanaSubtleBrush}" Text="{x:Bind Description}" TextTrimming="CharacterEllipsis" />

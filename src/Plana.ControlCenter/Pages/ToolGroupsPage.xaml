@@ -7,10 +7,11 @@
     <Grid Padding="32,24,32,32" RowSpacing="20">
         <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
         <TextBlock x:Name="PageTitle" Style="{StaticResource PageTitleStyle}" Text="Action groups" />
-        <Grid Grid.Row="1" ColumnSpacing="10">
-            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+        <Grid Grid.Row="1" ColumnSpacing="8">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
             <controls:SearchField x:Name="SearchBox" PlaceholderText="Search action groups" SearchTextChanged="SearchBox_TextChanged" />
-            <Button Grid.Column="1" MinWidth="132" Style="{StaticResource CommandButtonStyle}" Click="NewGroupButton_Click"><StackPanel Style="{StaticResource CommandButtonContentStyle}"><Viewbox Style="{StaticResource CommandIconStyle}"><SymbolIcon Symbol="Add" /></Viewbox><TextBlock x:Name="NewGroupLabel" Style="{StaticResource CommandLabelStyle}" Text="New group" /></StackPanel></Button>
+            <Button x:Name="RefreshButton" Grid.Column="1" Style="{StaticResource IconButtonStyle}" Click="RefreshButton_Click" AutomationProperties.Name="Refresh action groups" ToolTipService.ToolTip="Refresh action groups"><Viewbox Style="{StaticResource IconButtonGlyphStyle}"><SymbolIcon Symbol="Refresh" /></Viewbox></Button>
+            <Button Grid.Column="2" MinWidth="132" Style="{StaticResource CommandButtonStyle}" Click="NewGroupButton_Click"><StackPanel Style="{StaticResource CommandButtonContentStyle}"><Viewbox Style="{StaticResource CommandIconStyle}"><SymbolIcon Symbol="Add" /></Viewbox><TextBlock x:Name="NewGroupLabel" Style="{StaticResource CommandLabelStyle}" Text="New group" /></StackPanel></Button>
         </Grid>
         <Grid Grid.Row="2">
             <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>

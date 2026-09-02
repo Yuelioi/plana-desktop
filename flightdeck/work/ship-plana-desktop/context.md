@@ -30,7 +30,7 @@ Plana Desktop is a Windows companion that combines an expressive Spine character
 
 - Windows is the primary and currently exclusive platform.
 - Reusable modules target .NET 10. WinUI 3 owns ordinary application UI and configuration; the native Host embeds a narrow WPF transient-UI module for Windows 10 per-pixel-alpha Quick Launch and Companion Dock text/IME. `TransientUiHost` owns a dedicated STA thread and WPF Dispatcher; every Host-to-WPF public operation marshals through it. The global hotkey uses its own Host-thread WinForms HWND and never borrows a WPF window handle. Quick Launch activation temporarily attaches the previous foreground thread to the WPF thread before setting foreground, active, HWND, and WPF keyboard focus; logical WPF focus alone is insufficient. Quick Launch is a one-shot window: outside/Escape dismissal closes its HWND and clears WPF focus, while each activation creates a fresh Window and IME context from the retained catalog configuration. A supervised Godot 4 process owns transparent Spine rendering and dynamically loads validated Character Pack paths; one serialized Host lifecycle owns start/stop/recovery so switching cannot orphan Renderer processes. The .NET Companion host owns tray, persistence, Windows pass-through, recovery, and the semantic command seam.
-- Keep the WPF host runnable only as the behavioral migration baseline until parity checks pass.
+- Historical WPF/WebView implementations are archived for reference only and do not participate in builds, publishing, or runtime fallback.
 - Keep `Plana.Core` free of WPF and Windows dependencies.
 - Treat the Core module's small interface as the primary test surface.
 - The source repository must build independently without referencing sibling projects.
@@ -51,5 +51,5 @@ Plana Desktop is a Windows companion that combines an expressive Spine character
 
 ## External runtime requirements
 
-- The current WPF baseline is framework-dependent and requires the .NET 8 Desktop Runtime; the migration target is .NET 10 plus Windows App SDK deployment.
-- WebView2 Runtime is required for the renderer.
+- The Companion Host requires the .NET 10 Desktop Runtime; the Control Center uses Windows App SDK deployment.
+- The published Host requires its bundled Godot executable and Renderer project. Missing files are a startup error, never a fallback trigger.

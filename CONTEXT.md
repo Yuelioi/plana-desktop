@@ -69,8 +69,24 @@ A sensitive host operation an Action Pack must declare before one of its Actions
 _Avoid_: Permission, scope
 
 **Plugin**:
-Executable extension code hosted outside the desktop process. A valid discovered Plugin runs by default unless the user disables it; Plugins are reserved for behavior that cannot be expressed as an Action Pack.
+Executable extension code hosted outside the desktop process. A Plugin may maintain state, react to Host Context, and register multiple Plugin Contributions. Plugins are reserved for behavior that cannot be expressed as declarative Actions or an Action Pack; an executable that only contributes fixed Actions is an Action Provider, not the complete Plugin model.
 _Avoid_: Action Pack, mod, trusted Plugin, approved Plugin
+
+**Plugin Contribution**:
+A capability-scoped feature a Plugin registers at a Host-owned Extension Point. Contributions may include Actions, Companion Tools, Context Contributions, Content Providers, or configuration fields. The Host owns placement, lifecycle, accessibility, and permission enforcement; the Plugin supplies behavior and state through the Plugin interface.
+_Avoid_: Plugin Action, arbitrary embedded UI, host object
+
+**Companion Tool**:
+A Plugin Contribution shown as a Host-rendered button or compact control on an approved Companion surface. It has a stable identity, label, icon, enablement state, and invocation target; Plugins do not inject arbitrary WinUI, WPF, HTML, or native controls.
+_Avoid_: Action, toolbar HTML, Plugin window
+
+**Context Contribution**:
+A Plugin Contribution that makes commands available when declared Host Context predicates match, such as the active Character, selected text, dropped file type, or current Companion content. Context Contributions extend Host-owned menus and palettes without taking ownership of them.
+_Avoid_: right-click handler, global hook, arbitrary menu item
+
+**Content Provider**:
+A Plugin Contribution that supplies validated display content and controlled transitions for the Companion surface. A Content Provider may request Character Selection, provide bounded image/media content, or restore the prior content; the Renderer and Host retain ownership of windows, decoding, input, and recovery.
+_Avoid_: Character Pack, raw Renderer access, embedded website
 
 **Character Pack**:
 A declarative installed bundle that supplies one Companion character's Spine skeleton, atlas, textures, display metadata, and semantic Character Performance mappings. It contains no executable code and contributes no Actions.

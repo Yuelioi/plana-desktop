@@ -55,6 +55,17 @@ internal sealed class CompanionControlServer : IDisposable
                     await writer.WriteLineAsync(JsonSerializer.Serialize(new { ok = true, activated }));
                     continue;
                 }
+                if (request?.Type?.Equals("execute-action", StringComparison.OrdinalIgnoreCase) == true && !string.IsNullOrWhiteSpace(request.ActionId))
+                {
+                    var result = await _companion.ExecuteControlActionAsync(request.ActionId);
+                    await writer.WriteLineAsync(JsonSerializer.Serialize(new { ok = result.Succeeded, message = result.Message }));
+                    continue;
+                }
+                if (request?.Type?.Equals("catalog", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    await writer.WriteLineAsync(JsonSerializer.Serialize(new { ok = true, actions = _companion.GetActionCatalog() }));
+                    continue;
+                }
                 if (request is null || !Enum.TryParse<CharacterEmotion>(request.Emotion ?? string.Empty, true, out var emotion) ||
                     !Enum.TryParse<CharacterGesture>(request.Gesture ?? string.Empty, true, out var gesture))
                 {
@@ -76,5 +87,5 @@ internal sealed class CompanionControlServer : IDisposable
         _stop.Dispose();
     }
 
-    private sealed record ControlRequest(string? Type, string? Emotion, string? Gesture, bool IsSpeaking, bool Enabled, string? Text, bool IsError, string? Query);
+    private sealed record ControlRequest(string? Type, string? Emotion, string? Gesture, bool IsSpeaking, bool Enabled, string? Text, bool IsError, string? Query, string? ActionId);
 }

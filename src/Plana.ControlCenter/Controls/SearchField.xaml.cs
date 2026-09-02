@@ -23,6 +23,9 @@ public sealed partial class SearchField : UserControl
 
     private void Input_TextChanged(object sender, TextChangedEventArgs e)
     {
+        // TextBox.TextChanged can run before the TwoWay x:Bind source is updated.
+        // Publish the current editor value before notifying page-level filters.
+        if (!string.Equals(Text, Input.Text, StringComparison.Ordinal)) Text = Input.Text;
         if (SearchGlyph is not null) SearchGlyph.Visibility = Input.Text.Length == 0 ? Visibility.Visible : Visibility.Collapsed;
         SearchTextChanged?.Invoke(this, EventArgs.Empty);
     }

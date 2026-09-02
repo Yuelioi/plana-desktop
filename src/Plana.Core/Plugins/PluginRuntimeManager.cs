@@ -16,6 +16,7 @@ public sealed class PluginRuntimeManager(string pluginHostPath) : IAsyncDisposab
     private readonly Dictionary<string, RunningPlugin> running = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, PluginRuntimeInfo> statuses = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, ActionPack> contributionPacks = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, PluginContributionsPayload> contributionSets = new(StringComparer.OrdinalIgnoreCase);
 
     public event EventHandler? StateChanged;
 
@@ -27,6 +28,11 @@ public sealed class PluginRuntimeManager(string pluginHostPath) : IAsyncDisposab
     public IReadOnlyList<ActionPack> SnapshotActionPacks()
     {
         lock (contributionPacks) return contributionPacks.Values.ToArray();
+    }
+
+    public IReadOnlyDictionary<string, PluginContributionsPayload> SnapshotContributions()
+    {
+        lock (contributionSets) return new Dictionary<string, PluginContributionsPayload>(contributionSets, StringComparer.OrdinalIgnoreCase);
     }
 
     public async Task<ActionResult> InvokeAsync(
@@ -48,7 +54,7 @@ public sealed class PluginRuntimeManager(string pluginHostPath) : IAsyncDisposab
                 actionId,
                 approvedActionCapabilities,
                 handleHostRequest,
-                TimeSpan.FromSeconds(30),
+                TimeSpan.FromSeconds(45),
                 cancellationToken);
             return result.Succeeded ? ActionResult.Success(result.Message) : ActionResult.Failure(result.Message);
         }
@@ -67,6 +73,7 @@ public sealed class PluginRuntimeManager(string pluginHostPath) : IAsyncDisposab
     {
         running.Remove(pluginId);
         lock (contributionPacks) contributionPacks.Remove(pluginId);
+        lock (contributionSets) contributionSets.Remove(pluginId);
         await session.Protocol.DisposeAsync();
         session.Pipe.Dispose();
         if (!session.Host.HasExited) session.Host.Kill(entireProcessTree: true);
@@ -165,7 +172,8 @@ public sealed class PluginRuntimeManager(string pluginHostPath) : IAsyncDisposab
 
             var session = new RunningPlugin(host, pipe, protocol);
             running.Add(manifest.Id, session);
-            lock (contributionPacks) contributionPacks[manifest.Id] = CreateActionPack(manifest, contributions);
+            lock (contributionPacks) contributionPacks[manifest.Id] = CreateActionPack(manifest, contributions.Actions);
+            lock (contributionSets) contributionSets[manifest.Id] = contributions;
             SetStatus(new PluginRuntimeInfo(manifest.Id, "Ready"));
             _ = MonitorExitAsync(manifest.Id, session);
         }
@@ -183,6 +191,7 @@ public sealed class PluginRuntimeManager(string pluginHostPath) : IAsyncDisposab
     {
         if (!running.Remove(pluginId, out var session)) return;
         lock (contributionPacks) contributionPacks.Remove(pluginId);
+        lock (contributionSets) contributionSets.Remove(pluginId);
         await session.Protocol.DisposeAsync();
         session.Pipe.Dispose();
         if (!session.Host.HasExited)
@@ -204,6 +213,7 @@ public sealed class PluginRuntimeManager(string pluginHostPath) : IAsyncDisposab
             if (!running.TryGetValue(pluginId, out var current) || !ReferenceEquals(current, session)) return;
             running.Remove(pluginId);
             lock (contributionPacks) contributionPacks.Remove(pluginId);
+            lock (contributionSets) contributionSets.Remove(pluginId);
             SetStatus(new PluginRuntimeInfo(pluginId, "Exited", $"Plugin Host exited with code {session.Host.ExitCode}."));
             await session.Protocol.DisposeAsync();
             session.Pipe.Dispose();
@@ -238,7 +248,8 @@ public sealed class PluginRuntimeManager(string pluginHostPath) : IAsyncDisposab
                 ["actionId"] = action.Id,
             },
             new HashSet<string>(action.Capabilities, StringComparer.OrdinalIgnoreCase),
-            action.RequiresConfirmation)).ToArray(),
+            action.RequiresConfirmation,
+            action.Description?.Trim() ?? string.Empty)).ToArray(),
         SourceDirectory: manifest.PackageDirectory);
 
     private sealed record RunningPlugin(Process Host, NamedPipeClientStream Pipe, PluginProtocolSession Protocol);

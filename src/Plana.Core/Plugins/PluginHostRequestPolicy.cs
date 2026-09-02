@@ -12,6 +12,8 @@ public static class PluginHostRequestPolicy
         ActionKinds.LaunchProcess => Capabilities.LaunchProcess,
         ActionKinds.RunCommand => Capabilities.RunCommand,
         ActionKinds.RunScript => Capabilities.RunScript,
+        "character.activate" => Capabilities.CharacterSelect,
+        "companion.content.showImage" or "companion.content.preloadImage" or "companion.content.showFile" or "companion.content.restore" => Capabilities.CompanionContent,
         _ => null,
     };
 

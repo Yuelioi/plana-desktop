@@ -104,21 +104,22 @@ public sealed partial class AboutPage : Page
 
     private async void PackToggle_Toggled(object sender, RoutedEventArgs e)
     {
-        if (_loading || (sender as FrameworkElement)?.Tag is not ExtensionItem item) return;
-        SetDisabled(App.Settings.DisabledActionPacks, item);
+        if (_loading || sender is not ToggleSwitch { Tag: ExtensionItem item } toggle) return;
+        SetDisabled(App.Settings.DisabledActionPacks, item, toggle.IsOn);
         await App.SettingsStore.SaveAsync(App.Settings);
     }
 
     private async void PluginToggle_Toggled(object sender, RoutedEventArgs e)
     {
-        if (_loading || (sender as FrameworkElement)?.Tag is not ExtensionItem item) return;
-        SetDisabled(App.Settings.DisabledPlugins, item);
+        if (_loading || sender is not ToggleSwitch { Tag: ExtensionItem item } toggle) return;
+        SetDisabled(App.Settings.DisabledPlugins, item, toggle.IsOn);
         await App.SettingsStore.SaveAsync(App.Settings);
     }
 
-    private static void SetDisabled(HashSet<string> disabled, ExtensionItem item)
+    private static void SetDisabled(HashSet<string> disabled, ExtensionItem item, bool isOn)
     {
-        if (item.Enabled && item.Valid) disabled.Remove(item.Id); else disabled.Add(item.Id);
+        item.Enabled = isOn && item.Valid;
+        if (item.Enabled) disabled.Remove(item.Id); else disabled.Add(item.Id);
     }
 
     private static void OpenFolder(string path) => Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });

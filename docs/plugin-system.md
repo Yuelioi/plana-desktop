@@ -21,7 +21,7 @@ Each unpacked Plugin occupies one versioned directory containing `plugin.json`:
   "id": "example.productivity",
   "version": "1.0.0",
   "publisher": "Example",
-  "hostApi": "1",
+    "hostApi": "2",
   "entryPoint": "plugin/Example.Plugin.exe",
   "defaultLocale": "en",
   "locales": { "en": "locales/en.json" },
@@ -49,18 +49,20 @@ Messages larger than 1 MiB, unsupported versions, and envelopes without a reques
 1. The Plugin writes `hello` with its exact Plugin ID and host API version.
 2. Desktop verifies identity/API and writes `initialize` with the selected culture and approved capability set.
 3. The Plugin answers `ready` using the initialize request ID.
-4. The Plugin sends one bounded `contributeActions` message. Every Action ID must be unique and every requested capability must already exist in the Plugin manifest.
-5. Desktop answers `actionsAccepted`; accepted contributions enter the normal searchable Action catalog.
+4. The Plugin sends one bounded `contributeActions` message containing Actions plus optional Host-rendered Tools, Context Commands, and Content Providers. Every secondary contribution references one contributed Action.
+5. Desktop validates IDs, capability declarations, and Action references, then answers `actionsAccepted`. Actions enter search; Tools enter the Companion Dock; matching Context Commands enter the Host-owned context menu.
 
 Connection, handshake, and contribution share a five-second startup deadline. The control center reports Starting, Ready, Failed, or Exited. Disabling a Plugin or quitting Plana closes the session and stops the Plugin Host process tree.
 
 Running a contributed Action sends `invoke` with a unique request ID and the Plugin-local Action ID. The Plugin returns a structured `result` with success and a message. Invocation is serialized per Plugin and bounded to 30 seconds. Cancellation, timeout, malformed response, or request-ID mismatch fails the session, removes its contributed Actions, and terminates its process tree so a late response cannot corrupt the next request.
 
-During invoke, a Plugin may send typed `hostRequest` messages for `url.open`, `file.open`, `folder.open`, `process.launch`, `command.run`, or `script.run`. The requested kind must map to a capability declared by both the Plugin manifest and the currently invoked contributed Action. Desktop then constructs a temporary typed Action, runs the existing adapter's validation and execution, and returns a structured `hostResponse`. Unknown kinds and undeclared requests fail without reaching an adapter. Plugins never receive WinUI, Win32, renderer, or arbitrary host objects.
+During invoke, a Plugin may send typed `hostRequest` messages for ordinary desktop operations plus `character.activate`, `companion.content.showImage`, and `companion.content.restore`. The requested kind must map to a capability declared by both the Plugin manifest and the currently invoked contributed Action. Image content requires a direct HTTPS image response, is bounded to 15 MiB, and is decoded by the Renderer from a Host-managed cache. Unknown kinds and undeclared requests fail without reaching an adapter. Plugins never receive WinUI, Win32, renderer, or arbitrary host objects.
 
 ## Example Plugin
 
-The standard package includes an example under `SamplePlugins/hello`. It contributes `Open Plugin package folder`, declares only `folder.open`, and requests that operation through the broker. Install it from the Plugins page to exercise the full Plugin Host and broker flow. Its source is under `examples/Plana.ExamplePlugin`.
+The standard package includes the `plana.random-images` Plugin under `SamplePlugins/hello`. It contributes folder, character-switch, random-image, and content-restore Actions; image/restore context commands; and a Plana image Content Provider. The provider calls `https://pln.yuelili.com/api/v1/artworks/random`, resolves `preview_url` to a direct HTTPS WebP, and asks the Host to display it. Its Actions appear in the normal Actions page with `plana.random-images` as their source. Random image is not an automatic Companion Tool: it appears in the Dock only when the user pins that Action. Disabling the Plugin removes all contributions and restores the animated character. Its source is under `examples/Plana.ExamplePlugin`.
+
+The provider owns a five-item ready pool under `%LOCALAPPDATA%\PlanaDesktop\plugin-cache\plana.random-images`. Enabling the Plugin fills the pool before any click. Each random invocation consumes one local preview, waits at least one second before display, and signals the background worker to download one replacement. The Plugin retains up to 32 files on disk; Host validates that `showFile` inputs remain inside the managed Plugin cache and satisfy image type/size limits.
 
 ## Remaining before public use
 

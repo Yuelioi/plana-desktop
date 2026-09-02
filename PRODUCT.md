@@ -25,7 +25,7 @@ The companion lives continuously on the Windows desktop, stays above ordinary wi
 ## Capabilities and Constraints
 
 - Windows is the primary and currently exclusive platform.
-- The production host uses C# and .NET 10: WinUI 3 for the control center and raw Win32/Windows Composition with WebView2 for the transparent Companion. The former .NET 8 WPF host is retained only as a rollback build.
+- The production host uses C# and .NET 10: WinUI 3 owns the control center, the .NET Host owns Windows integration, and the supervised Godot process owns transparent Spine rendering. Historical WPF/WebView implementations are archived and never selected at runtime.
 - Users configure companion settings, Interaction bindings, Action Packs, and Plugins without editing JSON.
 - Declarative Action Packs do not load executable code into the desktop process.
 - Executable Plugins run outside the desktop process through a versioned, capability-mediated protocol.

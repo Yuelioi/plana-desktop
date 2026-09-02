@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "id": "plana.example.hello",
-  "version": "1.0.0",
+  "id": "plana.random-images",
+  "version": "2.0.0",
   "publisher": "Plana Desktop",
-  "hostApi": "1",
+  "hostApi": "2",
   "entryPoint": "Plana.ExamplePlugin.exe",
   "defaultLocale": "en",
   "locales": {},
-  "capabilities": ["folder.open"]
+  "capabilities": ["folder.open", "character.select", "companion.content"]
 }

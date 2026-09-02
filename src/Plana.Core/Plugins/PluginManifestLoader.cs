@@ -69,7 +69,7 @@ public sealed class PluginManifestLoader
     private static void Validate(ManifestData data, string packageDirectory)
     {
         if (data.SchemaVersion != 1) throw new PluginManifestException($"Unsupported schema version {data.SchemaVersion}.");
-        if (!string.Equals(data.HostApi, "1", StringComparison.Ordinal)) throw new PluginManifestException($"Unsupported host API '{data.HostApi}'.");
+        if (!string.Equals(data.HostApi, "2", StringComparison.Ordinal)) throw new PluginManifestException($"Unsupported host API '{data.HostApi}'.");
         if (string.IsNullOrWhiteSpace(data.Id) || string.IsNullOrWhiteSpace(data.Version) || string.IsNullOrWhiteSpace(data.Publisher))
         {
             throw new PluginManifestException("Plugin id, version, and publisher are required.");

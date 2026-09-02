@@ -10,21 +10,18 @@
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <AssemblyName>Plana.Desktop</AssemblyName>
-    <WebView2EnableCsWinRTProjection>true</WebView2EnableCsWinRTProjection>
     <ApplicationIcon>..\Plana.Brand\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Plana.Core\Plana.Core.csproj" />
     <ProjectReference Include="..\Plana.TransientUI\Plana.TransientUI.csproj" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4191.47" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Plana.Desktop\Renderer\**\*" Link="Renderer\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\Plana.Desktop\StarterPacks\**\*" Link="StarterPacks\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="StarterPacks\**\*" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\Plana.Companion.Godot.Renderer\character-packs\plana\character.json" Link="CharacterPacks\plana\character.json" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\Plana.Desktop\Renderer\spine\plana\NP0035_spr.skel" Link="CharacterPacks\plana\NP0035_spr.skel" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\Plana.Desktop\Renderer\spine\plana\NP0035_spr.atlas" Link="CharacterPacks\plana\NP0035_spr.atlas" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\Plana.Desktop\Renderer\spine\plana\NP0035_spr.png" Link="CharacterPacks\plana\NP0035_spr.png" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Plana.Companion.Godot.Renderer\character-packs\plana\NP0035_spr.skel" Link="CharacterPacks\plana\NP0035_spr.skel" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Plana.Companion.Godot.Renderer\character-packs\plana\NP0035_spr.atlas" Link="CharacterPacks\plana\NP0035_spr.atlas" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Plana.Companion.Godot.Renderer\character-packs\plana\NP0035_spr.png" Link="CharacterPacks\plana\NP0035_spr.png" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\Plana.Brand\AppIcon.ico" Link="Assets\AppIcon.ico" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\Plana.Brand\AppIcon.png" Link="Assets\AppIcon.png" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

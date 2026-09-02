@@ -4,7 +4,7 @@ namespace Plana.Core.Plugins;
 
 public static class PluginProtocol
 {
-    public const int Version = 1;
+    public const int Version = 2;
     public const int MaximumMessageCharacters = 1024 * 1024;
     public static JsonSerializerOptions JsonOptions { get; } = new(JsonSerializerDefaults.Web);
 
@@ -21,8 +21,16 @@ public sealed record PluginActionContribution(
     string Id,
     string Label,
     string[] Capabilities,
-    bool RequiresConfirmation = false);
-public sealed record PluginContributionsPayload(PluginActionContribution[] Actions);
+    bool RequiresConfirmation = false,
+    string Description = "");
+public sealed record PluginToolContribution(string Id, string Label, string ActionId, string Icon = "Plugin");
+public sealed record PluginContextContribution(string Id, string Label, string ActionId, string Context = "companion");
+public sealed record PluginContentProviderContribution(string Id, string Label, string ActionId);
+public sealed record PluginContributionsPayload(
+    PluginActionContribution[] Actions,
+    PluginToolContribution[]? Tools = null,
+    PluginContextContribution[]? ContextCommands = null,
+    PluginContentProviderContribution[]? ContentProviders = null);
 public sealed record PluginInvokePayload(string ActionId);
 public sealed record PluginInvokeResultPayload(bool Succeeded, string Message);
 public sealed record PluginHostRequestPayload(string Kind, Dictionary<string, string> Parameters);

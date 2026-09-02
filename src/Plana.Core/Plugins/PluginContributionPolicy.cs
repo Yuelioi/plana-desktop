@@ -2,6 +2,16 @@ namespace Plana.Core.Plugins;
 
 public static class PluginContributionPolicy
 {
+    public static PluginContributionsPayload Validate(PluginManifest manifest, PluginContributionsPayload payload)
+    {
+        var actions = Validate(manifest, payload.Actions ?? []);
+        var actionIds = actions.Select(action => action.Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        ValidateLinks(payload.Tools ?? [], item => item.Id, item => item.Label, item => item.ActionId, "Tool", actionIds);
+        ValidateLinks(payload.ContextCommands ?? [], item => item.Id, item => item.Label, item => item.ActionId, "Context command", actionIds);
+        ValidateLinks(payload.ContentProviders ?? [], item => item.Id, item => item.Label, item => item.ActionId, "Content provider", actionIds);
+        return payload with { Actions = actions.ToArray(), Tools = payload.Tools ?? [], ContextCommands = payload.ContextCommands ?? [], ContentProviders = payload.ContentProviders ?? [] };
+    }
+
     public static IReadOnlyList<PluginActionContribution> Validate(
         PluginManifest manifest,
         IEnumerable<PluginActionContribution> contributions)
@@ -33,5 +43,17 @@ public static class PluginContributionPolicy
             accepted.Add(action with { Capabilities = capabilities.Distinct(StringComparer.OrdinalIgnoreCase).ToArray() });
         }
         return accepted;
+    }
+
+    private static void ValidateLinks<T>(IEnumerable<T> items, Func<T, string> id, Func<T, string> label, Func<T, string> actionId, string kind, IReadOnlySet<string> actionIds)
+    {
+        var ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var item in items)
+        {
+            if (string.IsNullOrWhiteSpace(id(item)) || string.IsNullOrWhiteSpace(label(item)) || !ids.Add(id(item)))
+                throw new PluginProtocolException($"A contributed {kind} has an invalid or duplicate ID/label.");
+            if (!actionIds.Contains(actionId(item)))
+                throw new PluginProtocolException($"Contributed {kind} '{id(item)}' references unknown Action '{actionId(item)}'.");
+        }
     }
 }

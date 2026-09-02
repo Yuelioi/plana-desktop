@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using Plana.Core.Actions;
@@ -50,10 +51,30 @@ public sealed partial class HomePage : Page
         foreach (var pack in packs.ValidPacks.Where(pack => !App.Settings.DisabledActionPacks.Contains(pack.Id)))
         {
             _allActions.AddRange(pack.Actions.Select(action => new ActionListItem(
-                action.Id, action.Label, $"{pack.Name} · {DescribeKind(action.Kind)}", GlyphFor(action.Kind), action.Kind,
+                action.Id, action.Label, string.IsNullOrWhiteSpace(action.Description) ? $"{pack.Name} · {DescribeKind(action.Kind)}" : action.Description, GlyphFor(action.Kind), action.Kind,
                 action, pack.SourceDirectory) { IsPinned = App.Settings.PinnedCompanionActionIds.Contains(action.Id, StringComparer.OrdinalIgnoreCase) }));
         }
+        try
+        {
+            var pluginActions = await HostControlClient.GetPluginActionsAsync();
+            _allActions.AddRange(pluginActions.Select(action => new ActionListItem(
+                action.Id, action.Name, $"{action.Description} · {action.Source}", "\uE945", ActionKinds.PluginInvoke,
+                new ActionDefinition(action.Id, action.Name, ActionKinds.PluginInvoke, new Dictionary<string, string>(), new HashSet<string>(), Description: action.Description), null)
+            { IsPinned = App.Settings.PinnedCompanionActionIds.Contains(action.Id, StringComparer.OrdinalIgnoreCase) }));
+        }
+        catch (Exception exception) when (exception is IOException or TimeoutException) { }
         FilterActions(SearchBox.Text);
+    }
+
+    private async void RefreshButton_Click(object sender, RoutedEventArgs e)
+    {
+        RefreshButton.IsEnabled = false;
+        try
+        {
+            await App.ReloadSettingsAsync();
+            await LoadActionsAsync();
+        }
+        finally { RefreshButton.IsEnabled = true; }
     }
 
     private void SearchBox_TextChanged(object? sender, EventArgs args) => FilterActions(SearchBox.Text);
@@ -108,7 +129,9 @@ public sealed partial class HomePage : Page
 
     private async Task ExecuteActionAsync(ActionListItem item)
     {
-        var result = await ActionExecutionService.ExecuteAsync(item.Definition, item.WorkingDirectory);
+        var result = item.Definition.Kind == ActionKinds.PluginInvoke
+            ? await HostControlClient.ExecuteAsync(item.Id)
+            : await ActionExecutionService.ExecuteAsync(item.Definition, item.WorkingDirectory);
         ActionStatus.Title = item.Name;
         ActionStatus.Message = result.Message;
         ActionStatus.Severity = result.Succeeded ? InfoBarSeverity.Success : InfoBarSeverity.Error;
@@ -275,6 +298,9 @@ public sealed partial class HomePage : Page
         NameColumnHeader.Text = "名称";
         DescriptionColumnHeader.Text = "描述";
         TypeColumnHeader.Text = "类型";
+        OperationsColumnHeader.Text = "操作";
+        RefreshButton.SetValue(AutomationProperties.NameProperty, "刷新动作");
+        ToolTipService.SetToolTip(RefreshButton, "刷新动作");
         EmptyTitle.Text = "没有匹配的动作";
         EmptyDescription.Text = "尝试其他关键词，或新建一个动作。";
     }

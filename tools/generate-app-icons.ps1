@@ -1,7 +1,8 @@
 param(
     [Parameter(Mandatory)][string]$Source,
     [string]$ControlCenterAssets = "$PSScriptRoot\..\src\Plana.ControlCenter\Assets",
-    [string]$BrandAssets = "$PSScriptRoot\..\src\Plana.Brand"
+    [string]$BrandAssets = "$PSScriptRoot\..\src\Plana.Brand",
+    [switch]$PreserveBackground
 )
 
 $ErrorActionPreference = 'Stop'
@@ -20,13 +21,13 @@ using System.Drawing.Imaging;
 using System.IO;
 
 public static class PlanaIconPipeline {
-    public static void Generate(string source, string control, string brand) {
+    public static void Generate(string source, string control, string brand, bool preserveBackground) {
         Directory.CreateDirectory(control);
         Directory.CreateDirectory(brand);
         using var original = new Bitmap(source);
         using var cleaned = new Bitmap(original.Width, original.Height, PixelFormat.Format32bppArgb);
         using (var graphics = Graphics.FromImage(cleaned)) graphics.DrawImageUnscaled(original, 0, 0);
-        ClearConnectedCheckerboard(cleaned);
+        if (!preserveBackground) ClearConnectedCheckerboard(cleaned);
         using var master = Resize(cleaned, 1024, 1024);
         master.Save(Path.Combine(brand, "AppIcon.png"), ImageFormat.Png);
 
@@ -126,4 +127,5 @@ public static class PlanaIconPipeline {
 [PlanaIconPipeline]::Generate(
     [IO.Path]::GetFullPath($Source),
     [IO.Path]::GetFullPath($ControlCenterAssets),
-    [IO.Path]::GetFullPath($BrandAssets))
+    [IO.Path]::GetFullPath($BrandAssets),
+    $PreserveBackground.IsPresent)

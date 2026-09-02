@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
 using Plana.Core.Actions;
 using Plana.Core.Settings;
@@ -31,7 +32,7 @@ public sealed partial class ToolGroupsPage : Page
         _actions.AddRange(App.Settings.UserActions.Select(action => new ToolGroupActionOption($"user.action.{action.Id}", action.Name, string.IsNullOrWhiteSpace(action.Description) ? action.Kind : action.Description)));
         _actions.AddRange(App.Settings.ProjectLaunchers.Select(project => new ToolGroupActionOption($"user.launcher.{project.Id}", project.Name, project.Folder)));
         var packs = await new ActionPackLoader().LoadDirectoryAsync(Path.Combine(App.DataDirectory, "packs"));
-        _actions.AddRange(packs.ValidPacks.Where(pack => !App.Settings.DisabledActionPacks.Contains(pack.Id)).SelectMany(pack => pack.Actions.Select(action => new ToolGroupActionOption(action.Id, action.Label, pack.Name))));
+        _actions.AddRange(packs.ValidPacks.Where(pack => !App.Settings.DisabledActionPacks.Contains(pack.Id)).SelectMany(pack => pack.Actions.Select(action => new ToolGroupActionOption(action.Id, action.Label, string.IsNullOrWhiteSpace(action.Description) ? pack.Name : action.Description))));
 
         _allGroups.Clear();
         _allGroups.AddRange(App.Settings.ToolGroups.Select(group => new ToolGroupRow(group, Summarize(group))));
@@ -45,6 +46,17 @@ public sealed partial class ToolGroupsPage : Page
     }
 
     private void SearchBox_TextChanged(object? sender, EventArgs args) => Filter(SearchBox.Text);
+
+    private async void RefreshButton_Click(object sender, RoutedEventArgs e)
+    {
+        RefreshButton.IsEnabled = false;
+        try
+        {
+            await App.ReloadSettingsAsync();
+            await ReloadAsync();
+        }
+        finally { RefreshButton.IsEnabled = true; }
+    }
 
     private void Filter(string? query)
     {
@@ -125,6 +137,8 @@ public sealed partial class ToolGroupsPage : Page
         NewGroupLabel.Text = "新建动作组";
         NameHeader.Text = "名称";
         ActionsHeader.Text = "动作";
+        RefreshButton.SetValue(AutomationProperties.NameProperty, "刷新动作组");
+        ToolTipService.SetToolTip(RefreshButton, "刷新动作组");
         GroupNameInput.Header = "名称";
         GroupNameInput.PlaceholderText = "例如：Codex 项目";
         OptionalActionsLabel.Text = "动作（可选）";

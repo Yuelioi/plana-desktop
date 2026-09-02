@@ -1,44 +1,66 @@
 # Plana Desktop
 
-A Windows desktop companion built with .NET 10, WinUI 3, a supervised Godot 4 renderer, and the existing Plana Spine model.
+Plana Desktop 是一个运行在 Windows 桌面上的动态角色助手。角色会常驻桌面，你可以和她聊天、播放动作，也可以把常用网站、文件夹、程序和命令整理成随时可调用的“动作”。
 
-The repository is self-contained for builds. Renderer code, the Spine runtime files, model data, and their attribution/license notices live under `src/Plana.Desktop/Renderer`.
+## 能做什么
 
-## Status
+- 在桌面显示可拖动、可缩放的动态角色，不遮挡透明区域后的窗口操作。
+- 直接与角色聊天，并根据对话表现不同的表情和动作。
+- 创建打开网站、文件、文件夹、应用或脚本的个人动作。
+- 使用动作组整理常用操作，并从快捷搜索或桌宠面板运行。
+- 为单击、双击等互动绑定动作。
+- 切换角色，或从角色目录下载更多动态场景和静态插图。
+- 导入 Action Pack 和插件扩展功能。
+- 在中文和英文界面之间切换。
 
-The production application uses a transparent Godot Renderer supervised by a .NET Windows host plus a packaged WinUI 3 control center. It includes an IME-capable chat input below the character and a sharp native speech-bubble response surface using a local Codex subscription or an OpenAI-compatible API, semantic character expressions/gestures, unified Quick Launch, user-created Actions, configurable tool groups and interactions, Action Packs, out-of-process Plugins, English/Simplified-Chinese UI, persisted placement/scale, renderer crash recovery, and mouse pass-through. The former Native/WebView and WPF hosts remain as fallback code paths.
+## 开始使用
 
-## Architecture
+运行发布目录中的：
 
-- `src/Plana.Core`: settings, Action/Pack contracts, Plugin protocol/runtime, and the Companion surface seam.
-- `src/Plana.ControlCenter`: packaged .NET 10 WinUI 3 Chat, Settings, Actions, Tool Groups, and Extensions UI.
-- `src/Plana.Companion.Native`: .NET 10 Companion host, tray, settings watcher, Windows window adapter, semantic control pipe, renderer supervision, and legacy WebView fallback.
-- `src/Plana.Core/Characters`: declarative Character Pack loading, validation, selection fallback, and semantic performance planning.
-- `src/Plana.Companion.Godot.Renderer`: production transparent Spine renderer, character animation queue, drag, and pointer events.
-- `src/Plana.PluginHost`: out-of-process executable Plugin supervisor.
-- `src/Plana.Desktop`: retained .NET 8 WPF legacy fallback.
-- `tests/Plana.Core.Tests`: behavior tests across the Core module interface.
-
-## Action Packs
-
-An Action Pack is a directory containing `manifest.json`. It can contribute actions implemented by the host:
-
-- `pet.animation`
-- `url.open`
-- `process.launch`
-- `command.run`
-
-Opening URLs, launching applications, and executing commands are typed capabilities. Packs declare them and users can disable a pack without uninstalling it. Executable Plugins run through the separate Plugin Host and contribute Actions to the same catalog.
-
-Character appearance is independently extensible through passive Spine [Character Packs](docs/character-packs.md). The bundled Plana pack is the safe fallback; imported packs contain no executable code.
-
-## Build
-
-```powershell
-.\build.ps1
-.\build.ps1 -Publish
+```text
+artifacts/native-win-x64/Plana.Desktop.exe
 ```
 
-The build script removes a machine-level `TargetPath` environment variable from its process because some Adobe installations define it and unintentionally override MSBuild's project output path.
+启动后会在桌面显示角色，并在系统托盘保留 Plana 图标。通过托盘菜单可以打开设置、显示或隐藏角色以及退出程序。
 
-The framework-dependent Companion is written to `artifacts\native-win-x64`; run `artifacts\native-win-x64\Plana.Desktop.exe`. It starts the bundled Godot Renderer by default and requires the .NET 10 Desktop Runtime. The control-center MSIX is under `artifacts\control-center`; the currently generated local package must be signed before ordinary MSIX installation. A debug identity can run the latest Control Center from its build output. WebView2 is required only by fallback hosts.
+如果只打开了设置页面而没有看到角色，请确认启动的是上面的完整发布版本，而不是 `src` 下的单独构建文件。
+
+## 常用操作
+
+### 和角色聊天
+
+把鼠标移到角色附近，在出现的输入框中输入内容并按 Enter。AI 服务可在设置中配置。
+
+### 创建动作
+
+打开“动作”页面，选择“新建动作”，填写名称、说明、类型和目标。保存后可立即搜索、运行或固定到桌宠快捷区。
+
+AI 也可以创建或修改动作。完成后在“动作”或“动作组”页面点击刷新按钮，即可载入最新配置。
+
+### 快捷搜索
+
+按 `Ctrl + Alt + Space` 打开快捷搜索，输入动作名称或说明，按 Enter 运行首个结果。
+
+### 安装更多角色
+
+打开“设置 → 角色”，点击“更多角色”，选择资源类型并搜索。已安装的角色可以在同一窗口中再次切换。
+
+### 使用扩展
+
+打开“扩展”页面，可以导入 Action Pack 或插件，并用开关启用、停用。插件启用后会立即刷新其提供的动作，不需要重启程序。
+
+插件是可执行程序，只应导入你信任的来源。普通个人自动化优先使用“动作”或不含可执行代码的 Action Pack。
+
+## 遇到问题
+
+- 看不到角色：请从完整发布目录启动，并确认 `Godot` 与 `GodotRenderer` 文件夹存在。
+- 新动作没有出现：在“动作”或“动作组”页面点击刷新。
+- 插件没有动作：确认扩展页面中的插件已开启，再点击页面顶部的重新加载。
+- 角色或 Renderer 启动失败：查看 `%LOCALAPPDATA%\PlanaDesktop` 下的诊断文件。
+
+## 更多文档
+
+- [开发、构建与项目结构](DEVELOPMENT.md)
+- [Action Pack 格式](docs/action-packs.md)
+- [插件开发](docs/plugin-system.md)
+- [角色包格式](docs/character-packs.md)

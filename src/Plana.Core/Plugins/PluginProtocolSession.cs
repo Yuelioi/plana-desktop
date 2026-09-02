@@ -8,7 +8,7 @@ public sealed class PluginProtocolSession(Stream stream) : IAsyncDisposable
     private readonly StreamWriter writer = new(stream, leaveOpen: true) { AutoFlush = true };
     private readonly SemaphoreSlim requestGate = new(1, 1);
 
-    public async Task<IReadOnlyList<PluginActionContribution>> InitializeAsync(
+    public async Task<PluginContributionsPayload> InitializeAsync(
         PluginManifest manifest,
         string culture,
         TimeSpan timeout,
@@ -46,11 +46,11 @@ public sealed class PluginProtocolSession(Stream stream) : IAsyncDisposable
         }
         var contributionPayload = contributionEnvelope.Payload.Deserialize<PluginContributionsPayload>(PluginProtocol.JsonOptions)
             ?? throw new PluginProtocolException("The contributeActions payload is missing.");
-        var contributions = PluginContributionPolicy.Validate(manifest, contributionPayload.Actions ?? []);
+        var contributions = PluginContributionPolicy.Validate(manifest, contributionPayload);
         await WriteAsync(PluginProtocol.Envelope(
             contributionEnvelope.RequestId,
             "actionsAccepted",
-            new { count = contributions.Count }), deadline.Token);
+            new { actions = contributions.Actions.Length, tools = contributions.Tools!.Length, contextCommands = contributions.ContextCommands!.Length, contentProviders = contributions.ContentProviders!.Length }), deadline.Token);
         return contributions;
     }
 

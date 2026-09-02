@@ -22,6 +22,8 @@ public static class Capabilities
     public const string LaunchProcess = "process.launch";
     public const string RunCommand = "command.run";
     public const string RunScript = "script.run";
+    public const string CharacterSelect = "character.select";
+    public const string CompanionContent = "companion.content";
 }
 
 public sealed record ActionDefinition(
@@ -30,7 +32,8 @@ public sealed record ActionDefinition(
     string Kind,
     IReadOnlyDictionary<string, string> Parameters,
     IReadOnlySet<string> Capabilities,
-    bool RequiresConfirmation = false);
+    bool RequiresConfirmation = false,
+    string Description = "");
 
 public sealed record ActionPack(
     string Id,

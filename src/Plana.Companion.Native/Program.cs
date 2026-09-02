@@ -36,7 +36,7 @@ internal static class Program
         var pluginRuntime = new PluginRuntimeManager(Path.Combine(AppContext.BaseDirectory, "PluginHost", "Plana.PluginHost.exe"));
         var pluginDiagnostics = new PluginManifestLoader().LoadDirectoryAsync(Path.Combine(dataDirectory, "plugins")).GetAwaiter().GetResult();
         pluginRuntime.ReconcileAsync(pluginDiagnostics, settings, settings.UiCulture).GetAwaiter().GetResult();
-        var actions = LoadActions(settings, dataDirectory, pluginRuntime.SnapshotActionPacks());
+        var actions = NativeActionCatalog.Load(settings, dataDirectory, pluginRuntime.SnapshotActionPacks());
         var bundledCharacters = Path.Combine(AppContext.BaseDirectory, "CharacterPacks");
         var installedCharacters = Path.Combine(dataDirectory, "characters");
         var characterCatalog = new CharacterPackLoader().LoadCatalogAsync(bundledCharacters, installedCharacters).GetAwaiter().GetResult();
@@ -44,20 +44,8 @@ internal static class Program
         settings.SelectedCharacterPackId = character.Manifest.Id;
         using var companion = CreateCompanion(pluginRuntime, settings, actions, character, bundledCharacters, installedCharacters);
         companion.Apply(state);
-        if (companion is NativeCompanionWindow nativeCompanion)
-        {
-            try
-            {
-                nativeCompanion.InitializeRenderer(Path.Combine(AppContext.BaseDirectory, "Renderer"), settings, actions);
-            }
-            catch (Exception exception)
-            {
-                File.WriteAllText(Path.Combine(dataDirectory, "renderer-error.log"), exception.ToString());
-            }
-        }
-        if (companion is NativeCompanionWindow currentNative) currentNative.WatchSettings(settingsPath);
-        if (companion is GodotCompanionWindow godotCompanion) godotCompanion.WatchSettings(settingsPath);
-        using var controlServer = companion is GodotCompanionWindow controlledGodot ? new CompanionControlServer(controlledGodot) : null;
+        companion.WatchSettings(settingsPath);
+        using var controlServer = new CompanionControlServer(companion);
         using var tray = new NativeTrayIcon(companion, settings);
         companion.Show();
         companion.RunMessageLoop();
@@ -115,7 +103,7 @@ internal static class Program
         }
     }
 
-    private static ICompanionController CreateCompanion(
+    private static GodotCompanionWindow CreateCompanion(
         PluginRuntimeManager pluginRuntime,
         DesktopSettings settings,
         IReadOnlyList<NativeActionEntry> actions,
@@ -127,47 +115,11 @@ internal static class Program
             ?? Path.Combine(AppContext.BaseDirectory, "Godot", "Godot.exe");
         var projectPath = Environment.GetEnvironmentVariable("PLANA_GODOT_PROJECT")
             ?? Path.Combine(AppContext.BaseDirectory, "GodotRenderer");
-        return File.Exists(godotPath) && File.Exists(Path.Combine(projectPath, "project.godot"))
-            ? new GodotCompanionWindow(godotPath, projectPath, pluginRuntime, settings, actions, character, bundledCharacters, installedCharacters)
-            : new NativeCompanionWindow(pluginRuntime);
+        if (!File.Exists(godotPath))
+            throw new FileNotFoundException("The production Godot executable is missing. Run build.ps1 -Publish and start the Host from artifacts/native-win-x64.", godotPath);
+        if (!File.Exists(Path.Combine(projectPath, "project.godot")))
+            throw new DirectoryNotFoundException($"The production Godot Renderer project is missing: {projectPath}");
+        return new GodotCompanionWindow(godotPath, projectPath, pluginRuntime, settings, actions, character, bundledCharacters, installedCharacters);
     }
 
-    private static IReadOnlyList<NativeActionEntry> LoadActions(DesktopSettings settings, string dataDirectory, IReadOnlyList<ActionPack> pluginPacks)
-    {
-        var chinese = settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
-        var result = new List<NativeActionEntry>();
-        result.AddRange(settings.UserActions.Select(action => new NativeActionEntry(
-            $"user.action.{action.Id}", action.Name,
-            new ActionDefinition($"user.action.{action.Id}", action.Name, action.Kind, action.Parameters, Capability(action.Kind)), null,
-            action.Description, chinese ? "我的动作" : "My actions")));
-        result.AddRange(settings.ProjectLaunchers.Select(project =>
-        {
-            var parameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { ["executable"] = project.Executable };
-            for (var index = 0; index < project.Arguments.Count; index++) parameters[$"arg.{index}"] = project.Arguments[index].Replace("{folder}", project.Folder, StringComparison.OrdinalIgnoreCase);
-            return new NativeActionEntry($"user.launcher.{project.Id}", project.Name,
-                new ActionDefinition($"user.launcher.{project.Id}", project.Name, ActionKinds.LaunchProcess, parameters, Capability(ActionKinds.LaunchProcess)), project.Folder,
-                project.Folder, chinese ? "项目" : "Projects");
-        }));
-
-        var loader = new ActionPackLoader();
-        foreach (var directory in new[] { Path.Combine(AppContext.BaseDirectory, "StarterPacks"), Path.Combine(dataDirectory, "packs") })
-        {
-            var packs = loader.LoadDirectoryAsync(directory).GetAwaiter().GetResult();
-            foreach (var pack in packs.ValidPacks.Where(pack => !settings.DisabledActionPacks.Contains(pack.Id)))
-                result.AddRange(pack.Actions.Select(action => new NativeActionEntry(action.Id, action.Label, action, pack.SourceDirectory, "", pack.Name)));
-        }
-        foreach (var pack in pluginPacks)
-            result.AddRange(pack.Actions.Select(action => new NativeActionEntry(action.Id, action.Label, action, pack.SourceDirectory, "", pack.Name)));
-        return result;
-    }
-
-    private static HashSet<string> Capability(string kind) => [kind switch
-    {
-        ActionKinds.OpenUrl => Capabilities.OpenUrl,
-        ActionKinds.OpenFile => Capabilities.OpenFile,
-        ActionKinds.OpenFolder => Capabilities.OpenFolder,
-        ActionKinds.RunCommand => Capabilities.RunCommand,
-        ActionKinds.RunScript => Capabilities.RunScript,
-        _ => Capabilities.LaunchProcess,
-    }];
 }

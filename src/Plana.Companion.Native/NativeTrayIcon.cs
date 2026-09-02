@@ -75,10 +75,25 @@ internal sealed class NativeTrayIcon : IDisposable
     private void OnContextRequested(object? sender, EventArgs args) =>
         _uiContext.Post(_ =>
         {
+            RefreshPluginContextCommands();
             _leftButtonWasDown = false;
             _menu.Show(Forms.Cursor.Position);
             _menuDismissTimer.Start();
         }, null);
+
+    private void RefreshPluginContextCommands()
+    {
+        if (_godot is null) return;
+        foreach (var item in _menu.Items.Cast<Forms.ToolStripItem>().Where(item => Equals(item.Tag, "plugin-context")).ToArray())
+            _menu.Items.Remove(item);
+        var insertAt = Math.Min(4, _menu.Items.Count);
+        foreach (var command in _godot.GetPluginContextCommands())
+        {
+            var item = new Forms.ToolStripMenuItem(command.Label) { Tag = "plugin-context" };
+            item.Click += (_, _) => _godot.ExecutePluginCommand(command.Id);
+            _menu.Items.Insert(insertAt++, item);
+        }
+    }
 
     private void DismissMenuOnOutsideLeftClick()
     {

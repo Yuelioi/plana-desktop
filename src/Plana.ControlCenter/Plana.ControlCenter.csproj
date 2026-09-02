@@ -28,9 +28,9 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="..\..\release\characters\**\*.planacharacter" Link="CharacterPackages\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="..\Plana.Companion.Godot.Renderer\character-packs\plana\character.json" Link="CharacterPacks\plana\character.json" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\Plana.Desktop\Renderer\spine\plana\NP0035_spr.skel" Link="CharacterPacks\plana\NP0035_spr.skel" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\Plana.Desktop\Renderer\spine\plana\NP0035_spr.atlas" Link="CharacterPacks\plana\NP0035_spr.atlas" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="..\Plana.Desktop\Renderer\spine\plana\NP0035_spr.png" Link="CharacterPacks\plana\NP0035_spr.png" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Plana.Companion.Godot.Renderer\character-packs\plana\NP0035_spr.skel" Link="CharacterPacks\plana\NP0035_spr.skel" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Plana.Companion.Godot.Renderer\character-packs\plana\NP0035_spr.atlas" Link="CharacterPacks\plana\NP0035_spr.atlas" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Plana.Companion.Godot.Renderer\character-packs\plana\NP0035_spr.png" Link="CharacterPacks\plana\NP0035_spr.png" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
