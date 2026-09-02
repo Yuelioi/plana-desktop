@@ -17,6 +17,8 @@ namespace Plana_ControlCenter.Pages;
 
 public sealed partial class SettingsPage : Page
 {
+    private const string StartupRegistryPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
+    private const string StartupRegistryValueName = "Plana Desktop";
     private bool _loading = true;
     private CharacterOption[] _characterOptions = [];
     private readonly string _charactersDirectory = Path.Combine(App.DataDirectory, "characters");
@@ -31,7 +33,10 @@ public sealed partial class SettingsPage : Page
     private async void SettingsPage_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         TopmostToggle.IsOn = App.Settings.AlwaysOnTop;
-        StartupToggle.IsOn = App.Settings.StartWithWindows;
+        var startupExecutable = FindCompanionExecutable();
+        StartupToggle.IsEnabled = startupExecutable is not null;
+        StartupToggle.IsOn = startupExecutable is not null && IsStartupRegistered(startupExecutable);
+        App.Settings.StartWithWindows = StartupToggle.IsOn;
         ScaleSlider.Value = App.Settings.Scale;
         ScaleSlider.Header = $"{App.Settings.Scale:P0}";
         LanguagePicker.SelectedIndex = App.IsChinese ? 1 : 0;
@@ -279,13 +284,29 @@ public sealed partial class SettingsPage : Page
     private async void StartupToggle_Toggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         if (_loading) return;
-        App.Settings.StartWithWindows = StartupToggle.IsOn;
-        using var runKey = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
-        if (StartupToggle.IsOn && FindCompanionExecutable() is { } executable)
-            runKey.SetValue("Plana Desktop", $"\"{executable}\"");
-        else
-            runKey.DeleteValue("Plana Desktop", throwOnMissingValue: false);
-        await SaveWithStatusAsync();
+        var previous = App.Settings.StartWithWindows;
+        try
+        {
+            var executable = FindCompanionExecutable()
+                ?? throw new InvalidOperationException(App.IsChinese ? "找不到正在运行的桌宠程序。" : "The running Companion executable could not be found.");
+            SetStartupRegistration(StartupToggle.IsOn, executable);
+            App.Settings.StartWithWindows = StartupToggle.IsOn;
+            if (!await SaveWithStatusAsync())
+            {
+                SetStartupRegistration(previous, executable);
+                App.Settings.StartWithWindows = previous;
+                SetStartupToggleWithoutNotification(previous);
+            }
+        }
+        catch (Exception exception) when (exception is UnauthorizedAccessException or System.Security.SecurityException or IOException or InvalidOperationException)
+        {
+            App.Settings.StartWithWindows = previous;
+            SetStartupToggleWithoutNotification(previous);
+            SaveStatus.Severity = InfoBarSeverity.Error;
+            SaveStatus.Title = App.IsChinese ? "无法设置开机自启" : "Could not change startup behavior";
+            SaveStatus.Message = exception.Message;
+            SaveStatus.IsOpen = true;
+        }
     }
 
     private async void ScaleSlider_ValueChanged(object sender, Microsoft.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
@@ -370,6 +391,35 @@ public sealed partial class SettingsPage : Page
         {
             return null;
         }
+    }
+
+    private static bool IsStartupRegistered(string executable)
+    {
+        try
+        {
+            using var runKey = Registry.CurrentUser.OpenSubKey(StartupRegistryPath);
+            return runKey?.GetValue(StartupRegistryValueName) is string command &&
+                command.Equals($"\"{executable}\"", StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception exception) when (exception is UnauthorizedAccessException or System.Security.SecurityException or IOException)
+        {
+            return false;
+        }
+    }
+
+    private static void SetStartupRegistration(bool enabled, string executable)
+    {
+        using var runKey = Registry.CurrentUser.CreateSubKey(StartupRegistryPath, writable: true)
+            ?? throw new InvalidOperationException("Windows startup settings are unavailable.");
+        if (enabled) runKey.SetValue(StartupRegistryValueName, $"\"{executable}\"");
+        else runKey.DeleteValue(StartupRegistryValueName, throwOnMissingValue: false);
+    }
+
+    private void SetStartupToggleWithoutNotification(bool enabled)
+    {
+        _loading = true;
+        StartupToggle.IsOn = enabled;
+        _loading = false;
     }
 }
 

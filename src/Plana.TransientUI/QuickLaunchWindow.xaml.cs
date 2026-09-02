@@ -122,6 +122,8 @@ public partial class QuickLaunchWindow : Window
         _compositionText = composition ?? string.Empty;
         _compositionGeneration++;
         UpdateCompositionPreview();
+        var committedAtEvent = SearchBox.Text;
+        var caretAtEvent = SearchBox.CaretIndex;
         Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, () =>
         {
             if (string.IsNullOrEmpty(composition))
@@ -129,9 +131,8 @@ public partial class QuickLaunchWindow : Window
                 ApplyQuery(SearchBox.Text);
                 return;
             }
-            var committed = SearchBox.Text;
-            var insertion = Math.Clamp(SearchBox.CaretIndex, 0, committed.Length);
-            ApplyQuery(committed.Insert(insertion, composition));
+            ApplyQuery(QuickLaunchQuery.ComposePreview(
+                committedAtEvent, SearchBox.Text, caretAtEvent, composition));
         });
     }
 
