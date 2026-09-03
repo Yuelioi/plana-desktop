@@ -37,7 +37,9 @@ jobs:
 
       - name: Install NSIS
         shell: pwsh
-        run: choco install nsis --no-progress -y
+        run: |
+          choco install nsis --no-progress -y
+          Join-Path ${env:ProgramFiles(x86)} 'NSIS' | Out-File $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Assemble release assets
         shell: pwsh

@@ -17,8 +17,9 @@ if (-not $testPackage) { throw 'Control Center test package was not produced.' }
 
 $setupPath = Join-Path $releaseDirectory 'Plana-Desktop-x64-Setup.exe'
 $makensis = Get-Command 'makensis.exe' -ErrorAction SilentlyContinue
-if (-not $makensis) { throw 'NSIS (makensis.exe) is required to build the Windows installer.' }
-& $makensis.Source `
+$makensisPath = if ($makensis) { $makensis.Source } else { Join-Path ${env:ProgramFiles(x86)} 'NSIS\makensis.exe' }
+if (-not (Test-Path -LiteralPath $makensisPath)) { throw 'NSIS (makensis.exe) is required to build the Windows installer.' }
+& $makensisPath `
     "/DREPOSITORY_ROOT=$repositoryRoot" `
     "/DCONTROL_CENTER_PACKAGE=$($testPackage.FullName)" `
     "/DOUTPUT_FILE=$setupPath" `
