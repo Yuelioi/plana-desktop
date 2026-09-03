@@ -17,11 +17,11 @@ Plana Desktop 是一个运行在 Windows 桌面上的动态角色助手。角色
 
 Release 页面只提供三种附件：
 
-- `Plana-Desktop-x64-Installer.zip`：完整安装包，包含桌宠、Renderer 和 Control Center。
+- `Plana-Desktop-x64-Setup.exe`：完整的 Windows 安装程序，包含桌宠、Renderer 和 Control Center。
 - `plugin-plana-random-images-win-x64.zip`：随机图片插件，可按需安装。
 - `Character-Packs.zip`：可选角色包。
 
-首次安装时，解压 `Plana-Desktop-x64-Installer.zip`，右键 `Install.ps1` 并选择“使用 PowerShell 运行”。安装脚本会安装 Control Center、把完整桌宠复制到当前用户的程序目录、创建开始菜单快捷方式并启动 Plana Desktop。
+首次安装时，双击 `Plana-Desktop-x64-Setup.exe` 并确认 Windows 的 UAC 提示。安装程序会安装 Control Center、把完整桌宠复制到 Program Files、创建桌面和开始菜单快捷方式，并启动 Plana Desktop；也可以从 Windows“已安装的应用”中卸载。
 
 启动后会在桌面显示角色，并在系统托盘保留 Plana 图标。通过托盘菜单可以打开设置、显示或隐藏角色以及退出程序。
 

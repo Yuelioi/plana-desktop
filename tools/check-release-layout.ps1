@@ -6,12 +6,16 @@ param(
 $ErrorActionPreference = 'Stop'
 $expected = @(
     'Character-Packs.zip',
-    'Plana-Desktop-x64-Installer.zip',
+    'Plana-Desktop-x64-Setup.exe',
     'plugin-plana-random-images-win-x64.zip'
 )
 $actual = Get-ChildItem -LiteralPath $ReleaseDirectory -File | Select-Object -ExpandProperty Name | Sort-Object
 if (Compare-Object $expected $actual) {
     throw "Release must contain exactly: $($expected -join ', '). Actual: $($actual -join ', ')."
+}
+
+if ((Get-Item (Join-Path $ReleaseDirectory 'Plana-Desktop-x64-Setup.exe')).Length -lt 1MB) {
+    throw 'The Windows installer is unexpectedly small.'
 }
 
 Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -35,10 +39,6 @@ function Assert-ZipEntryAbsent([string]$zipPath, [string]$pattern) {
     finally { $archive.Dispose() }
 }
 
-Assert-ZipEntry (Join-Path $ReleaseDirectory 'Plana-Desktop-x64-Installer.zip') 'Install.ps1'
-Assert-ZipEntry (Join-Path $ReleaseDirectory 'Plana-Desktop-x64-Installer.zip') 'Companion/Plana.Desktop.exe'
-Assert-ZipEntry (Join-Path $ReleaseDirectory 'Plana-Desktop-x64-Installer.zip') 'ControlCenter/Install.ps1'
-Assert-ZipEntryAbsent (Join-Path $ReleaseDirectory 'Plana-Desktop-x64-Installer.zip') 'Companion/SamplePlugins/*'
 Assert-ZipEntry (Join-Path $ReleaseDirectory 'plugin-plana-random-images-win-x64.zip') 'plugin.json'
 Assert-ZipEntry (Join-Path $ReleaseDirectory 'plugin-plana-random-images-win-x64.zip') 'Plana.ExamplePlugin.exe'
 

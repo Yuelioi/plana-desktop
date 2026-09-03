@@ -55,6 +55,9 @@ finally {
 $rendererSource = Get-Content -LiteralPath (Join-Path $repoRoot 'src\Plana.Companion.Godot.Renderer\renderer.gd') -Raw
 $hostSource = Get-Content -LiteralPath (Join-Path $repoRoot 'src\Plana.Companion.Native\GodotCompanionWindow.cs') -Raw
 $traySource = Get-Content -LiteralPath (Join-Path $repoRoot 'src\Plana.Companion.Native\NativeTrayIcon.cs') -Raw
+if ($traySource -match 'GetAsyncKeyState|DismissMenuOnOutsideLeftClick|menuDismissTimer') {
+    throw 'The context menu must rely on native ContextMenuStrip dismissal; polling mouse state can swallow item clicks.'
+}
 $topPoint = [CompanionCapture+Point]::new()
 $topPoint.X = $rect.Left + [int]($width * 0.5)
 $topPoint.Y = $rect.Top + [int]($height * 0.18)

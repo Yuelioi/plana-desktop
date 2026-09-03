@@ -35,6 +35,10 @@ jobs:
         shell: pwsh
         run: .\build.ps1 -Publish
 
+      - name: Install NSIS
+        shell: pwsh
+        run: choco install nsis --no-progress -y
+
       - name: Assemble release assets
         shell: pwsh
         run: .\tools\assemble-release.ps1 release-output
@@ -48,6 +52,6 @@ jobs:
         with:
           generate_release_notes: true
           files: |
-            release-output/Plana-Desktop-x64-Installer.zip
+            release-output/Plana-Desktop-x64-Setup.exe
             release-output/plugin-plana-random-images-win-x64.zip
             release-output/Character-Packs.zip

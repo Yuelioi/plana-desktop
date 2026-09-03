@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Plana.Core.Companion;
 using Plana.Core.Settings;
 using Forms = System.Windows.Forms;
@@ -12,18 +11,13 @@ internal sealed class NativeTrayIcon : IDisposable
     private readonly Forms.ContextMenuStrip _menu;
     private readonly GodotCompanionWindow? _godot;
     private readonly SynchronizationContext _uiContext;
-    private readonly Forms.Timer _menuDismissTimer;
     private readonly System.Drawing.Icon _appIcon;
-    private bool _leftButtonWasDown;
 
     public NativeTrayIcon(ICompanionController companion, DesktopSettings settings)
     {
         var chinese = settings.UiCulture.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
         _uiContext = SynchronizationContext.Current ?? new Forms.WindowsFormsSynchronizationContext();
         _menu = new Forms.ContextMenuStrip();
-        _menuDismissTimer = new Forms.Timer { Interval = 25 };
-        _menuDismissTimer.Tick += (_, _) => DismissMenuOnOutsideLeftClick();
-        _menu.Closed += (_, _) => { _menuDismissTimer.Stop(); _leftButtonWasDown = false; };
         var iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico");
         _appIcon = File.Exists(iconPath)
             ? new System.Drawing.Icon(iconPath)
@@ -76,9 +70,7 @@ internal sealed class NativeTrayIcon : IDisposable
         _uiContext.Post(_ =>
         {
             RefreshPluginContextCommands();
-            _leftButtonWasDown = false;
             _menu.Show(Forms.Cursor.Position);
-            _menuDismissTimer.Start();
         }, null);
 
     private void RefreshPluginContextCommands()
@@ -95,23 +87,13 @@ internal sealed class NativeTrayIcon : IDisposable
         }
     }
 
-    private void DismissMenuOnOutsideLeftClick()
-    {
-        var leftButtonDown = (GetAsyncKeyState(0x01) & 0x8000) != 0;
-        if (leftButtonDown && !_leftButtonWasDown && !_menu.Bounds.Contains(Forms.Cursor.Position)) _menu.Close();
-        _leftButtonWasDown = leftButtonDown;
-    }
-
     public void Dispose()
     {
         _icon.Visible = false;
-        _menuDismissTimer.Dispose();
         if (_godot is not null) _godot.ContextRequested -= OnContextRequested;
         _menu.Dispose();
         _icon.Dispose();
         _appIcon.Dispose();
     }
 
-    [DllImport("user32.dll")]
-    private static extern short GetAsyncKeyState(int virtualKey);
 }

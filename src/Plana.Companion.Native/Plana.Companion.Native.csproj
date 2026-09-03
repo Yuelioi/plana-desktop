@@ -11,6 +11,7 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>Plana.Desktop</AssemblyName>
     <ApplicationIcon>..\Plana.Brand\AppIcon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Plana.Core\Plana.Core.csproj" />

@@ -53,3 +53,4 @@ Plana Desktop is a Windows companion that combines an expressive Spine character
 
 - The Companion Host requires the .NET 10 Desktop Runtime; the Control Center uses Windows App SDK deployment.
 - The published Host requires its bundled Godot executable and Renderer project. Missing files are a startup error, never a fallback trigger.
+- Public Windows releases expose one elevated `Plana-Desktop-x64-Setup.exe`; users do not unpack or invoke PowerShell scripts. The installed Companion and Control Center request administrator elevation at process startup so application Actions can launch elevated executables without error 740.
