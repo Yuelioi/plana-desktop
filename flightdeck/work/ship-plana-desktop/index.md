@@ -190,7 +190,7 @@ Stage 7 — Godot cutover usable; continuing packaging, interaction polish, proj
 
 - Hardened the shared tray/model context menu after a user reported that clicking Exit did nothing. UI Automation invocation and an exact physical click both proved the shutdown path exits Host and Renderer within five seconds; the remaining race was a redundant 25 ms `GetAsyncKeyState` poll that could close the manually shown menu before its item Click. The custom poll is removed so `ContextMenuStrip` owns native outside-click dismissal, with a regression assertion preventing its return.
 
-- The first `v0.3.4` release run passed tests and publish but failed before release creation because Chocolatey's freshly installed NSIS directory was not visible to the next GitHub Actions step. The workflow now exports the canonical NSIS directory through `GITHUB_PATH`, and release assembly also resolves that canonical installation path directly when command discovery has not refreshed. Continue under `v0.3.5`; do not move the public failed tag.
+- The first `v0.3.4` release run passed tests and publish but failed before release creation because Chocolatey's freshly installed NSIS directory was not visible to the next GitHub Actions step. The workflow now exports and directly resolves the canonical NSIS directory. Patch release `v0.3.5` completed in 5m40s and published the 218.5 MiB Setup EXE, Plugin ZIP, and Character Packs ZIP; the failed `v0.3.4` tag remains unmoved as history.
 
 ## References
 
